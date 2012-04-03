@@ -1,0 +1,13 @@
+C:\work\Mercurial\denso\DeNSo\bin\Debug\DeNSo.exe
+C:\work\Mercurial\denso\DeNSo\bin\Debug\DeNSo.pdb
+C:\work\Mercurial\denso\DeNSo\bin\Debug\DeNSo.Core.dll
+C:\work\Mercurial\denso\DeNSo\bin\Debug\DeNSo.Meta.dll
+C:\work\Mercurial\denso\DeNSo\bin\Debug\DeNSo.Core.pdb
+C:\work\Mercurial\denso\DeNSo\bin\Debug\DeNSo.Meta.pdb
+C:\work\Mercurial\denso\DeNSo\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\work\Mercurial\denso\DeNSo\obj\x86\Debug\DeNSo.DeNSOInstaller.resources
+C:\work\Mercurial\denso\DeNSo\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\work\Mercurial\denso\DeNSo\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\work\Mercurial\denso\DeNSo\obj\x86\Debug\DeNSo.exe
+C:\work\Mercurial\denso\DeNSo\obj\x86\Debug\DeNSo.pdb
+C:\work\Mercurial\denso\DeNSo\bin\Debug\DeNSo.exe.config

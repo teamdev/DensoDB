@@ -1,0 +1,5 @@
+C:\work\Mercurial\denso\DeNSo.Meta\bin\Debug\DeNSo.Meta.dll
+C:\work\Mercurial\denso\DeNSo.Meta\bin\Debug\DeNSo.Meta.pdb
+C:\work\Mercurial\denso\DeNSo.Meta\obj\Debug\ResolveAssemblyReference.cache
+C:\work\Mercurial\denso\DeNSo.Meta\obj\Debug\DeNSo.Meta.dll
+C:\work\Mercurial\denso\DeNSo.Meta\obj\Debug\DeNSo.Meta.pdb

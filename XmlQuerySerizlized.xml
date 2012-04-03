@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Filter xmlns="">
+  <Types>
+    <p>TDBTest.post_Posts, TDBTest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</p>
+  </Types>
+  <OrElse>
+    <OrElse>
+      <OrElse>
+        <AndAlso>
+          <GreaterThan>
+            <Parameter name="p">Id</Parameter>
+            <Value type="System.Int32">45</Value>
+          </GreaterThan>
+          <LessThan>
+            <Parameter name="p">Id</Parameter>
+            <Value type="System.Int32">60</Value>
+          </LessThan>
+        </AndAlso>
+        <AndAlso>
+          <GreaterThan>
+            <Parameter name="p">Id</Parameter>
+            <Value type="System.Int32">120</Value>
+          </GreaterThan>
+          <LessThan>
+            <Parameter name="p">Id</Parameter>
+            <Value type="System.Int32">140</Value>
+          </LessThan>
+        </AndAlso>
+      </OrElse>
+      <Parameter name="p">Body</Parameter>
+      <Value type="System.String">33</Value>
+    </OrElse>
+    <GreaterThan>
+      <Parameter name="p">CreationDate</Parameter>
+    </GreaterThan>
+  </OrElse>
+</Filter>

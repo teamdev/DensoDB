@@ -1,0 +1,5 @@
+glob:*/bin/*
+glob:*/obj/*
+glob:TestResults/*
+glob:Tests/*
+glob:*.suo

@@ -1,0 +1,11 @@
+C:\work\Mercurial\denso\DeNSo.Test\bin\Debug\DeNSo.Test.exe.config
+C:\work\Mercurial\denso\DeNSo.Test\bin\Debug\pcm-house4.xyz
+C:\work\Mercurial\denso\DeNSo.Test\bin\Debug\DeNSo.Core.dll
+C:\work\Mercurial\denso\DeNSo.Test\bin\Debug\DeNSo.Meta.dll
+C:\work\Mercurial\denso\DeNSo.Test\bin\Debug\DeNSo.Core.pdb
+C:\work\Mercurial\denso\DeNSo.Test\bin\Debug\DeNSo.Meta.pdb
+C:\work\Mercurial\denso\DeNSo.Test\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\work\Mercurial\denso\DeNSo.Test\obj\x86\Debug\DeNSo.Test.exe
+C:\work\Mercurial\denso\DeNSo.Test\obj\x86\Debug\DeNSo.Test.pdb
+C:\work\Mercurial\denso\DeNSo.Test\bin\Debug\DeNSo.Test.exe
+C:\work\Mercurial\denso\DeNSo.Test\bin\Debug\DeNSo.Test.pdb
