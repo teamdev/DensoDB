@@ -9,13 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		XmlQuerySerizlized.xml = XmlQuerySerizlized.xml
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dipendenze", "Dipendenze", "{858B5545-A323-4E8E-8407-2C72DDA1CDAA}"
-	ProjectSection(SolutionItems) = preProject
-		Dipendenze\ExpressionBuilder.dll = Dipendenze\ExpressionBuilder.dll
-		Dipendenze\TeamDev.FluentProgramming.dll = Dipendenze\TeamDev.FluentProgramming.dll
-		Dipendenze\TeamDev.SDK.dll = Dipendenze\TeamDev.SDK.dll
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeNSo.Core", "DeNSo.Core\DeNSo.Core.csproj", "{60B0B52B-2846-41DF-931D-24032CF4E9E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeNSo.Meta", "DeNSo.Meta\DeNSo.Meta.csproj", "{FDBAC522-A00C-46A1-B197-FA9AC2788422}"
@@ -114,8 +107,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{73DAF1D2-9A99-4924-A59E-32B0652EBC5B} = {01FD1A95-2947-483B-8B48-68AF38794097}
 		{00FC287C-DFC8-4CAA-894A-F8AECD39EFEE} = {01FD1A95-2947-483B-8B48-68AF38794097}
+		{73DAF1D2-9A99-4924-A59E-32B0652EBC5B} = {01FD1A95-2947-483B-8B48-68AF38794097}
 		{457BC66D-F8CC-455B-9244-ECCDA8CA8CC6} = {A57CF389-8303-48F6-8A72-52CED560A194}
 		{941FADB8-09C5-4531-A300-C23FBE4A3FB8} = {A4F5E2EA-5811-45D0-9A42-F67A5A731A94}
 	EndGlobalSection
