@@ -1,7 +1,0 @@
-C:\work\Mercurial\denso\DeNSo.Meta.Tests\bin\Debug\DeNSo.Meta.Tests.dll
-C:\work\Mercurial\denso\DeNSo.Meta.Tests\bin\Debug\DeNSo.Meta.Tests.pdb
-C:\work\Mercurial\denso\DeNSo.Meta.Tests\bin\Debug\DeNSo.Meta.dll
-C:\work\Mercurial\denso\DeNSo.Meta.Tests\bin\Debug\DeNSo.Meta.pdb
-C:\work\Mercurial\denso\DeNSo.Meta.Tests\obj\Debug\ResolveAssemblyReference.cache
-C:\work\Mercurial\denso\DeNSo.Meta.Tests\obj\Debug\DeNSo.Meta.Tests.dll
-C:\work\Mercurial\denso\DeNSo.Meta.Tests\obj\Debug\DeNSo.Meta.Tests.pdb

@@ -1,7 +1,0 @@
-C:\work\Mercurial\denso\DeNSo.Core\bin\Release\DeNSo.Core.dll
-C:\work\Mercurial\denso\DeNSo.Core\bin\Release\DeNSo.Core.pdb
-C:\work\Mercurial\denso\DeNSo.Core\bin\Release\DeNSo.Meta.dll
-C:\work\Mercurial\denso\DeNSo.Core\bin\Release\DeNSo.Meta.pdb
-C:\work\Mercurial\denso\DeNSo.Core\obj\Release\ResolveAssemblyReference.cache
-C:\work\Mercurial\denso\DeNSo.Core\obj\Release\DeNSo.Core.dll
-C:\work\Mercurial\denso\DeNSo.Core\obj\Release\DeNSo.Core.pdb

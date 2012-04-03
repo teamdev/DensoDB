@@ -1,7 +1,0 @@
-C:\work\Mercurial\denso\DeNSo.Client\bin\Debug\DeNSo.Client.dll
-C:\work\Mercurial\denso\DeNSo.Client\bin\Debug\DeNSo.Client.pdb
-C:\work\Mercurial\denso\DeNSo.Client\bin\Debug\DeNSo.Meta.dll
-C:\work\Mercurial\denso\DeNSo.Client\bin\Debug\DeNSo.Meta.pdb
-C:\work\Mercurial\denso\DeNSo.Client\obj\Debug\ResolveAssemblyReference.cache
-C:\work\Mercurial\denso\DeNSo.Client\obj\Debug\DeNSo.Client.dll
-C:\work\Mercurial\denso\DeNSo.Client\obj\Debug\DeNSo.Client.pdb
