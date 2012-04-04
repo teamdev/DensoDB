@@ -15,23 +15,23 @@ namespace DeNSo.Core
     private static Dictionary<string, Dictionary<string, Action<ObjectStoreWrapper, BSonDoc>>> _methods =
                new Dictionary<string, Dictionary<string, Action<ObjectStoreWrapper, BSonDoc>>>();
 
-    private static List<Action<IStore, BSonDoc>> _globalcommands = new List<Action<IStore, BSonDoc>>();
+    private static List<Action<IStore, BSonDoc>> _globaleventhandlers = new List<Action<IStore, BSonDoc>>();
 
-    public static void RegisterGlobalEventHandler(Action<IStore, BSonDoc> globalcommand)
+    public static void RegisterGlobalEventHandler(Action<IStore, BSonDoc> eventhandler)
     {
-      _globalcommands.Add(globalcommand);
+      _globaleventhandlers.Add(eventhandler);
     }
 
-    public static void UnRegisterGlobalEventHandler(Action<IStore, BSonDoc> globalcommand)
+    public static void UnRegisterGlobalEventHandler(Action<IStore, BSonDoc> eventhandler)
     {
-      _globalcommands.Remove(globalcommand);
+      _globaleventhandlers.Remove(eventhandler);
     }
 
     internal static void ExecuteEvent(string database, BSonDoc command)
     {
       var store = new ObjectStoreWrapper(database);
 
-      foreach (var ge in _globalcommands)
+      foreach (var ge in _globaleventhandlers)
       {
         try
         {
