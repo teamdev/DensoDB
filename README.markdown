@@ -14,7 +14,7 @@ It's usable in tre different ways:
 The Theory
 ------------------------------------------------
 
-
+A document database is a Database where data are stored as they are. Usually there is no need to normalize or change their structure. 
 
 Used Patterns
 ------------------------------------------------
