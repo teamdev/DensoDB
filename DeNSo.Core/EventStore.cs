@@ -70,7 +70,7 @@ namespace DeNSo.Core
         //sDebug.Write(string.Format("step3 : {0}", DateTime.Now.ToString("ss:ffff")));
 
         //Debug.Write(string.Format("step4 : {0}", DateTime.Now.ToString("ss:ffff")));
-        EventHandlerManager.ExecuteEvent(DatabaseName, we.Command.Deserialize());
+        EventHandlerManager.ExecuteEvent(DatabaseName, we);
         //sDebug.Write(string.Format("step5 : {0}", DateTime.Now.ToString("ss:ffff")));
         LastExecutedCommandSN = we.CommandSN;
         if (LastExecutedCommandSN % 1000 == 0)

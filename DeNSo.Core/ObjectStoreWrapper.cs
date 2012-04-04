@@ -9,6 +9,7 @@ namespace DeNSo.Core
   public class ObjectStoreWrapper: IStore
   {
     private string _databasename;
+    public string DataBaseName { get { return _databasename; } }
 
     internal ObjectStoreWrapper(string databasename)
     {

@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using DeNSo.Meta.BSon;
 using System.Diagnostics;
 using DeNSo.Meta;
+using DeNSo.Core.DiskIO;
 
 namespace DeNSo.Core
 {
@@ -15,19 +16,19 @@ namespace DeNSo.Core
     private static Dictionary<string, Dictionary<string, Action<ObjectStoreWrapper, BSonDoc>>> _methods =
                new Dictionary<string, Dictionary<string, Action<ObjectStoreWrapper, BSonDoc>>>();
 
-    private static List<Action<IStore, BSonDoc>> _globaleventhandlers = new List<Action<IStore, BSonDoc>>();
+    private static List<Action<IStore, EventCommand>> _globaleventhandlers = new List<Action<IStore, EventCommand>>();
 
-    public static void RegisterGlobalEventHandler(Action<IStore, BSonDoc> eventhandler)
+    public static void RegisterGlobalEventHandler(Action<IStore, EventCommand> eventhandler)
     {
       _globaleventhandlers.Add(eventhandler);
     }
 
-    public static void UnRegisterGlobalEventHandler(Action<IStore, BSonDoc> eventhandler)
+    public static void UnRegisterGlobalEventHandler(Action<IStore, EventCommand> eventhandler)
     {
       _globaleventhandlers.Remove(eventhandler);
     }
 
-    internal static void ExecuteEvent(string database, BSonDoc command)
+    internal static void ExecuteEvent(string database, EventCommand waitingevent )
     {
       var store = new ObjectStoreWrapper(database);
 
@@ -35,7 +36,7 @@ namespace DeNSo.Core
       {
         try
         {
-          if (ge != null) ge(store, command);
+          if (ge != null) ge(store, waitingevent);
         }
         catch (Exception ex)
         {
@@ -43,11 +44,11 @@ namespace DeNSo.Core
         }
       }
 
-      Action<ObjectStoreWrapper, BSonDoc> method = FindEventHandler(command);
+      Action<ObjectStoreWrapper, BSonDoc> method = FindEventHandler(waitingevent.Command.Deserialize());
       try
       {
         if (method != null)
-          method(store, command);
+          method(store, waitingevent.Command.Deserialize());
       }
       catch (Exception ex)
       {

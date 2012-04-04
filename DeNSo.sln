@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{A4F5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeNSo.Client", "DeNSo.Client\DeNSo.Client.csproj", "{941FADB8-09C5-4531-A300-C23FBE4A3FB8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeNSo.P2P", "DeNSo.P2P\DeNSo.P2P.csproj", "{1F4C5739-676D-4692-A325-9AA47B0CB880}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = TDB.vsmdi
@@ -102,6 +104,16 @@ Global
 		{941FADB8-09C5-4531-A300-C23FBE4A3FB8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{941FADB8-09C5-4531-A300-C23FBE4A3FB8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{941FADB8-09C5-4531-A300-C23FBE4A3FB8}.Release|x86.ActiveCfg = Release|Any CPU
+		{1F4C5739-676D-4692-A325-9AA47B0CB880}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F4C5739-676D-4692-A325-9AA47B0CB880}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F4C5739-676D-4692-A325-9AA47B0CB880}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1F4C5739-676D-4692-A325-9AA47B0CB880}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1F4C5739-676D-4692-A325-9AA47B0CB880}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1F4C5739-676D-4692-A325-9AA47B0CB880}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F4C5739-676D-4692-A325-9AA47B0CB880}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F4C5739-676D-4692-A325-9AA47B0CB880}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1F4C5739-676D-4692-A325-9AA47B0CB880}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1F4C5739-676D-4692-A325-9AA47B0CB880}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
