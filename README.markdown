@@ -7,7 +7,7 @@ You can use it in three different ways:
 
 1. InProcess: No need of service installation and communication protocol. The fastest way to use it. You have direct access to the DataBase memory and you can manipulate objects and data in a very fast way. 
 
-2. As a Service: Installed as Windows Service, it can be used as a network document store.You can use rest service or wcf service to access it. It's not different from the previuos way to use it but you have a networking protocol and it's fast as the previous one.
+2. As a Service: Installed as Windows Service, it can be used as a network document store.You can use rest service or wcf service to access it. It's not different from the previuos way to use it but you have a networking protocol and so it's not fast as the previous one.
 
 3. On a Mesh: mixing the previous two usage mode with a P2P mesh network, it can be easily syncronizable with other mesh nodes. It gives you the power of a distributed scalable fast database, in a server or server-less environment.
 
