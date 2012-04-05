@@ -32,7 +32,8 @@ The Theory
 A document database is a Database where data are stored as they are. 
 Usually there is no need to normalize or change their structure, so it's optimal for domain driven design, because you'll not need to think about how to persist your domain. 
 
-A document is self contained and all information needed to understand it's information are in the document itself. 
+A document is stored in BSon-like format
+A document is self contained, and all you needed to understand it's information are in the document itself. 
 So you will not need additional query to understand foreign key or lookup table datas. 
 
 You can have collections of document. Collection are not tables, you can think to collections as sets of documents, categorized in the same way.
