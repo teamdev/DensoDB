@@ -18,10 +18,23 @@ namespace DeNSo.P2P.Services
     public static Dictionary<Guid, IEventP2PServices> NodeChannels { get { return _channels; } }
     public static Dictionary<Guid, EventMessage> Nodes { get { return _nodes; } }
 
-    public void NewEventInTheMesh(EventMessage message)
+    public void GlobalEvent(EventMessage message)
     {
       var store = StoreManager.GetEventStore(message.Database);
       store.Enqueue(message.Command);
+    }
+
+    public void InterestedIn(string database, string collection)
+    {
+      throw new NotImplementedException();
+    }
+
+    protected IEventP2PServices CallbackChannel
+    {
+      get
+      {
+        return OperationContext.Current.GetCallbackChannel<IEventP2PServices>();
+      }
     }
   }
 }

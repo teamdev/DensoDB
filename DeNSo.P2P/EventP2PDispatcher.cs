@@ -23,7 +23,7 @@ namespace DeNSo.P2P
       DeNSo.Core.EventHandlerManager.RegisterGlobalEventHandler(
         (store, doc) =>
         {
-          _channel.NewEventInTheMesh(new Messages.EventMessage()
+          _channel.GlobalEvent(new Messages.EventMessage()
           {
             NodeIdentity = DeNSo.Core.Configuration.NodeIdentity,
             Database = store.DataBaseName,
