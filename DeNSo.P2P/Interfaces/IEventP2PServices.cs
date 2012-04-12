@@ -29,6 +29,12 @@ namespace DeNSo.P2P.Interfaces
     /// <param name="database"></param>
     /// <param name="collection"></param>
     [OperationContract(IsOneWay = true)]
-    void InterestedIn(string database, string collection);
+    void InterestedInCollection(string database, string collection);
+
+    [OperationContract(IsOneWay = true)]
+    void InterestedInMessageType(string database, string messagetype);
+
+    [OperationContract(IsOneWay = true)]
+    void InterestedInMessageContent(string database, string messagetype);
   }
 }
