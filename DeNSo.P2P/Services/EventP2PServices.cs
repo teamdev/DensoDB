@@ -36,5 +36,21 @@ namespace DeNSo.P2P.Services
         return OperationContext.Current.GetCallbackChannel<IEventP2PServices>();
       }
     }
+
+
+    public void InterestedInCollection(string database, string collection)
+    {
+      throw new NotImplementedException();
+    }
+
+    public void InterestedInMessageType(string database, string messagetype)
+    {
+      throw new NotImplementedException();
+    }
+
+    public void InterestedInMessageContent(string database, string filter)
+    {
+      throw new NotImplementedException();
+    }
   }
 }

@@ -16,13 +16,17 @@ namespace DeNSo.Core
     public long LastEventSN { get; internal set; }
     public int ChangesFromLastSave { get; set; }
 
+    public ObjectStoreKeyType KeyType { get; set; }
+
     #region Private Fields and function for storeid
-    //private long _storelonguid = 0;
+
+    private long _storelonguid = 0;
     private int _storeintuid = 0;
-    //private StoreGuid _storeGuid = new StoreGuid();
+    private Guid _storeGuid = Guid.Empty;
 
     private Func<object> newIdFunction;
     private Func<object> currentIdFunction;
+
     #endregion
 
     #region Private fields
@@ -30,26 +34,33 @@ namespace DeNSo.Core
     #endregion
 
     #region Constructor
+
     internal ObjectStore()
+      : this(ObjectStoreKeyType.GlobalUniqueIdentifier)
+    { }
+
+    internal ObjectStore(ObjectStoreKeyType keytype)
     {
-      //if (ptype == typeof(int))
-      //{
-      newIdFunction = () => ++_storeintuid;
-      currentIdFunction = () => _storeintuid;
-      //}
 
-      //if (ptype == typeof(long))
-      //{
-      //newIdFunction = () => ++_storelonguid;
-      //currentIdFunction = () => _storelonguid;
-      //}
+      KeyType = keytype;
 
-      //if (ptype == typeof(Guid))
-      //{
-      //_storeGuid.init();
-      //newIdFunction = () => _storeGuid.Increment();
-      //currentIdFunction = () => _storeGuid.GetUid();
-      //}
+      switch (KeyType)
+      {
+        case ObjectStoreKeyType.Integer:
+          newIdFunction = () => ++_storeintuid;
+          currentIdFunction = () => _storeintuid;
+          break;
+        case ObjectStoreKeyType.LongInteger:
+          newIdFunction = () => ++_storelonguid;
+          currentIdFunction = () => _storelonguid;
+          break;
+        case ObjectStoreKeyType.GlobalUniqueIdentifier:
+          newIdFunction = () => { _storeGuid = Guid.NewGuid(); return _storeGuid; };
+          currentIdFunction = () => _storeGuid;
+          break;
+        default:
+          break;
+      }
 
     }
     #endregion
@@ -67,12 +78,6 @@ namespace DeNSo.Core
         return;
       }
       dSet(uid, entity);
-      //if (_primarystore.ContainsKey(uid))
-      //{
-      //  _primarystore[uid] = entity;
-      //  return;
-      //}
-      //_primarystore.Add(uid, entity);
     }
 
     public void Remove(BSonDoc entity)

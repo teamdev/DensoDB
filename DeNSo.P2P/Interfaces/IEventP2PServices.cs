@@ -35,6 +35,6 @@ namespace DeNSo.P2P.Interfaces
     void InterestedInMessageType(string database, string messagetype);
 
     [OperationContract(IsOneWay = true)]
-    void InterestedInMessageContent(string database, string messagetype);
+    void InterestedInMessageContent(string database, string filter);
   }
 }

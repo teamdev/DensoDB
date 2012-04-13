@@ -48,6 +48,7 @@
     <Compile Include="CQRS\Query.cs" />
     <Compile Include="DiskIO\Journaling.cs" />
     <Compile Include="ObjectStore.cs" />
+    <Compile Include="ObjectStoreKeyType.cs" />
     <Compile Include="ObjectStoreWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Session.cs" />
