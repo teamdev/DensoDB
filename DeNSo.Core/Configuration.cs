@@ -18,6 +18,9 @@ namespace DeNSo.Core
     public static string PeerService { get; set; }
     public static int PeerNetworkPort { get; set; }
 
+    public const string DensoIDKeyName = "_id";
+    public const string DensoTSKeyName = "@ts#";
+
     public static Guid NodeIdentity { get; private set; }
 
     static Configuration()

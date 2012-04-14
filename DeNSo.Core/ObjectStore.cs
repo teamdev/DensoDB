@@ -95,11 +95,11 @@ namespace DeNSo.Core
 
     private int GetEntityUI(BSonDoc entity)
     {
-      if (entity.HasProperty("_id") && entity["_id"] != null)
-        return (int)entity["_id"];
+      if (entity.HasProperty(Configuration.DensoIDKeyName) && entity[Configuration.DensoIDKeyName] != null)
+        return (int)entity[Configuration.DensoIDKeyName];
 
-      entity["_id"] = newIdFunction();
-      return (int)entity["_id"];
+      entity[Configuration.DensoIDKeyName] = newIdFunction();
+      return (int)entity[Configuration.DensoIDKeyName];
     }
 
     #endregion
@@ -127,6 +127,8 @@ namespace DeNSo.Core
 
     private void dInsert(int key, BSonDoc doc)
     {
+      //doc["@ts#"
+
       Dictionary<int, byte[]> freedictionary = null;
       foreach (var d in _primarystore)
         if (d.Count < Configuration.DictionarySplitSize)

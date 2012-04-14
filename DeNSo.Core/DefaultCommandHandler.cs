@@ -71,7 +71,8 @@ namespace DeNSo.Core
 
     private static string[] GetRealProperties(this BSonDoc document)
     {
-      string[] invalidproperties = new string[] { "_collection", "_action", "_value", "_id", "_filter", "_type" };
+      string[] invalidproperties = new string[] { "_collection", "_action", "_value", "_id", "_filter", "_type", 
+                                                  Configuration.DensoIDKeyName, Configuration.DensoTSKeyName };
       return document.Properties.Except(invalidproperties).ToArray();
     }
 
@@ -79,7 +80,7 @@ namespace DeNSo.Core
     {
       IObjectStore st = store.GetStore(collection);
 
-      if (document.HasProperty("_id"))
+      if (document.HasProperty(Configuration.DensoIDKeyName))
       {
         UpdateSingleDocument(document, st); return;
       }
@@ -96,7 +97,7 @@ namespace DeNSo.Core
     {
       IObjectStore st = store.GetStore(collection);
 
-      if (document.HasProperty("_id"))
+      if (document.HasProperty(Configuration.DensoIDKeyName))
       {
         ReplaceSingleDocument(document, st); return;
       }
@@ -112,9 +113,9 @@ namespace DeNSo.Core
     private static void InternalDelete(BSonDoc document, string collection, IStore store)
     {
       IObjectStore st = store.GetStore(collection);
-      if (document.HasProperty("_id"))
+      if (document.HasProperty(Configuration.DensoIDKeyName))
       {
-        var ent = st.GetById((int)document["_id"]);
+        var ent = st.GetById((int)document[Configuration.DensoIDKeyName]);
         if (ent != null)
           st.Remove(ent);
       }
@@ -122,7 +123,7 @@ namespace DeNSo.Core
 
     private static void UpdateSingleDocument(BSonDoc document, IObjectStore store)
     {
-      var obj = store.GetById((int)document["_id"]);
+      var obj = store.GetById((int)document[Configuration.DensoIDKeyName]);
       BSonDoc val = GetValue(document);
       foreach (var p in val.GetRealProperties()) // remove properties starting with  
         if (document.HasProperty(p))
