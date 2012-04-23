@@ -8,7 +8,8 @@ namespace DeNSo.Meta
   public class CommandAttribute : System.Attribute
   {
     public string Action { get; set; }
-    public Type EntityType { get; set; }
+    public Type MessageType { get; set; }
+    public string Method { get; set; }
 
     public CommandAttribute()
     { }

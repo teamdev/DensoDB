@@ -78,7 +78,7 @@ namespace DeNSo.Core
 
     private static void InternalUpdate(BSonDoc document, string collection, IStore store)
     {
-      IObjectStore st = store.GetStore(collection);
+      IObjectStore st = store.GetCollection(collection);
 
       if (document.HasProperty(Configuration.DensoIDKeyName))
       {
@@ -95,7 +95,7 @@ namespace DeNSo.Core
 
     private static void InternalSet(BSonDoc document, string collection, IStore store)
     {
-      IObjectStore st = store.GetStore(collection);
+      IObjectStore st = store.GetCollection(collection);
 
       if (document.HasProperty(Configuration.DensoIDKeyName))
       {
@@ -112,7 +112,7 @@ namespace DeNSo.Core
 
     private static void InternalDelete(BSonDoc document, string collection, IStore store)
     {
-      IObjectStore st = store.GetStore(collection);
+      IObjectStore st = store.GetCollection(collection);
       if (document.HasProperty(Configuration.DensoIDKeyName))
       {
         var ent = st.GetById((int)document[Configuration.DensoIDKeyName]);

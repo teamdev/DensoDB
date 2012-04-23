@@ -9,7 +9,7 @@ namespace DeNSo.Meta
   public interface IStore
   {
     string DataBaseName { get; }
-    IObjectStore GetStore(string collection);
+    IObjectStore GetCollection(string collection);
   }
 
   public interface IObjectStore

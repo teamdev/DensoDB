@@ -16,7 +16,7 @@ namespace DeNSo.Core
       _databasename = databasename;
     }
 
-    public IObjectStore GetStore(string collection)
+    public IObjectStore GetCollection(string collection)
     {
       return StoreManager.GetObjectStore(_databasename, collection);
     }
