@@ -17,6 +17,6 @@ namespace DeNSo.Meta
     IEnumerable<BSonDoc> Where(Func<BSonDoc, bool> filter);
     void Set(BSonDoc entity);
     void Remove(BSonDoc entity);
-    BSonDoc GetById(int key);
+    BSonDoc GetById(byte[] key);
   }
 }

@@ -115,7 +115,7 @@ namespace DeNSo.Core
       IObjectStore st = store.GetCollection(collection);
       if (document.HasProperty(Configuration.DensoIDKeyName))
       {
-        var ent = st.GetById((int)document[Configuration.DensoIDKeyName]);
+        var ent = st.GetById((byte[])document[Configuration.DensoIDKeyName]);
         if (ent != null)
           st.Remove(ent);
       }
@@ -123,7 +123,7 @@ namespace DeNSo.Core
 
     private static void UpdateSingleDocument(BSonDoc document, IObjectStore store)
     {
-      var obj = store.GetById((int)document[Configuration.DensoIDKeyName]);
+      var obj = store.GetById((byte[])document[Configuration.DensoIDKeyName]);
       BSonDoc val = GetValue(document);
       foreach (var p in val.GetRealProperties()) // remove properties starting with  
         if (document.HasProperty(p))
