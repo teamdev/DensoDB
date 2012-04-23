@@ -48,6 +48,7 @@
     <Compile Include="BSon\Serializer.cs" />
     <Compile Include="ISession.cs" />
     <Compile Include="IStore.cs" />
+    <Compile Include="Json\Bson2JsonExtensions.cs" />
     <Compile Include="Linq\EntityQueryable.cs" />
     <Compile Include="Linq\Generic2BsonLambdaConverter.cs" />
     <Compile Include="Linq\Lambda2JsonSerializer.cs" />
@@ -60,6 +61,7 @@
   <ItemGroup>
     <Content Include="LICENSE.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

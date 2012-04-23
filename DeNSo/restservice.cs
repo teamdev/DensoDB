@@ -22,16 +22,18 @@ namespace DeNSo
 
     [OperationContract]
     [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "{database}/{collection}/count")]
-    public IEnumerable<string> CollectionCount(string database, string collection)
+    public int CollectionCount(string database, string collection)
     {
-      return null;
+      return new Query().Count(database, collection);
     }
 
     [OperationContract]
     [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "{database}/{collection}/count/{filter}")]
-    public IEnumerable<string> CollectionCount(string database, string collection, string filter)
+    public int CollectionCount(string database, string collection, string filter)
     {
-      return null;
+      //TODO: complete count filtered implementation. 
+      // depends on filter Linq deserialization
+      return new Query().Count(database, collection, null);
     }
 
     [OperationContract]
