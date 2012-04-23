@@ -15,7 +15,7 @@ namespace DeNSo.P2P
     public static void EnableP2PEventMesh()
     {
       if (_channel != null && _channel.State == System.ServiceModel.CommunicationState.Opened) return;
-      _channel = Mesh.OpenPeerChannel<IEventP2PServices, IEventP2PServiceChannel>(_node = new EventP2PServices());
+      _channel = Mesh.OpenPeerChannel<IEventP2PServices, IEventP2PServiceChannel>();
     }
 
     private static void RegisterP2PDispatcherInEventStore()

@@ -73,7 +73,6 @@ namespace DeNSo.Core
       Journaling.RaiseCloseEvent();
       ShuttingDown = true;
       ShutDownEvent.Set();
-
     }
 
     public static string[] Databases

@@ -36,7 +36,7 @@ namespace DeNSo.Core
     #region Constructor
 
     internal ObjectStore()
-      : this(ObjectStoreKeyType.GlobalUniqueIdentifier)
+      : this(ObjectStoreKeyType.Integer)
     { }
 
     internal ObjectStore(ObjectStoreKeyType keytype)
