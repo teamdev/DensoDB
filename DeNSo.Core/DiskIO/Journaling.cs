@@ -156,7 +156,7 @@ namespace DeNSo.Core
             {
               var cmd = ReadCommand(br);
               if (cmd != null)
-                if (cmd.CommandSN >= commandsn)
+                if (cmd.CommandSN > commandsn)
                   WriteCommand(bw, cmd);
             }
 

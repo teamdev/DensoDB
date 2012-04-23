@@ -86,7 +86,11 @@ namespace DeNSo.Core
       if (Directory.Exists(Configuration.BasePath))
       {
         foreach (var dir in Directory.GetDirectories(Configuration.BasePath))
-          result.Add(Path.GetDirectoryName(dir));
+        {
+          var dinfo = new DirectoryInfo(dir);
+          if (dinfo.Exists)
+            result.Add(dinfo.Name);
+        }
       }
       return result.ToArray();
     }
@@ -99,9 +103,10 @@ namespace DeNSo.Core
 
         long eventcommandsn = 0;
         if (File.Exists(filename))
-          using (var fs = File.Create(Path.Combine(Configuration.BasePath, databasename, "denso.trn")))
-          using (var br = new BinaryReader(fs))
-            eventcommandsn = br.ReadInt64();
+          using (var fs = File.OpenRead(Path.Combine(Configuration.BasePath, databasename, "denso.trn")))
+            if (fs.Length > 0)
+              using (var br = new BinaryReader(fs))
+                eventcommandsn = br.ReadInt64();
 
         _eventStore.Add(databasename, new EventStore(databasename, eventcommandsn));
       }
