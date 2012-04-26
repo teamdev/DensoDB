@@ -14,9 +14,8 @@ namespace DeNSo.Core
     public static int DictionarySplitSize { get; set; }
     public static bool EnableJournaling { get; set; }
 
-    public static string PeerNetworkPassword { get; set; }
-    public static string PeerService { get; set; }
-    public static int PeerNetworkPort { get; set; }
+    private static DensoExtensions _extensions = new DensoExtensions();
+    public static DensoExtensions Extensions { get { return _extensions; } }
 
     public const string DensoIDKeyName = "_id";
     public const string DensoTSKeyName = "@ts#";
@@ -25,7 +24,6 @@ namespace DeNSo.Core
 
     static Configuration()
     {
-      var rnd = new Random();
       BasePath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "DeNSo");
 
       if (File.Exists(Path.Combine(BasePath, "d.cfg")))
@@ -38,10 +36,6 @@ namespace DeNSo.Core
       }
 
       File.WriteAllBytes(Path.Combine(BasePath, "d.cfg"), NodeIdentity.ToByteArray());
-
-      PeerService = "net.p2p://mesh.denso.net";
-      PeerNetworkPassword = "DensoTest";
-      PeerNetworkPort = 8090 + rnd.Next(1000);
 
       SaveInterval = new TimeSpan(0, 5, 0);
       DBCheckTimeSpan = new TimeSpan(0, 0, 10);

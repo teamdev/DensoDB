@@ -11,12 +11,12 @@ namespace DeNSo.P2P
   {
     private static Uri GetURI()
     {
-      return new Uri(DeNSo.Core.Configuration.PeerService);
+      return new Uri(DeNSo.Core.Configuration.Extensions.P2P().ServiceUri);
     }
 
     public static TChannel OpenPeerChannel<TService, TChannel>() where TChannel : IClientChannel
     {
-      var portnumber = DeNSo.Core.Configuration.PeerNetworkPort;
+      var portnumber = DeNSo.Core.Configuration.Extensions.P2P().NetworkPort;
       NetPeerTcpBinding binding = new NetPeerTcpBinding()
       {
         Port = portnumber,
@@ -27,7 +27,7 @@ namespace DeNSo.P2P
 
       EndpointAddress address = new EndpointAddress(GetURI().OriginalString);
       ChannelFactory<TChannel> sourceFactory = new ChannelFactory<TChannel>(binding, address);
-      sourceFactory.Credentials.Peer.MeshPassword = DeNSo.Core.Configuration.PeerNetworkPassword;
+      sourceFactory.Credentials.Peer.MeshPassword = DeNSo.Core.Configuration.Extensions.P2P().NetworkPassword;
 
       TChannel sourceProxy = (TChannel)sourceFactory.CreateChannel();
 
@@ -43,7 +43,7 @@ namespace DeNSo.P2P
     public static TChannel OpenDuplexPeerChannel<TService, TChannel>(TService sourceObject) where TChannel : IClientChannel
     {
       InstanceContext sourceContext = new InstanceContext(sourceObject);
-      var portnumber = DeNSo.Core.Configuration.PeerNetworkPort;
+      var portnumber = DeNSo.Core.Configuration.Extensions.P2P().NetworkPort;
       NetPeerTcpBinding binding = new NetPeerTcpBinding()
       {
         Port = portnumber,
@@ -55,7 +55,7 @@ namespace DeNSo.P2P
       EndpointAddress address = new EndpointAddress(GetURI().OriginalString);
       DuplexChannelFactory<TChannel> sourceFactory = new DuplexChannelFactory<TChannel>(sourceContext, binding, address);
       //ChannelFactory<TChannel> sourceFactory = new ChannelFactory<TChannel>(sourceContext, binding, address);
-      sourceFactory.Credentials.Peer.MeshPassword = DeNSo.Core.Configuration.PeerNetworkPassword;
+      sourceFactory.Credentials.Peer.MeshPassword = DeNSo.Core.Configuration.Extensions.P2P().NetworkPassword;
 
       TChannel sourceProxy = (TChannel)sourceFactory.CreateChannel();
 

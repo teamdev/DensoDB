@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.cs" />
+    <Compile Include="DensoExtensions.cs" />
     <Compile Include="CQRS\Command.cs" />
     <Compile Include="DefaultCommandHandler.cs" />
     <Compile Include="DiskIO\EventCommand.cs" />
