@@ -48,13 +48,33 @@ DeNSo has a Bson De/Serializer able to traduce virtually every entity in a BSon 
 
 Used Patterns
 ------------------------------------------------
-  
-	
+ 
+DensoDB use Command Query Responsibility Segregation Pattern, because it give a clear easy to manage separation between components in the DataBase. 
+CQRS make internal implementation very simple to understand and easy to maintain. It's also efficient and extremely scalable. 
+
+CQRS make easy to manage extensibility, too. 
+Extensibility is managed at event dispatcher level. Events can be dispatched in multiple ways and to multiple handlers. ex: P2P support is implemented as DensoDb extension. 
 
 Practice
 ------------------------------------------------
 
+(coming soon)
 
 
 Why should i use it ?
 ------------------------------------------------
+
+It's a different approach to data management, and can be used in a more "social" environment. 
+Imagine you need a social application that must work in a partially connected environment, densoDb can help in this kind of approach. 
+Some examples (coming soon) show how to use densoDB in this scenario. 
+
+DensoDB can be used in a more traditional environment, too. 
+It's easy to manage, very small (<100KB), installation-less and fast. 
+
+
+What i'm working on now
+------------------------------------------------
+
+More detailed documentation. 
+Samples.. so you can start working more easly. 
+ 
