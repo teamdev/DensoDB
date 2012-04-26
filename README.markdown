@@ -68,6 +68,9 @@ It's a different approach to data management, and can be used in a more "social"
 Imagine you need a social application that must work in a partially connected environment, densoDb can help in this kind of approach. 
 Some examples (coming soon) show how to use densoDB in this scenario. 
 
+DensoDB can be used in a more traditional environment, too. 
+It's easy to manage, very small (<100KB), installation-less and fast. 
+
 
 What i'm working on now
 ------------------------------------------------
