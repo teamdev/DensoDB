@@ -54,6 +54,7 @@
     <Compile Include="Messages\NodeInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\EventP2PServices.cs" />
+    <Compile Include="Services\NodeService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeNSo.Core\DeNSo.Core.csproj">
