@@ -1,4 +1,4 @@
-##[Jump to documentation](https://github.com/teamdev/DensoDB/wiki/Documentation-Index)
+##[Jump to documentation](https://github.com/teamdev/DensoDB/wiki/Documentation)
 
 DeNSo DB
 ================================================
