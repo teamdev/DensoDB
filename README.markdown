@@ -1,3 +1,5 @@
+##[Jump to documentation](https://github.com/teamdev/DensoDB/wiki/Documentation-Index)
+
 DeNSo DB
 ================================================
 DensoDB is a new NoSQL document database. Written for .Net environment in c# language.  
