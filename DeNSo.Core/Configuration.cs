@@ -24,7 +24,7 @@ namespace DeNSo.Core
 
     static Configuration()
     {
-      BasePath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "DeNSo");
+      BasePath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DeNSo");
 
       if (File.Exists(Path.Combine(BasePath, "d.cfg")))
       {
@@ -34,6 +34,9 @@ namespace DeNSo.Core
       {
         NodeIdentity = Guid.NewGuid();
       }
+
+      if (!Directory.Exists(BasePath))
+        Directory.CreateDirectory(BasePath);
 
       File.WriteAllBytes(Path.Combine(BasePath, "d.cfg"), NodeIdentity.ToByteArray());
 
