@@ -10,13 +10,13 @@ namespace DeNSo.P2P
   public static class EventP2PDispatcher
   {
     private static NodeService _node = null;
-    private static IEventP2PServiceChannel _servicechannel = null;
+    private static IEventP2PServiceChannel _eventchannel = null;
     private static INodeServiceChannel _nodechannel = null;
 
     public static void EnableP2PEventMesh()
     {
-      if (_servicechannel == null)
-        _servicechannel = Mesh.OpenPeerChannel<IEventP2PServices, IEventP2PServiceChannel>();
+      if (_eventchannel == null)
+        _eventchannel = Mesh.OpenPeerChannel<IEventP2PServices, IEventP2PServiceChannel>();
 
       if (_nodechannel == null)
       {
@@ -30,7 +30,7 @@ namespace DeNSo.P2P
       DeNSo.Core.EventHandlerManager.RegisterGlobalEventHandler(
         (store, doc) =>
         {
-          _servicechannel.GlobalEvent(new Messages.EventMessage()
+          _eventchannel.GlobalEvent(new Messages.EventMessage()
           {
             NodeIdentity = DeNSo.Core.Configuration.NodeIdentity,
             Database = store.DataBaseName,
@@ -42,9 +42,9 @@ namespace DeNSo.P2P
 
     public static void StopP2PEventMesh()
     {
-      if (_servicechannel != null)
+      if (_eventchannel != null)
       {
-        _servicechannel.Close();
+        _eventchannel.Close();
       }
     }
   }
