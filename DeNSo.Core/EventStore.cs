@@ -85,14 +85,23 @@ namespace DeNSo.Core
 
     public long Enqueue(byte[] command)
     {
+      var cmd = new EventCommand() { Command = command };
+      return Enqueue(cmd);
+    }
+
+    public long Enqueue(EventCommand command)
+    {
       var csn = _journal.LogCommand(command);
+      command.CommandSN = csn;
       lock (_waitingevents)
-        _waitingevents.Enqueue(new EventCommand() { CommandSN = csn, Command = command });
+        _waitingevents.Enqueue(command);
 
       CommandsReady.Set();
 
       return csn;
     }
+
+
     public void ShrinkEventStore()
     {
       if (_journal != null)

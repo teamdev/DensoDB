@@ -27,14 +27,14 @@ namespace DeNSo.P2P
 
       EndpointAddress address = new EndpointAddress(GetURI().OriginalString);
       ChannelFactory<TChannel> sourceFactory = new ChannelFactory<TChannel>(binding, address);
-      sourceFactory.Credentials.Peer.MeshPassword = DeNSo.Core.Configuration.Extensions.P2P().NetworkPassword;
+      //sourceFactory.Credentials.Peer.MeshPassword = DeNSo.Core.Configuration.Extensions.P2P().NetworkPassword;
 
       TChannel sourceProxy = (TChannel)sourceFactory.CreateChannel();
 
       MessagePropagationFilter remoteOnlyFilter = new MessagePropagationFilter();
 
       PeerNode peerNode = ((IClientChannel)sourceProxy).GetProperty<PeerNode>();
-      peerNode.MessagePropagationFilter = remoteOnlyFilter;
+      //peerNode.MessagePropagationFilter = remoteOnlyFilter;
 
       sourceProxy.Open();
       return sourceProxy;
@@ -67,5 +67,7 @@ namespace DeNSo.P2P
       sourceProxy.Open();
       return sourceProxy;
     }
+
+
   }
 }

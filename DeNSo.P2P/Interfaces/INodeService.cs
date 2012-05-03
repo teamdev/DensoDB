@@ -15,6 +15,9 @@ namespace DeNSo.P2P.Interfaces
     [OperationContract(IsOneWay = true)]
     void RequestNodeInfo();
 
+    [OperationContract(IsOneWay = true)]
+    void NotifyNodeInfo(NodeInfo node);
+
     #endregion
 
     #region Responses

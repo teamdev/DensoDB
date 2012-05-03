@@ -9,7 +9,7 @@ using DeNSo.P2P.Messages;
 namespace DeNSo.P2P.Interfaces
 {
   //[ServiceContract(CallbackContract=typeof(IEventP2PServices))]
-  [ServiceContract()]
+  [ServiceContract(CallbackContract = typeof(IEventP2PServices))]
   public interface IEventP2PServices
   {
     /// <summary>
@@ -17,6 +17,7 @@ namespace DeNSo.P2P.Interfaces
     /// The event will be dispatched to ALL nodes in the mesh and every node can choose to use the message or discard it. 
     /// </summary>
     /// <param name="message">The message object that will be dispatched</param>
+
     [OperationContract(IsOneWay = true)]
     void GlobalEvent(EventMessage message);
 

@@ -21,6 +21,8 @@ namespace DeNSo.P2P
     public int NetworkPort { get; set; }
     public int MaxHop { get; set; }
 
+    public const string NoRedispatch = "p2p_noredispatch";
+
 
     public P2PConfiguration()
     {

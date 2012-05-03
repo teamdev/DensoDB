@@ -52,6 +52,7 @@
     <Compile Include="Messages\EventMessage.cs" />
     <Compile Include="EventP2PDispatcher.cs" />
     <Compile Include="Messages\NodeInfo.cs" />
+    <Compile Include="Enums\P2PDispatchTo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\EventP2PServices.cs" />
     <Compile Include="Services\NodeService.cs" />

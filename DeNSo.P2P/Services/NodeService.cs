@@ -9,7 +9,7 @@ using DeNSo.P2P.Messages;
 namespace DeNSo.P2P.Services
 {
   [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-  public class NodeService : INodeServices
+  internal class NodeService : INodeServices
   {
     #region private fields
 
@@ -33,12 +33,22 @@ namespace DeNSo.P2P.Services
       }
     }
 
+    public void NotifyNodeInfo(NodeInfo node)
+    {
+      RegisterNodeInfo(node);
+    }
+
     public void RequestNodeInfo()
     {
       CallbackChannel.NodeInfoResponse(NodeInfo.Current);
     }
     
     public void NodeInfoResponse(NodeInfo node)
+    {
+      RegisterNodeInfo(node);
+    }
+
+    private void RegisterNodeInfo(NodeInfo node)
     {
       if (!Nodes.ContainsKey(node.Identity))
       {

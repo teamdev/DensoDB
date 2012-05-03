@@ -24,7 +24,11 @@ namespace DeNSo.P2P.Messages
 
     static NodeInfo()
     {
-      Current = new NodeInfo() { Identity = Configuration.NodeIdentity, HopCount = Configuration.Extensions.P2P().MaxHop };
+      Current = new NodeInfo()
+      {
+        Identity = Configuration.NodeIdentity,
+        HopCount = Configuration.Extensions.P2P().MaxHop
+      };
     }
   }
 }

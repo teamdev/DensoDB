@@ -21,5 +21,11 @@ namespace DeNSo.P2P.Messages
     [MessageBodyMember]
     public byte[] Command { get; set; }
 
+    [MessageBodyMember]
+    public string CommandMarker { get; set; }
+
+    [PeerHopCount]
+    public int MaxHop { get; set; }
+
   }
 }

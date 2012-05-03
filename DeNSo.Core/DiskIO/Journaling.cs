@@ -45,7 +45,7 @@ namespace DeNSo.Core
       Init();
     }
 
-    public long LogCommand(byte[] command)
+    public long LogCommand(EventCommand command)
     {
       lock (_filelock)
       {
@@ -54,9 +54,10 @@ namespace DeNSo.Core
           // Writing the journal
           _writer.Write('K');
           _writer.Write(++CommandSN);
+          _writer.Write(command.CommandMarker ?? string.Empty);
           _writer.Write('D');
-          _writer.Write((int)command.Length);
-          _writer.Write(command);
+          _writer.Write((int)command.Command.Length);
+          _writer.Write(command.Command);
           //_logfile.Flush();
 
           if (_logfile.Length - _logfile.Position < MByte)
@@ -67,6 +68,11 @@ namespace DeNSo.Core
       }
       return CommandSN;
     }
+
+  //  public long LogCommand(byte[] command)
+    //{
+    //  return LogCommand(new EventCommand() { Command = command });
+    //}
 
     private bool Init()
     {
@@ -172,6 +178,7 @@ namespace DeNSo.Core
     {
       bw.Write('K');
       bw.Write(command.CommandSN);
+      bw.Write(command.CommandMarker??string.Empty);
       bw.Write('D');
       bw.Write(command.Command.Length);
       bw.Write(command.Command);
@@ -183,12 +190,13 @@ namespace DeNSo.Core
       if (k == 'K')
       {
         var csn = br.ReadInt64();
+        var marker = br.ReadString();
         var d = br.ReadChar();
         if (d == 'D')
         {
           var len = br.ReadInt32();
           byte[] command = br.ReadBytes(len);
-          return new EventCommand() { Command = command, CommandSN = csn };
+          return new EventCommand() { Command = command, CommandSN = csn, CommandMarker = marker };
         }
       }
       return null;

@@ -6,6 +6,8 @@ using System.ServiceModel;
 using DeNSo.P2P.Interfaces;
 using DeNSo.P2P.Messages;
 using DeNSo.Core;
+using DeNSo.Meta.BSon;
+using DeNSo.Core.DiskIO;
 
 namespace DeNSo.P2P.Services
 {
@@ -21,7 +23,11 @@ namespace DeNSo.P2P.Services
     public void GlobalEvent(EventMessage message)
     {
       var store = StoreManager.GetEventStore(message.Database);
-      store.Enqueue(message.Command);
+
+      EventCommand cmd = new EventCommand() { Command = message.Command, CommandMarker = message.CommandMarker };
+      cmd.SetMarker(P2PConfiguration.NoRedispatch);
+
+      store.Enqueue(cmd);
     }
 
     public void InterestedIn(string database, string collection)
