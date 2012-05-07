@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ServiceModel;
 using DeNSo.P2P.Filters;
+using System.Diagnostics;
 
 namespace DeNSo.P2P
 {
@@ -65,6 +66,7 @@ namespace DeNSo.P2P
       peerNode.MessagePropagationFilter = remoteOnlyFilter;
 
       sourceProxy.Open();
+      Debug.WriteLine(string.Format("PNRP is {0} avaiable", NetPeerTcpBinding.IsPnrpAvailable ? string.Empty  :"not"));
       return sourceProxy;
     }
 
