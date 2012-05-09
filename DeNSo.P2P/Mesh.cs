@@ -41,7 +41,7 @@ namespace DeNSo.P2P
       return sourceProxy;
     }
 
-    public static TChannel OpenDuplexPeerChannel<TService, TChannel>(TService sourceObject) where TChannel : IClientChannel
+    public static TChannel OpenDuplexPeerChannel<TService, TChannel>(TService sourceObject, Action<NetPeerTcpBinding> bindingconfiguration = null) where TChannel : IClientChannel
     {
       InstanceContext sourceContext = new InstanceContext(sourceObject);
       var portnumber = DeNSo.Core.Configuration.Extensions.P2P().NetworkPort;
@@ -52,6 +52,10 @@ namespace DeNSo.P2P
       };
 
       binding.Security.Mode = SecurityMode.None;
+      binding.Resolver.Mode = System.ServiceModel.PeerResolvers.PeerResolverMode.Pnrp;
+
+      if (bindingconfiguration != null)
+        bindingconfiguration(binding);
 
       EndpointAddress address = new EndpointAddress(GetURI().OriginalString);
       DuplexChannelFactory<TChannel> sourceFactory = new DuplexChannelFactory<TChannel>(sourceContext, binding, address);
@@ -66,10 +70,9 @@ namespace DeNSo.P2P
       peerNode.MessagePropagationFilter = remoteOnlyFilter;
 
       sourceProxy.Open();
-      Debug.WriteLine(string.Format("PNRP is {0} avaiable", NetPeerTcpBinding.IsPnrpAvailable ? string.Empty  :"not"));
+      Debug.WriteLine(string.Format("PNRP is {0} avaiable", NetPeerTcpBinding.IsPnrpAvailable ? string.Empty : "not"));
       return sourceProxy;
     }
-
 
   }
 }

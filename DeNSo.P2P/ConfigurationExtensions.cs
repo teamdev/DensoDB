@@ -16,19 +16,28 @@ namespace DeNSo.P2P
 
   public class P2PConfiguration
   {
-    public string NetworkPassword { get; set; }
+    private string _password;
+    public string NetworkPassword
+    {
+      get
+      {
+        if (string.IsNullOrEmpty(_password))
+          return "densodbdefaultpass";
+        return _password;
+      }
+      set { _password = value; }
+    }
     public string ServiceUri { get; set; }
     public int NetworkPort { get; set; }
     public int MaxHop { get; set; }
 
     public const string NoRedispatch = "p2p_noredispatch";
 
-
     public P2PConfiguration()
     {
       var rnd = new Random();
       ServiceUri = "net.p2p://mesh.denso.net";
-      NetworkPassword = "DensoTest";
+      NetworkPassword = "densodbdefaultpass";
       NetworkPort = 8090 + rnd.Next(1000);
       MaxHop = 5;
     }
