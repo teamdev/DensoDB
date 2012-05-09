@@ -5,6 +5,7 @@ using System.Text;
 using DeNSo.P2P.Services;
 using DeNSo.P2P.Interfaces;
 using DeNSo.P2P.Messages;
+using System.Net.PeerToPeer;
 
 namespace DeNSo.P2P
 {
@@ -30,14 +31,17 @@ namespace DeNSo.P2P
         _eventchannel = Mesh.OpenDuplexPeerChannel<IEventP2PServices, IEventP2PServiceChannel>(_eventservice);
       }
 
-      //if (_nodechannel == null)
-      //{
-      //  _node = new NodeService();
-      //  _nodechannel = Mesh.OpenDuplexPeerChannel<INodeServices, INodeServiceChannel>(_node);
-      //}
-
-      // register event dispatcher
       RegisterP2PDispatcherInEventStore();
+    }
+
+    public static void MakeNodeAvaiableToPNRP(Cloud cloud = null)
+    {
+      Mesh.RegisterNodeInPNRP(cloud);
+    }
+
+    public static void RemoveNodeFromPNRP()
+    {
+      Mesh.DeregisterNodeInPNRP();
     }
 
     /// <summary>
@@ -67,30 +71,6 @@ namespace DeNSo.P2P
     {
       _eventchannel.GlobalEvent(message);
     }
-    //private static void DispatchToAll()
-    //{ 
-
-    //}
-
-    //private static void DispatchToNode()
-    //{ 
-
-    //}
-
-    //private static void DispatchToFaultTolleranceServer()
-    //{ 
-
-    //}
-
-    //private static bool IsMeshAvaiable()
-    //{
-    //  return true;
-    //}
-
-    //private static bool IsFaultTolleranceServerAvaiable()
-    //{
-    //  return true;
-    //}
 
     public static void StopP2PEventMesh()
     {

@@ -5,11 +5,14 @@ using System.Text;
 using System.ServiceModel;
 using DeNSo.P2P.Filters;
 using System.Diagnostics;
+using System.Net.PeerToPeer;
 
 namespace DeNSo.P2P
 {
   internal static class Mesh
   {
+    private static volatile PeerNameRegistration _peerNameRegistration;
+
     private static Uri GetURI()
     {
       return new Uri(DeNSo.Core.Configuration.Extensions.P2P().ServiceUri);
@@ -74,5 +77,17 @@ namespace DeNSo.P2P
       return sourceProxy;
     }
 
+    public static void RegisterNodeInPNRP(Cloud cloud = null)
+    {
+      PeerName name = new PeerName(DeNSo.Core.Configuration.NodeIdentity.ToString(), PeerNameType.Secured);
+      _peerNameRegistration = new PeerNameRegistration(name, DeNSo.Core.Configuration.Extensions.P2P().NetworkPort);
+      _peerNameRegistration.Cloud = cloud ?? Cloud.Available;
+      _peerNameRegistration.Start();
+    }
+
+    public static void DeregisterNodeInPNRP()
+    {
+      _peerNameRegistration.Stop();
+    }
   }
 }
