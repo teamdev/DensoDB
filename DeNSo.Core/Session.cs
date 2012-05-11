@@ -57,7 +57,7 @@ namespace DeNSo.Core
       waitingThread.Start();
     }
 
-    public void WaitForNonSteelDataAt(long eventcommandnumber)
+    public void WaitForNonStaleDataAt(long eventcommandnumber)
     {
       if (_lastexecutedcommand >= eventcommandnumber) return;
       _waitingfor = eventcommandnumber;
@@ -68,7 +68,7 @@ namespace DeNSo.Core
 
     }
 
-    public void WaitForNonSteelDataAt(long eventcommandnumber, TimeSpan timeout)
+    public void WaitForNonStaleDataAt(long eventcommandnumber, TimeSpan timeout)
     {
       if (_lastexecutedcommand >= eventcommandnumber) return;
       _waitingfor = eventcommandnumber;
@@ -78,7 +78,7 @@ namespace DeNSo.Core
       _waitingfor = 0;
     }
 
-    public void WaitForNonSteelDataAt(long eventcommandnumber, int timeout)
+    public void WaitForNonStaleDataAt(long eventcommandnumber, int timeout)
     {
       if (_lastexecutedcommand >= eventcommandnumber) return;
       _waitingfor = eventcommandnumber;

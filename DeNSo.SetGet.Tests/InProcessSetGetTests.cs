@@ -23,7 +23,7 @@ namespace DeNSo.SetGet.Tests
       // Clean DB
       var denso = Session.New;
       
-      denso.WaitForNonSteelDataAt(denso.Flush<TestDataModel>());
+      denso.WaitForNonStaleDataAt(denso.Flush<TestDataModel>());
       Session.ShutDown();
     }
 
@@ -38,7 +38,7 @@ namespace DeNSo.SetGet.Tests
       item.StringValue1 = "jdasljdlas";
 
       var cn = denso.Set(item);
-      denso.WaitForNonSteelDataAt(cn);
+      denso.WaitForNonStaleDataAt(cn);
 
       Assert.AreEqual(1, denso.Count<TestDataModel>());
     }
