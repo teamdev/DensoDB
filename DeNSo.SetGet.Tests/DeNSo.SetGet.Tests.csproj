@@ -46,7 +46,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FirsttestBattery.cs" />
+    <Compile Include="InProcessSetGetTests.cs" />
+    <Compile Include="TestDataModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DeNSo.Core\DeNSo.Core.csproj">
+      <Project>{60B0B52B-2846-41DF-931D-24032CF4E9E8}</Project>
+      <Name>DeNSo.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DeNSo.Meta\DeNSo.Meta.csproj">
+      <Project>{FDBAC522-A00C-46A1-B197-FA9AC2788422}</Project>
+      <Name>DeNSo.Meta</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

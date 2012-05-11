@@ -58,6 +58,18 @@ namespace DeNSo.Core
       return _command.Execute(DataBase, cmd.ToBSon().Serialize());
     }
 
+    public void Flush<T>() where T : class
+    {
+      var cmd = new { _action = "flush", _collection = typeof(T).Name };
+      _command.Execute(DataBase, cmd.ToBSon().Serialize());
+    }
+
+    public void Flush(string collection)
+    {
+      var cmd = new { _action = "flush", _collection = collection };
+      _command.Execute(DataBase, cmd.ToBSon().Serialize());
+    }
+
     public IEnumerable<T> Get<T>(Expression<Func<T, bool>> filter = null) where T : class, new()
     {
       return this.Get(typeof(T).Name, filter);

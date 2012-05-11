@@ -93,6 +93,17 @@ namespace DeNSo.Core
           ChangesFromLastSave++;
     }
 
+    public void Flush()
+    {
+      foreach (var d in _primarystore)
+      {
+        foreach (var k in d.Keys)
+        {
+          dRemove(k);
+        }
+      }
+    }
+
     #endregion
 
     #region private entities methods

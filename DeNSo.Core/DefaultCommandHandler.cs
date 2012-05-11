@@ -33,6 +33,11 @@ namespace DeNSo.Core
       InternalExecute(store, command, new InternalMethod(InternalDelete));
     }
 
+    public static void Flush(IStore store, BSonDoc command)
+    {
+      InternalExecute(store, command, new InternalMethod(InternalFlush));
+    }
+
     private static void InternalExecute(IStore store, BSonDoc command, InternalMethod method)
     {
       if (command.HasProperty("_value"))
@@ -119,6 +124,12 @@ namespace DeNSo.Core
         if (ent != null)
           st.Remove(ent);
       }
+    }
+
+    private static void InternalFlush(BSonDoc document, string collection, IStore store)
+    {
+      IObjectStore st = store.GetCollection(collection);
+      st.Flush();
     }
 
     private static void UpdateSingleDocument(BSonDoc document, IObjectStore store)
