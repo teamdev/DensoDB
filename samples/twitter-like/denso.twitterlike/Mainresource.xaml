@@ -1,0 +1,10 @@
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Color x:Key="ActivityBackgroundColor">#E5474747</Color>
+	<Color x:Key="FollowingBackgroundColor">#E52F2F2F</Color>
+	<Color x:Key="FollowersBackgroundColor">#E5121212</Color>
+	<Color x:Key="ExternalBorderBrush">#CC000000</Color>
+	<Color x:Key="ItemsSeparatorColor">#FF8D8D8D</Color>
+	<!-- Posizione per la definizione delle voci del dizionario risorse. -->
+</ResourceDictionary>

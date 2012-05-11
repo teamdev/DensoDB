@@ -1,0 +1,196 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  
+        xmlns:dt="clr-namespace:denso.twitterlike.model;assembly=denso.twitterlike.model"
+        xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" mc:Ignorable="d" x:Class="denso.twitterlike.MainWindow"
+  
+        Title="MainWindow" Height="524" Width="350" Background="{x:Null}" AllowsTransparency="True" WindowStyle="None">
+
+  <Window.Resources>
+    <ObjectDataProvider x:Key="newMessage" ObjectType="{x:Type dt:Message}" />
+    <ObjectDataProvider x:Key="MessageList" />
+  	<ItemsPanelTemplate x:Key="ItemsPanelTemplate1">
+  		<VirtualizingStackPanel IsItemsHost="True" Margin="5,0"/>
+  	</ItemsPanelTemplate>
+  	<LinearGradientBrush x:Key="TextBoxBorder" EndPoint="0,20" MappingMode="Absolute" StartPoint="0,0">
+  		<GradientStop Color="#ABADB3" Offset="0.05"/>
+  		<GradientStop Color="#E2E3EA" Offset="0.07"/>
+  		<GradientStop Color="#E3E9EF" Offset="1"/>
+  	</LinearGradientBrush>
+  	<Style x:Key="TextBoxStyle1" BasedOn="{x:Null}" TargetType="{x:Type TextBox}">
+  		<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+  		<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+  		<Setter Property="BorderBrush" Value="{StaticResource TextBoxBorder}"/>
+  		<Setter Property="BorderThickness" Value="1"/>
+  		<Setter Property="Padding" Value="1"/>
+  		<Setter Property="AllowDrop" Value="true"/>
+  		<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+  		<Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+  		<Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+  		<Setter Property="Template">
+  			<Setter.Value>
+  				<ControlTemplate TargetType="{x:Type TextBox}">
+  					<ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+  						<VisualStateManager.VisualStateGroups>
+  							<VisualStateGroup x:Name="CommonStates">
+  								<VisualState x:Name="Normal"/>
+  								<VisualState x:Name="Disabled"/>
+  								<VisualState x:Name="ReadOnly"/>
+  								<VisualState x:Name="MouseOver"/>
+  							</VisualStateGroup>
+  							<VisualStateGroup x:Name="FocusStates">
+  								<VisualState x:Name="Unfocused"/>
+  								<VisualState x:Name="Focused"/>
+  							</VisualStateGroup>
+  							<VisualStateGroup x:Name="ValidationStates">
+  								<VisualState x:Name="Valid"/>
+  								<VisualState x:Name="InvalidFocused"/>
+  								<VisualState x:Name="InvalidUnfocused"/>
+  							</VisualStateGroup>
+  						</VisualStateManager.VisualStateGroups>
+  					</ScrollViewer>
+  					<ControlTemplate.Triggers>
+  						<Trigger Property="IsEnabled" Value="false">
+  							<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+  						</Trigger>
+  					</ControlTemplate.Triggers>
+  				</ControlTemplate>
+  			</Setter.Value>
+  		</Setter>
+  	</Style>
+  	<Storyboard x:Key="OnMouseEnter1"/>
+  </Window.Resources>
+	<Window.Triggers>
+		<EventTrigger RoutedEvent="Mouse.MouseEnter">
+			<BeginStoryboard Storyboard="{StaticResource OnMouseEnter1}"/>
+		</EventTrigger>
+	</Window.Triggers>
+  <Grid MouseLeftButtonDown="Grid_MouseLeftButtonDown">
+  	<Grid.ColumnDefinitions>
+  		<ColumnDefinition/>
+  		<ColumnDefinition Width="Auto"/>
+  	</Grid.ColumnDefinitions>
+		<Border Margin="0" BorderThickness="2" CornerRadius="5,0,5,5">
+			<Border.Background>
+				<LinearGradientBrush EndPoint="0.776,0.982" StartPoint="0.224,0.018">
+					<GradientStop Color="#FF646464"/>
+					<GradientStop Color="#FF4A4A4A" Offset="0.813"/>
+					<GradientStop Color="#FF4C4C4C" Offset="0.056"/>
+					<GradientStop Color="#FF272727" Offset="1"/>
+				</LinearGradientBrush>
+			</Border.Background>
+			<Border.BorderBrush>
+				<SolidColorBrush Color="{DynamicResource ExternalBorderBrush}"/>
+			</Border.BorderBrush>
+  		<Grid >
+  			<Grid.RowDefinitions>
+  				<RowDefinition Height="40"/>
+  				<RowDefinition Height="0.6*"/>
+  				<RowDefinition Height="0.4*"/>
+  			</Grid.RowDefinitions>
+  			<Grid.ColumnDefinitions>
+  				<ColumnDefinition Width="1*" />
+  			</Grid.ColumnDefinitions>
+        <Border Margin="5,0,5,36" Grid.Row="2" d:LayoutOverrides="Height" Background="#33FFFFFF">
+  				<TextBox TextWrapping="Wrap" Text="{Binding Body, Source={StaticResource newMessage}}"
+                   KeyUp="TextBox_KeyUp"
+                   Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource TextBoxStyle1}"/>
+  			</Border>
+  			<GridSplitter HorizontalAlignment="Stretch" Height="3" Margin="0" Grid.Row="1" VerticalAlignment="Bottom">
+  				<GridSplitter.Background>
+  					<SolidColorBrush Color="{DynamicResource ItemsSeparatorColor}"/>
+  				</GridSplitter.Background>
+  			</GridSplitter>
+  			<Button Content="Send message" 
+  				Click="btnSendMessage"
+  				HorizontalAlignment="Right" Margin="0,0,8,8" Width="90" Grid.Row="2" VerticalAlignment="Bottom"/>
+    
+  			<ListView Grid.Column="0" Grid.Row="1"
+  				ItemsSource="{Binding Source={StaticResource MessageList}}" Background="{x:Null}" BorderThickness="0,3,0,1" Foreground="White" ItemsPanel="{DynamicResource ItemsPanelTemplate1}" Margin="0,0,0,3"
+              >
+  				<ListView.BorderBrush>
+  					<SolidColorBrush Color="{DynamicResource ItemsSeparatorColor}"/>
+  				</ListView.BorderBrush>
+  				<ListView.ItemTemplate>
+  					<DataTemplate>
+  						<TextBlock Text="{Binding Body}" />
+  					</DataTemplate>
+  				</ListView.ItemTemplate>
+  			</ListView>
+  			<TextBlock TextWrapping="Wrap" Foreground="White" FontSize="18.667" Text="Twitter-like mini client" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0">
+  				<TextBlock.Effect>
+  					<DropShadowEffect/>
+  				</TextBlock.Effect>
+  			</TextBlock>
+  		</Grid>
+  	</Border>
+		<StackPanel Margin="0" Width="100" d:LayoutOverrides="GridBox" Grid.Column="1" Visibility="Collapsed">
+			<Border BorderThickness="0,2,2,0" Height="100" CornerRadius="0,5,0,0">
+				<Border.BorderBrush>
+					<SolidColorBrush Color="{DynamicResource ExternalBorderBrush}"/>
+				</Border.BorderBrush>
+				<Border.Background>
+					<SolidColorBrush Color="{DynamicResource ActivityBackgroundColor}"/>
+				</Border.Background>
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition/>
+						<RowDefinition/>
+					</Grid.RowDefinitions>
+					<TextBlock Margin="0" TextWrapping="Wrap" Text="Activity" VerticalAlignment="Bottom" d:LayoutOverrides="Width" HorizontalAlignment="Center" Foreground="White" FontSize="16" FontFamily="Calibri"/>
+					<TextBlock Margin="0" TextWrapping="Wrap" Text="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="18.667" FontFamily="Calibri" Grid.Row="1" FontWeight="Bold" FontStyle="Italic"/>
+				</Grid>
+			</Border>
+			<Border BorderThickness="0,1,2,0" Height="100">
+				<Border.BorderBrush>
+					<SolidColorBrush Color="{DynamicResource ExternalBorderBrush}"/>
+				</Border.BorderBrush>
+				<Border.Background>
+					<SolidColorBrush Color="{DynamicResource FollowingBackgroundColor}"/>
+				</Border.Background>
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition/>
+						<RowDefinition/>
+					</Grid.RowDefinitions>
+					<TextBlock Margin="0" TextWrapping="Wrap" Text="Following" VerticalAlignment="Bottom" d:LayoutOverrides="Width" HorizontalAlignment="Center" Foreground="White" FontSize="16" FontFamily="Calibri"/>
+					<TextBlock Margin="0" TextWrapping="Wrap" Text="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="18.667" FontFamily="Calibri" Grid.Row="1" FontWeight="Bold" FontStyle="Italic"/>
+				</Grid>
+			</Border>
+			<Border BorderThickness="0,1,2,0" Height="100">
+				<Border.BorderBrush>
+					<SolidColorBrush Color="{DynamicResource ExternalBorderBrush}"/>
+				</Border.BorderBrush>
+				<Border.Background>
+					<SolidColorBrush Color="{DynamicResource FollowersBackgroundColor}"/>
+				</Border.Background>
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition/>
+						<RowDefinition/>
+					</Grid.RowDefinitions>
+					<TextBlock Margin="0" TextWrapping="Wrap" Text="Followers" VerticalAlignment="Bottom" d:LayoutOverrides="Width" HorizontalAlignment="Center" Foreground="White" FontSize="16" FontFamily="Calibri"/>
+					<TextBlock Margin="0" TextWrapping="Wrap" Text="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="18.667" FontFamily="Calibri" Grid.Row="1" FontWeight="Bold" FontStyle="Italic"/>
+				</Grid>
+			</Border>
+			<Border BorderThickness="0,1,2,2" Height="100" CornerRadius="0,0,5,0">
+				<Border.BorderBrush>
+					<SolidColorBrush Color="{DynamicResource ExternalBorderBrush}"/>
+				</Border.BorderBrush>
+				<Border.Background>
+					<SolidColorBrush Color="#E5152F00"/>
+				</Border.Background>
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition/>
+						<RowDefinition/>
+					</Grid.RowDefinitions>
+					<TextBlock Margin="0" TextWrapping="Wrap" VerticalAlignment="Bottom" d:LayoutOverrides="Width" HorizontalAlignment="Center" Foreground="White" FontSize="16" FontFamily="Calibri" Text="Users Online"/>
+					<TextBlock Margin="0" TextWrapping="Wrap" Text="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="18.667" FontFamily="Calibri" Grid.Row="1" FontWeight="Bold" FontStyle="Italic"/>
+				</Grid>
+			</Border>
+		</StackPanel>
+	</Grid>
+</Window>
