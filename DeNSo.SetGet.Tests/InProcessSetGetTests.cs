@@ -21,13 +21,26 @@ namespace DeNSo.SetGet.Tests
     public void TestClean()
     {
       // Clean DB
-      Session.New.Flush<TestDataModel>();
+      var denso = Session.New;
+      
+      denso.WaitForNonSteelDataAt(denso.Flush<TestDataModel>());
+      Session.ShutDown();
     }
 
     [TestMethod]
     public void SetSingleItemTest()
     {
       var denso = Session.New;
+      var item = new TestDataModel();
+
+      item.DateValue1 = new DateTime(1975, 02, 13);
+      item.IntValue1 = 99;
+      item.StringValue1 = "jdasljdlas";
+
+      var cn = denso.Set(item);
+      denso.WaitForNonSteelDataAt(cn);
+
+      Assert.AreEqual(1, denso.Count<TestDataModel>());
     }
   }
 }

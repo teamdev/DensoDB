@@ -78,7 +78,7 @@ namespace DeNSo.Core
         //sDebug.WriteLine(string.Empty);
 
         if (_waitingevents.Count == 0)
-          Session.RaiseStoreUpdated();
+          Session.RaiseStoreUpdated(LastExecutedCommandSN);
 
       }
     }

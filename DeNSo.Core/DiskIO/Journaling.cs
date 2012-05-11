@@ -18,7 +18,7 @@ namespace DeNSo.Core
     private BinaryWriter _writer = null;
     private BinaryFormatter _bf = new BinaryFormatter();
     private const int MByte = 1024 * 1204;
-    private int _increasefileby = 5 * MByte; 
+    private int _increasefileby = 1 * MByte; 
     #endregion
 
     #region public properties

@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="7c21d417-4ae9-4631-bcc6-36aeaf4cc442" name="Paolo.Possanzini@ARCHERSSD 2012-05-11 19:42:21" runUser="TEAMDEV\Paolo.Possanzini" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="Local" id="bb20c32e-9085-4f02-9c24-045208f34b57">
+    <Description>These are default test settings for a local test run.</Description>
+    <Deployment enabled="false" runDeploymentRoot="Paolo.Possanzini_ARCHERSSD 2012-05-11 19_42_21">
+      <DeploymentItem filename="D:\Work\github\densodb\DeNSo.Core\bin\Debug\DeNSo.Core.dll" />
+      <DeploymentItem filename="D:\Work\github\densodb\DeNSo.Meta\bin\Debug\DeNSo.Meta.dll" />
+    </Deployment>
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+      </AgentRule>
+    </Execution>
+  </TestSettings>
+  <Times creation="2012-05-11T19:42:21.2638376+02:00" queuing="2012-05-11T19:42:22.2998376+02:00" start="2012-05-11T19:42:22.4458376+02:00" finish="2012-05-11T19:42:35.1908376+02:00" />
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" error="0" failed="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="SetSingleItemTest" storage="d:\work\github\densodb\denso.setget.tests\bin\debug\denso.setget.tests.dll" id="95e3f55f-53e2-0884-d5e5-f9bf8c02ec15">
+      <Execution id="b022dcb5-4a45-4b4d-95d3-a20b3780baa7" />
+      <TestMethod codeBase="D:/Work/github/densodb/DeNSo.SetGet.Tests/bin/Debug/DeNSo.SetGet.Tests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="DeNSo.SetGet.Tests.InProcessSetGetTests, DeNSo.SetGet.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="SetSingleItemTest" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="95e3f55f-53e2-0884-d5e5-f9bf8c02ec15" executionId="b022dcb5-4a45-4b4d-95d3-a20b3780baa7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="b022dcb5-4a45-4b4d-95d3-a20b3780baa7" testId="95e3f55f-53e2-0884-d5e5-f9bf8c02ec15" testName="SetSingleItemTest" computerName="ARCHERSSD" duration="00:00:11.4256129" startTime="2012-05-11T19:42:22.5668376+02:00" endTime="2012-05-11T19:42:35.0918376+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b022dcb5-4a45-4b4d-95d3-a20b3780baa7">
+    </UnitTestResult>
+  </Results>
+</TestRun>

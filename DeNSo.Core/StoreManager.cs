@@ -9,6 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace DeNSo.Core
 {
+
   internal static class StoreManager
   {
     internal static ManualResetEvent ShutDownEvent = new ManualResetEvent(false);
@@ -73,6 +74,7 @@ namespace DeNSo.Core
       Journaling.RaiseCloseEvent();
       ShuttingDown = true;
       ShutDownEvent.Set();
+      _started = false;
     }
 
     public static string[] Databases

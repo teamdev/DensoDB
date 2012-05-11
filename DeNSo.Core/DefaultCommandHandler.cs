@@ -40,13 +40,19 @@ namespace DeNSo.Core
 
     private static void InternalExecute(IStore store, BSonDoc command, InternalMethod method)
     {
+      BSonDoc value = null;
+      var collection = string.Empty;
+
       if (command.HasProperty("_value"))
       {
-        var value = command["_value"] as BSonDoc;
-        var collection = (command["_collection"] ?? string.Empty).ToString();
-
-        method(value, collection, store);
+        value = command["_value"] as BSonDoc;
       }
+      if (command.HasProperty("_collection"))
+      {
+        collection = (command["_collection"] ?? string.Empty).ToString();
+      }
+
+      method(value, collection, store);
     }
 
     private static Type GetDocumentType(BSonDoc command)
@@ -83,6 +89,7 @@ namespace DeNSo.Core
 
     private static void InternalUpdate(BSonDoc document, string collection, IStore store)
     {
+      if (document == null || string.IsNullOrEmpty(collection)) return;
       IObjectStore st = store.GetCollection(collection);
 
       if (document.HasProperty(Configuration.DensoIDKeyName))
@@ -100,6 +107,7 @@ namespace DeNSo.Core
 
     private static void InternalSet(BSonDoc document, string collection, IStore store)
     {
+      if (document == null || string.IsNullOrEmpty(collection)) return;
       IObjectStore st = store.GetCollection(collection);
 
       if (document.HasProperty(Configuration.DensoIDKeyName))
@@ -117,6 +125,7 @@ namespace DeNSo.Core
 
     private static void InternalDelete(BSonDoc document, string collection, IStore store)
     {
+      if (document == null || string.IsNullOrEmpty(collection)) return;
       IObjectStore st = store.GetCollection(collection);
       if (document.HasProperty(Configuration.DensoIDKeyName))
       {
@@ -128,6 +137,7 @@ namespace DeNSo.Core
 
     private static void InternalFlush(BSonDoc document, string collection, IStore store)
     {
+      if (string.IsNullOrEmpty(collection)) return;
       IObjectStore st = store.GetCollection(collection);
       st.Flush();
     }

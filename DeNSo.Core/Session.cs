@@ -6,29 +6,86 @@ using DeNSo.Core.CQRS;
 using DeNSo.Meta.BSon;
 using DeNSo.Meta;
 using System.Linq.Expressions;
+using System.Threading;
 
 namespace DeNSo.Core
 {
-  public class Session : DeNSo.Meta.ISession
+  public delegate void StoreUpdatedHandler(long executedcommandsn);
+
+  public class Session : DeNSo.Meta.ISession, IDisposable
   {
     private Command _command = new Command();
     private Query _query = new Query();
+
+    private ManualResetEvent _waiting = new ManualResetEvent(false);
+    private long _waitingfor = 0;
+    private long _lastexecutedcommand = 0;
 
     public static string DefaultDataBase { get; set; }
     public static Session New { get { return new Session() { DataBase = DefaultDataBase ?? string.Empty }; } }
 
     public string DataBase { get; set; }
-    public static event EventHandler StoreUpdated;
+    public static event StoreUpdatedHandler StoreUpdatedHandler;
 
-    internal static void RaiseStoreUpdated()
+    internal static void RaiseStoreUpdated(long commandnumber)
     {
-      if (StoreUpdated != null)
-        StoreUpdated(null, EventArgs.Empty);
+      if (StoreUpdatedHandler != null)
+        StoreUpdatedHandler(commandnumber);
     }
 
     private Session()
     {
       StoreManager.Start();
+    }
+
+    public void Dispose()
+    {
+    }
+
+    private void RegisterWaitEventAsync()
+    {
+      Thread waitingThread = new Thread((ThreadStart)delegate
+      {
+        Session.StoreUpdatedHandler += (sn) =>
+        {
+          _lastexecutedcommand = sn;
+          if (_waitingfor <= sn)
+            _waiting.Set();
+        };
+      });
+      waitingThread.IsBackground = true;
+      waitingThread.Start();
+    }
+
+    public void WaitForNonSteelDataAt(long eventcommandnumber)
+    {
+      if (_lastexecutedcommand >= eventcommandnumber) return;
+      _waitingfor = eventcommandnumber;
+      _waiting.Reset();
+      RegisterWaitEventAsync();
+      _waiting.WaitOne();
+      _waitingfor = 0;
+
+    }
+
+    public void WaitForNonSteelDataAt(long eventcommandnumber, TimeSpan timeout)
+    {
+      if (_lastexecutedcommand >= eventcommandnumber) return;
+      _waitingfor = eventcommandnumber;
+      _waiting.Reset();
+      _waiting.WaitOne(timeout);
+      RegisterWaitEventAsync();
+      _waitingfor = 0;
+    }
+
+    public void WaitForNonSteelDataAt(long eventcommandnumber, int timeout)
+    {
+      if (_lastexecutedcommand >= eventcommandnumber) return;
+      _waitingfor = eventcommandnumber;
+      _waiting.Reset();
+      _waiting.WaitOne(timeout);
+      RegisterWaitEventAsync();
+      _waitingfor = 0;
     }
 
     public long Set<T>(T entity) where T : class
@@ -58,16 +115,15 @@ namespace DeNSo.Core
       return _command.Execute(DataBase, cmd.ToBSon().Serialize());
     }
 
-    public void Flush<T>() where T : class
+    public long Flush<T>() where T : class
     {
       var cmd = new { _action = "flush", _collection = typeof(T).Name };
-      _command.Execute(DataBase, cmd.ToBSon().Serialize());
+      return _command.Execute(DataBase, cmd.ToBSon().Serialize());
     }
-
-    public void Flush(string collection)
+    public long Flush(string collection)
     {
       var cmd = new { _action = "flush", _collection = collection };
-      _command.Execute(DataBase, cmd.ToBSon().Serialize());
+      return _command.Execute(DataBase, cmd.ToBSon().Serialize());
     }
 
     public IEnumerable<T> Get<T>(Expression<Func<T, bool>> filter = null) where T : class, new()
@@ -108,5 +164,6 @@ namespace DeNSo.Core
     {
       StoreManager.ShutDown();
     }
+
   }
 }
