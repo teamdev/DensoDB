@@ -67,7 +67,6 @@ namespace DeNSo.Core
       _waitingfor = 0;
 
     }
-
     public void WaitForNonStaleDataAt(long eventcommandnumber, TimeSpan timeout)
     {
       if (_lastexecutedcommand >= eventcommandnumber) return;
@@ -77,7 +76,6 @@ namespace DeNSo.Core
       RegisterWaitEventAsync();
       _waitingfor = 0;
     }
-
     public void WaitForNonStaleDataAt(long eventcommandnumber, int timeout)
     {
       if (_lastexecutedcommand >= eventcommandnumber) return;
@@ -165,5 +163,9 @@ namespace DeNSo.Core
       StoreManager.ShutDown();
     }
 
+    public static void Start()
+    {
+      StoreManager.Start();
+    }
   }
 }

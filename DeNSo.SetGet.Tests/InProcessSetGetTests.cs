@@ -15,6 +15,7 @@ namespace DeNSo.SetGet.Tests
     {
       Configuration.BasePath = @"E:\DensoUnitTests";
       Session.DefaultDataBase = "UnitTests";
+      
     }
 
     [TestCleanup]
@@ -23,7 +24,7 @@ namespace DeNSo.SetGet.Tests
       // Clean DB
       var denso = Session.New;
       
-      denso.WaitForNonStaleDataAt(denso.Flush<TestDataModel>());
+      denso.WaitForNonStaleDataAt(denso.Flush<TestDataModel>(),200);
       Session.ShutDown();
     }
 
@@ -38,9 +39,40 @@ namespace DeNSo.SetGet.Tests
       item.StringValue1 = "jdasljdlas";
 
       var cn = denso.Set(item);
-      denso.WaitForNonStaleDataAt(cn);
+      denso.WaitForNonStaleDataAt(cn,2000);
 
       Assert.AreEqual(1, denso.Count<TestDataModel>());
+    }
+
+    [TestMethod]
+    public void SetMultipleItem()
+    {
+      var denso = Session.New;
+
+      var item = new TestDataModel();
+
+      item.DateValue1 = new DateTime(1975, 02, 13);
+      item.IntValue1 = 99;
+      item.StringValue1 = "jdasljdlas";
+
+      var cn = denso.Set(item);
+
+      item = new TestDataModel();
+      item.DateValue1 = new DateTime(1975, 02, 23);
+      item.IntValue1 = 96;
+      item.StringValue1 = "sasd";
+
+      cn = denso.Set(item);
+
+      item = new TestDataModel();
+      item.DateValue1 = new DateTime(1975, 02, 25);
+      item.IntValue1 = 90;
+      item.StringValue1 = "sasddasdas";
+
+      cn = denso.Set(item);
+
+      denso.WaitForNonStaleDataAt(cn, 2000);
+      Assert.AreEqual(3, denso.Count<TestDataModel>());
     }
   }
 }
