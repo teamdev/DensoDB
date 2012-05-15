@@ -51,12 +51,13 @@ namespace DeNSo.Core
           {
             var cmd = Journaling.ReadCommand(br);
             if (cmd != null)
+            {
               if (cmd.CommandSN > LastExecutedCommandSN)
               {
                 _waitingevents.Enqueue(cmd);
               }
-
-            journalsn = Math.Max(journalsn, cmd.CommandSN);
+              journalsn = Math.Max(journalsn, cmd.CommandSN);
+            }
           }
         }
       return journalsn;

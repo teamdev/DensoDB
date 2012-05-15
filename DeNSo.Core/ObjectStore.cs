@@ -97,10 +97,11 @@ namespace DeNSo.Core
     {
       foreach (var d in _primarystore)
       {
-        foreach (var k in d.Keys)
-        {
-          dRemove(k);
-        }
+        d.Clear();
+        //foreach (var k in d.Keys)
+        //{
+        //  d.Clear();
+        //}
       }
     }
 

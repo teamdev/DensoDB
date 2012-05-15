@@ -13,9 +13,10 @@ namespace DeNSo.SetGet.Tests
     [TestInitialize]
     public void TestInit()
     {
-      Configuration.BasePath = @"E:\DensoUnitTests";
+      Configuration.BasePath = @"c:\DensoUnitTests";
       Session.DefaultDataBase = "UnitTests";
-
+      var denso = Session.New;
+      denso.WaitForNonStaleDataAt(denso.Flush<TestDataModel>());
     }
 
     [TestCleanup]
@@ -24,7 +25,7 @@ namespace DeNSo.SetGet.Tests
       // Clean DB
       var denso = Session.New;
 
-      denso.WaitForNonStaleDataAt(denso.Flush<TestDataModel>(), 200);
+      denso.WaitForNonStaleDataAt(denso.Flush<TestDataModel>());
       Session.ShutDown();
     }
 
@@ -32,6 +33,7 @@ namespace DeNSo.SetGet.Tests
     public void SetSingleItemTest()
     {
       var denso = Session.New;
+
       var item = new TestDataModel();
 
       item.DateValue1 = new DateTime(1975, 02, 13);
@@ -39,7 +41,7 @@ namespace DeNSo.SetGet.Tests
       item.StringValue1 = "jdasljdlas";
 
       var cn = denso.Set(item);
-      denso.WaitForNonStaleDataAt(cn, 2000);
+      denso.WaitForNonStaleDataAt(cn);
 
       Assert.AreEqual(1, denso.Count<TestDataModel>());
     }
@@ -71,7 +73,7 @@ namespace DeNSo.SetGet.Tests
 
       cn = denso.Set(item);
 
-      denso.WaitForNonStaleDataAt(cn, 2000);
+      denso.WaitForNonStaleDataAt(cn);
       Assert.AreEqual(3, denso.Count<TestDataModel>());
     }
 

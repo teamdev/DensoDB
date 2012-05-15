@@ -36,6 +36,7 @@ namespace DeNSo.Core
     private Session()
     {
       StoreManager.Start();
+      RegisterWaitEventAsync();
     }
 
     public void Dispose()
@@ -61,9 +62,8 @@ namespace DeNSo.Core
     {
       if (_lastexecutedcommand >= eventcommandnumber) return;
       _waitingfor = eventcommandnumber;
-      _waiting.Reset();
-      RegisterWaitEventAsync();
       _waiting.WaitOne();
+      _waiting.Reset();
       _waitingfor = 0;
 
     }
@@ -71,18 +71,17 @@ namespace DeNSo.Core
     {
       if (_lastexecutedcommand >= eventcommandnumber) return;
       _waitingfor = eventcommandnumber;
-      _waiting.Reset();
       _waiting.WaitOne(timeout);
-      RegisterWaitEventAsync();
+      _waiting.Reset();
       _waitingfor = 0;
     }
     public void WaitForNonStaleDataAt(long eventcommandnumber, int timeout)
     {
       if (_lastexecutedcommand >= eventcommandnumber) return;
       _waitingfor = eventcommandnumber;
-      _waiting.Reset();
+
       _waiting.WaitOne(timeout);
-      RegisterWaitEventAsync();
+      _waiting.Reset();
       _waitingfor = 0;
     }
 
