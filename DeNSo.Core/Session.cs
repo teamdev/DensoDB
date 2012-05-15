@@ -7,6 +7,7 @@ using DeNSo.Meta.BSon;
 using DeNSo.Meta;
 using System.Linq.Expressions;
 using System.Threading;
+using DeNSo.Core.Struct;
 
 namespace DeNSo.Core
 {
@@ -85,42 +86,42 @@ namespace DeNSo.Core
       _waitingfor = 0;
     }
 
-    public long Set<T>(T entity) where T : class
+    public EventCommandStatus Set<T>(T entity) where T : class
     {
       var cmd = new { _action = "set", _value = entity, _collection = typeof(T).Name };
-      return _command.Execute(DataBase, cmd.ToBSon().Serialize());
+      return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
     }
-    public long Set<T>(string collection, T entity) where T : class
+    public EventCommandStatus Set<T>(string collection, T entity) where T : class
     {
       var cmd = new { _action = "set", _collection = collection, _value = entity };
-      return _command.Execute(DataBase, cmd.ToBSon().Serialize());
+      return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
     }
 
-    public long Execute<T>(T command) where T : class
+    public EventCommandStatus Execute<T>(T command) where T : class
     {
-      return _command.Execute(DataBase, command.ToBSon().Serialize());
+      return EventCommandStatus.Create(_command.Execute(DataBase, command.ToBSon().Serialize()), this);
     }
 
-    public long Delete<T>(T entity) where T : class
+    public EventCommandStatus Delete<T>(T entity) where T : class
     {
       var cmd = new { _action = "delete", _value = entity, _collection = typeof(T).Name };
-      return _command.Execute(DataBase, cmd.ToBSon().Serialize());
+      return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
     }
-    public long Delete<T>(string collection, T entity)
+    public EventCommandStatus Delete<T>(string collection, T entity)
     {
       var cmd = new { _action = "delete", _collection = collection, _value = entity };
-      return _command.Execute(DataBase, cmd.ToBSon().Serialize());
+      return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
     }
 
-    public long Flush<T>() where T : class
+    public EventCommandStatus Flush<T>() where T : class
     {
       var cmd = new { _action = "flush", _collection = typeof(T).Name };
-      return _command.Execute(DataBase, cmd.ToBSon().Serialize());
+      return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
     }
-    public long Flush(string collection)
+    public EventCommandStatus Flush(string collection)
     {
       var cmd = new { _action = "flush", _collection = collection };
-      return _command.Execute(DataBase, cmd.ToBSon().Serialize());
+      return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
     }
 
     public IEnumerable<T> Get<T>(Expression<Func<T, bool>> filter = null) where T : class, new()

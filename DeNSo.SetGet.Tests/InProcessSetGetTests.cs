@@ -106,6 +106,23 @@ namespace DeNSo.SetGet.Tests
 
       cn = denso.Set(item);
       Assert.IsTrue(cn > cn2);
+    }
+
+    [TestMethod]
+    public void TestWaitExtensionMethod()
+    {
+      var denso = Session.New;
+
+      var item = new TestDataModel();
+
+      item.DateValue1 = new DateTime(1975, 02, 13);
+      item.IntValue1 = 99;
+      item.StringValue1 = "jdasljdlas";
+
+      denso.Set(item).Wait();
+      denso.Flush<TestDataModel>().Wait();
+
+      Assert.AreEqual(0, denso.Count<TestDataModel>());
 
     }
   }
