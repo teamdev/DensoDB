@@ -15,7 +15,7 @@ namespace DeNSo.SetGet.Tests
     {
       Configuration.BasePath = @"E:\DensoUnitTests";
       Session.DefaultDataBase = "UnitTests";
-      
+
     }
 
     [TestCleanup]
@@ -23,8 +23,8 @@ namespace DeNSo.SetGet.Tests
     {
       // Clean DB
       var denso = Session.New;
-      
-      denso.WaitForNonStaleDataAt(denso.Flush<TestDataModel>(),200);
+
+      denso.WaitForNonStaleDataAt(denso.Flush<TestDataModel>(), 200);
       Session.ShutDown();
     }
 
@@ -39,7 +39,7 @@ namespace DeNSo.SetGet.Tests
       item.StringValue1 = "jdasljdlas";
 
       var cn = denso.Set(item);
-      denso.WaitForNonStaleDataAt(cn,2000);
+      denso.WaitForNonStaleDataAt(cn, 2000);
 
       Assert.AreEqual(1, denso.Count<TestDataModel>());
     }
@@ -73,6 +73,38 @@ namespace DeNSo.SetGet.Tests
 
       denso.WaitForNonStaleDataAt(cn, 2000);
       Assert.AreEqual(3, denso.Count<TestDataModel>());
+    }
+
+    [TestMethod]
+    public void OpenCloseReopenDatabase()
+    {
+      //
+      var denso = Session.New;
+
+      var item = new TestDataModel();
+
+      item.DateValue1 = new DateTime(1975, 02, 13);
+      item.IntValue1 = 99;
+      item.StringValue1 = "jdasljdlas";
+
+      var cn = denso.Set(item);
+      var cn2 = denso.Flush<TestDataModel>();
+
+      // Close DB
+      Session.ShutDown();
+
+      // reopen DB
+      Session.Start();
+
+      item = new TestDataModel();
+
+      item.DateValue1 = new DateTime(1975, 02, 13);
+      item.IntValue1 = 99;
+      item.StringValue1 = "jdasljdlas";
+
+      cn = denso.Set(item);
+      Assert.IsTrue(cn > cn2);
+
     }
   }
 }

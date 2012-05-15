@@ -26,16 +26,22 @@ namespace DeNSo.Core
       DatabaseName = dbname;
 
       LastExecutedCommandSN = lastcommittedcommandsn;
-      LoadUncommittedEventsFromJournal();
+      long jsn = LoadUncommittedEventsFromJournal();
 
       _eventHandlerThread = new Thread(new ThreadStart(ExecuteEventCommands));
       _eventHandlerThread.Start();
 
       _journal = new Journaling(Configuration.BasePath, dbname);
+
+      // The journal can be empty so i have to evaluate the last committed command serial number 
+      // and reset Command Serial number in the journal to ensure command execution coherency.
+      _journal.CommandSN = Math.Max(jsn, lastcommittedcommandsn);
     }
 
-    internal void LoadUncommittedEventsFromJournal()
+    internal long LoadUncommittedEventsFromJournal()
     {
+      long journalsn = 0;
+
       var jnlfile = Path.Combine(Configuration.BasePath, DatabaseName, "denso.jnl");
       if (File.Exists(jnlfile))
         using (var fs = File.Open(jnlfile, FileMode.Open, FileAccess.Read))
@@ -46,9 +52,14 @@ namespace DeNSo.Core
             var cmd = Journaling.ReadCommand(br);
             if (cmd != null)
               if (cmd.CommandSN > LastExecutedCommandSN)
+              {
                 _waitingevents.Enqueue(cmd);
+              }
+
+            journalsn = Math.Max(journalsn, cmd.CommandSN);
           }
         }
+      return journalsn;
     }
 
     private void ExecuteEventCommands()
@@ -101,12 +112,10 @@ namespace DeNSo.Core
       return csn;
     }
 
-
     public void ShrinkEventStore()
     {
       if (_journal != null)
         _journal.ShrinkToSN(LastExecutedCommandSN);
     }
   }
-
 }

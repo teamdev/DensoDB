@@ -18,14 +18,14 @@ namespace DeNSo.Core
     private BinaryWriter _writer = null;
     private BinaryFormatter _bf = new BinaryFormatter();
     private const int MByte = 1024 * 1204;
-    private int _increasefileby = 1 * MByte; 
+    private int _increasefileby = 1 * MByte;
     #endregion
 
     #region public properties
-    public long CommandSN { get; private set; }
+    public long CommandSN { get; internal set; }
     public string FileName { get; private set; }
     public string DataBaseName { get; private set; }
-    public string BasePath { get; private set; } 
+    public string BasePath { get; private set; }
     #endregion
 
     #region events
@@ -35,7 +35,7 @@ namespace DeNSo.Core
     {
       if (Closing != null)
         Closing(null, EventArgs.Empty);
-    } 
+    }
     #endregion
 
     internal Journaling(string basepath, string databasename)
@@ -69,7 +69,7 @@ namespace DeNSo.Core
       return CommandSN;
     }
 
-  //  public long LogCommand(byte[] command)
+    //  public long LogCommand(byte[] command)
     //{
     //  return LogCommand(new EventCommand() { Command = command });
     //}
@@ -178,7 +178,7 @@ namespace DeNSo.Core
     {
       bw.Write('K');
       bw.Write(command.CommandSN);
-      bw.Write(command.CommandMarker??string.Empty);
+      bw.Write(command.CommandMarker ?? string.Empty);
       bw.Write('D');
       bw.Write(command.Command.Length);
       bw.Write(command.Command);

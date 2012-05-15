@@ -58,6 +58,9 @@ namespace DeNSo.Core
     {
       if (!_started)
       {
+        ShuttingDown = false;
+        ShutDownEvent.Reset();
+
         foreach (var db in GetDatabases())
         {
           OpenDataBase(db);
@@ -74,6 +77,13 @@ namespace DeNSo.Core
       Journaling.RaiseCloseEvent();
       ShuttingDown = true;
       ShutDownEvent.Set();
+      if (_saveDBThread != null)
+        _saveDBThread.Join(new TimeSpan(0, 5, 0));
+
+      // remove all Event Store
+      _eventStore.Clear();
+      _stores.Clear();
+
       _started = false;
     }
 
@@ -125,6 +135,7 @@ namespace DeNSo.Core
           ShutDownEvent.WaitOne(Configuration.DBCheckTimeSpan);
         }
       }
+      ShutDownEvent.Reset();
     }
 
     internal static void SaveDataBase(string databasename)
