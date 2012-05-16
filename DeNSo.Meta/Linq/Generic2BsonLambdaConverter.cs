@@ -85,7 +85,32 @@ namespace DeNSo.Meta
 
     protected override Expression VisitMethodCall(MethodCallExpression node)
     {
+      var member = Visit(node.Object);
+      var declaringtype = node.Method.DeclaringType;
+      var convertedexpression = Expression.Convert(member, declaringtype);
+      return Expression.Call(convertedexpression, node.Method, node.Arguments);
       return base.VisitMethodCall(node);
+
+      //var nn = new XElement(node.NodeType.ToString());
+      //_current.Peek().Add(nn);
+
+      //nn.SetAttributeValue("method", node.Method.Name);
+      //nn.SetAttributeValue("type", node.Method.DeclaringType.AssemblyQualifiedName);
+
+      //_current.Push(nn);
+      //this.Visit(node.Object);
+      //_current.Pop();
+
+      //foreach (var a in node.Arguments)
+      //{
+      //  var v = Expression.Lambda(a).Compile().DynamicInvoke();
+      //  var sn = new XElement("arg", v);
+      //  if (v != null)
+      //    sn.SetAttributeValue("type", v.GetType().AssemblyQualifiedName);
+      //  nn.Add(sn);
+      //}
+
+      //return node;
     }
 
     [Conditional("DEBUG")]

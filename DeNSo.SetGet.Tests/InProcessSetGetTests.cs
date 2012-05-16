@@ -10,6 +10,8 @@ namespace DeNSo.SetGet.Tests
   [TestClass]
   public class InProcessSetGetTests
   {
+    #region Init and Clean Test Environment
+
     [TestInitialize]
     public void TestInit()
     {
@@ -28,17 +30,15 @@ namespace DeNSo.SetGet.Tests
       denso.WaitForNonStaleDataAt(denso.Flush<TestDataModel>());
       Session.ShutDown();
     }
+    #endregion
 
+    #region Simple Set Items
     [TestMethod]
     public void SetSingleItemTest()
     {
       var denso = Session.New;
 
-      var item = new TestDataModel();
-
-      item.DateValue1 = new DateTime(1975, 02, 13);
-      item.IntValue1 = 99;
-      item.StringValue1 = "jdasljdlas";
+      var item = CreateSingleItem();
 
       var cn = denso.Set(item);
       denso.WaitForNonStaleDataAt(cn);
@@ -51,43 +51,26 @@ namespace DeNSo.SetGet.Tests
     {
       var denso = Session.New;
 
-      var item = new TestDataModel();
-
-      item.DateValue1 = new DateTime(1975, 02, 13);
-      item.IntValue1 = 99;
-      item.StringValue1 = "jdasljdlas";
-
+      var item = CreateSingleItem();
       var cn = denso.Set(item);
 
-      item = new TestDataModel();
-      item.DateValue1 = new DateTime(1975, 02, 23);
-      item.IntValue1 = 96;
-      item.StringValue1 = "sasd";
-
+      item = CreateSingleItem();
       cn = denso.Set(item);
 
-      item = new TestDataModel();
-      item.DateValue1 = new DateTime(1975, 02, 25);
-      item.IntValue1 = 90;
-      item.StringValue1 = "sasddasdas";
-
+      item = CreateSingleItem();
       cn = denso.Set(item);
 
       denso.WaitForNonStaleDataAt(cn);
       Assert.AreEqual(3, denso.Count<TestDataModel>());
     }
+    #endregion
 
+    #region Database administrative operations
     [TestMethod]
     public void OpenCloseReopenDatabase()
     {
-      //
       var denso = Session.New;
-
-      var item = new TestDataModel();
-
-      item.DateValue1 = new DateTime(1975, 02, 13);
-      item.IntValue1 = 99;
-      item.StringValue1 = "jdasljdlas";
+      var item = CreateSingleItem();
 
       var cn = denso.Set(item);
       var cn2 = denso.Flush<TestDataModel>();
@@ -98,16 +81,13 @@ namespace DeNSo.SetGet.Tests
       // reopen DB
       Session.Start();
 
-      item = new TestDataModel();
-
-      item.DateValue1 = new DateTime(1975, 02, 13);
-      item.IntValue1 = 99;
-      item.StringValue1 = "jdasljdlas";
-
+      item = CreateSingleItem();
       cn = denso.Set(item);
       Assert.IsTrue(cn > cn2);
     }
+    #endregion
 
+    #region Wait Methods
     [TestMethod]
     public void TestWaitExtensionMethod()
     {
@@ -125,5 +105,39 @@ namespace DeNSo.SetGet.Tests
       Assert.AreEqual(0, denso.Count<TestDataModel>());
 
     }
+    #endregion
+
+    #region Get Methods
+
+    [TestMethod]
+    public void Get1Lambda_MethodCall_Contains()
+    {
+      var denso = Session.New;
+      var item = CreateSingleItem(i => i.StringValue1 = "Prova");
+
+      denso.Set(item).Wait();
+
+      var result = denso.Get<TestDataModel>(m => m.StringValue1.Contains("P"));
+
+      Assert.AreEqual(1, result.Count());
+    }
+
+    #endregion
+
+    private static TestDataModel CreateSingleItem(Action<TestDataModel> refineaction = null)
+    {
+      var item = new TestDataModel();
+
+      Random rnd = new Random();
+      item.DateValue1 = new DateTime(rnd.Next(30) + 1970, rnd.Next(11) + 1, rnd.Next(27) + 1);
+      item.IntValue1 = (int)rnd.Next();
+
+      item.StringValue1 = string.Format("TestItem{0}", rnd.Next(100));
+
+      if (refineaction != null)
+        refineaction(item);
+      return item;
+    }
+
   }
 }
