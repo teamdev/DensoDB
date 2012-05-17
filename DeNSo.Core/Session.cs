@@ -51,8 +51,8 @@ namespace DeNSo.Core
         Session.StoreUpdatedHandler += (sn) =>
         {
           _lastexecutedcommand = sn;
-          if (_waitingfor <= sn)
-            _waiting.Set();
+          //if (_waitingfor <= sn)
+          _waiting.Set();
         };
       });
       waitingThread.IsBackground = true;
@@ -61,29 +61,36 @@ namespace DeNSo.Core
 
     public void WaitForNonStaleDataAt(long eventcommandnumber)
     {
-      if (_lastexecutedcommand >= eventcommandnumber) return;
+      //if (_lastexecutedcommand >= eventcommandnumber) return;
       _waitingfor = eventcommandnumber;
-      _waiting.WaitOne();
-      _waiting.Reset();
-      _waitingfor = 0;
-
-    }
-    public void WaitForNonStaleDataAt(long eventcommandnumber, TimeSpan timeout)
-    {
-      if (_lastexecutedcommand >= eventcommandnumber) return;
-      _waitingfor = eventcommandnumber;
-      _waiting.WaitOne(timeout);
-      _waiting.Reset();
+      while (_lastexecutedcommand < eventcommandnumber)
+      {
+        _waiting.WaitOne(200);
+        _waiting.Reset();
+      }
       _waitingfor = 0;
     }
-    public void WaitForNonStaleDataAt(long eventcommandnumber, int timeout)
+
+    public bool WaitForNonStaleDataAt(long eventcommandnumber, TimeSpan timeout)
     {
-      if (_lastexecutedcommand >= eventcommandnumber) return;
+      //if (_lastexecutedcommand >= eventcommandnumber) return;
+      _waitingfor = eventcommandnumber;
+      _waiting.WaitOne(timeout);
+      if (_lastexecutedcommand < eventcommandnumber) return false;
+      _waiting.Reset();
+      _waitingfor = 0;
+      return true;
+    }
+
+    public bool WaitForNonStaleDataAt(long eventcommandnumber, int timeout)
+    {
       _waitingfor = eventcommandnumber;
 
       _waiting.WaitOne(timeout);
+      if (_lastexecutedcommand < eventcommandnumber) return false;
       _waiting.Reset();
       _waitingfor = 0;
+      return true;
     }
 
     public EventCommandStatus Set<T>(T entity) where T : class

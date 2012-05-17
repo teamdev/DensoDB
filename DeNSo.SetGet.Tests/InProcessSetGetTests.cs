@@ -117,6 +117,45 @@ namespace DeNSo.SetGet.Tests
 
       denso.Set(item).Wait();
 
+      var result = denso.Get<TestDataModel>(m => m.StringValue1.Contains("P") );
+
+      Assert.AreEqual(1, result.Count());
+    }
+
+    [TestMethod]
+    public void Get2Lambda_MethodCall_Contains()
+    {
+      var denso = Session.New;
+      var item = CreateSingleItem(i => i.StringValue1 = "Prova");
+
+      denso.Set(item).Wait();
+
+      var result = denso.Get<TestDataModel>(m => m.StringValue1.Contains("P") && m.StringValue1.StartsWith("P"));
+
+      Assert.AreEqual(1, result.Count());
+    }
+
+    [TestMethod]
+    public void Get3Lambda_MethodCall_Contains()
+    {
+      var denso = Session.New;
+      var item = CreateSingleItem(i => i.StringValue1 = "Prova");
+
+      denso.Set(item).Wait();
+
+      var result = denso.Get<TestDataModel>(m => m.StringValue1.Contains("P"));
+
+      Assert.AreEqual(1, result.Count());
+    }
+
+    [TestMethod]
+    public void Get4Lambda_MethodCall_Contains()
+    {
+      var denso = Session.New;
+      var item = CreateSingleItem(i => i.StringValue1 = "Prova");
+
+      denso.Set(item).Wait();
+
       var result = denso.Get<TestDataModel>(m => m.StringValue1.Contains("P"));
 
       Assert.AreEqual(1, result.Count());

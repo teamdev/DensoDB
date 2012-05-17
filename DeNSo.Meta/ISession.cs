@@ -18,7 +18,7 @@ namespace DeNSo.Meta
     EventCommandStatus Set<T>(T entity) where T : class;
 
     void WaitForNonStaleDataAt(long eventcommandnumber);
-    void WaitForNonStaleDataAt(long eventcommandnumber, TimeSpan timeout);
-    void WaitForNonStaleDataAt(long eventcommandnumber, int timeout);
+    bool WaitForNonStaleDataAt(long eventcommandnumber, TimeSpan timeout);
+    bool WaitForNonStaleDataAt(long eventcommandnumber, int timeout);
   }
 }
