@@ -23,6 +23,11 @@ namespace DeNSo.Meta
       return node.Type;
     }
 
+    private Expression GetFirstExpression(Expression node)
+    {
+      return null;
+    }
+
     protected override Expression VisitBinary(BinaryExpression node)
     {
       var type = GetRightExpressionType(node.Right);
@@ -61,8 +66,19 @@ namespace DeNSo.Meta
 
     protected override Expression VisitMember(MemberExpression node)
     {
-      var mi = typeof(BSonDoc).GetMethod("get_Item", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-      return Expression.Call(Visit(node.Expression), mi, Expression.Constant(node.Member.Name));
+      var baseresult = Visit(node.Expression);
+      if (baseresult.Type == typeof(BSonDoc))
+      {
+        var mi = typeof(BSonDoc).GetMethod("get_Item", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+        return Expression.Call(baseresult, mi, Expression.Constant(node.Member.Name));
+      }
+      else
+      {
+        var mi = node.Expression.Type.GetProperty(node.Member.Name, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+        if (node.Expression.Type != baseresult.Type)
+          baseresult = Expression.Convert(baseresult, node.Expression.Type);
+        return Expression.MakeMemberAccess(baseresult, mi);
+      }
     }
 
     protected override Expression VisitParameter(ParameterExpression node)

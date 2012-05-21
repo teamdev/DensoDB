@@ -117,13 +117,13 @@ namespace DeNSo.SetGet.Tests
 
       denso.Set(item).Wait();
 
-      var result = denso.Get<TestDataModel>(m => m.StringValue1.Contains("P") );
+      var result = denso.Get<TestDataModel>(m => m.StringValue1.Contains("P"));
 
       Assert.AreEqual(1, result.Count());
     }
 
     [TestMethod]
-    public void Get2Lambda_MethodCall_Contains()
+    public void Get2Lambda_MethodCall_Contains_And_StartWith()
     {
       var denso = Session.New;
       var item = CreateSingleItem(i => i.StringValue1 = "Prova");
@@ -136,27 +136,41 @@ namespace DeNSo.SetGet.Tests
     }
 
     [TestMethod]
-    public void Get3Lambda_MethodCall_Contains()
+    public void Get3Lambda_SimpleDateTime()
     {
       var denso = Session.New;
-      var item = CreateSingleItem(i => i.StringValue1 = "Prova");
+      var item = CreateSingleItem(i => { i.StringValue1 = "Prova"; i.DateValue1 = new DateTime(2012, 05, 20); });
 
       denso.Set(item).Wait();
 
-      var result = denso.Get<TestDataModel>(m => m.StringValue1.Contains("P"));
+      var result = denso.Get<TestDataModel>(m => m.DateValue1 == new DateTime(2012, 05, 20));
+
+      Assert.AreEqual(1, result.Count());
+    }
+
+
+    [TestMethod]
+    public void Get4Lambda_SimpleDateTime()
+    {
+      var denso = Session.New;
+      var item = CreateSingleItem(i => { i.StringValue1 = "Prova"; i.DateValue1 = new DateTime(2012, 05, 20); });
+
+      denso.Set(item).Wait();
+
+      var result = denso.Get<TestDataModel>(m => m.DateValue1.Year == 2012);
 
       Assert.AreEqual(1, result.Count());
     }
 
     [TestMethod]
-    public void Get4Lambda_MethodCall_Contains()
+    public void Get5Lambda_SimpleDateTime()
     {
       var denso = Session.New;
-      var item = CreateSingleItem(i => i.StringValue1 = "Prova");
+      var item = CreateSingleItem(i => { i.StringValue1 = "Prova"; i.DateValue1 = new DateTime(2012, 05, 20); });
 
       denso.Set(item).Wait();
 
-      var result = denso.Get<TestDataModel>(m => m.StringValue1.Contains("P"));
+      var result = denso.Get<TestDataModel>(m => m.DateValue1.Year >= new DateTime(2012, 05, 20).Year);
 
       Assert.AreEqual(1, result.Count());
     }
