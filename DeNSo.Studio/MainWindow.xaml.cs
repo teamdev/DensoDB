@@ -11,6 +11,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DeNSo.Studio.Meta;
+using System.Runtime.InteropServices;
+using System.Drawing.Printing;
+using System.Windows.Interop;
 
 namespace DeNSo.Studio
 {
@@ -22,6 +26,24 @@ namespace DeNSo.Studio
     public MainWindow()
     {
       InitializeComponent();
+
+      //this.EnableSystemDropShadow();
+
+      this.leftColumn.RegisterRegion("leftArea");
+      this.centerColumn.RegisterRegion("centerArea");
+      this.rightColumn.RegisterRegion("rightArea");
     }
+
+    private void Border_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+      if(e.LeftButton == MouseButtonState.Pressed)
+        try
+        {
+          this.DragMove();
+        }
+        catch { }
+    }
+
+
   }
 }

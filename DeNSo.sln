@@ -35,6 +35,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Management Studio", "Manage
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeNSo.SetGet.Tests", "DeNSo.SetGet.Tests\DeNSo.SetGet.Tests.csproj", "{F42396A5-E2CD-44FA-8461-218737FA827C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeNSo.Studio.Meta", "DeNSo.Studio.Meta\DeNSo.Studio.Meta.csproj", "{97D1506B-9139-4912-B000-08BD8F27E4AE}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = DeNSo.vsmdi
@@ -140,6 +142,16 @@ Global
 		{F42396A5-E2CD-44FA-8461-218737FA827C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{F42396A5-E2CD-44FA-8461-218737FA827C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F42396A5-E2CD-44FA-8461-218737FA827C}.Release|x86.ActiveCfg = Release|Any CPU
+		{97D1506B-9139-4912-B000-08BD8F27E4AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97D1506B-9139-4912-B000-08BD8F27E4AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97D1506B-9139-4912-B000-08BD8F27E4AE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{97D1506B-9139-4912-B000-08BD8F27E4AE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{97D1506B-9139-4912-B000-08BD8F27E4AE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{97D1506B-9139-4912-B000-08BD8F27E4AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97D1506B-9139-4912-B000-08BD8F27E4AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97D1506B-9139-4912-B000-08BD8F27E4AE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{97D1506B-9139-4912-B000-08BD8F27E4AE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{97D1506B-9139-4912-B000-08BD8F27E4AE}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -151,5 +163,6 @@ Global
 		{457BC66D-F8CC-455B-9244-ECCDA8CA8CC6} = {A57CF389-8303-48F6-8A72-52CED560A194}
 		{941FADB8-09C5-4531-A300-C23FBE4A3FB8} = {A4F5E2EA-5811-45D0-9A42-F67A5A731A94}
 		{D6AF71A5-4C90-44F9-8098-5E2EC833BB20} = {21DDE89E-8A59-4C56-A8C1-B3AFA567209F}
+		{97D1506B-9139-4912-B000-08BD8F27E4AE} = {21DDE89E-8A59-4C56-A8C1-B3AFA567209F}
 	EndGlobalSection
 EndGlobal

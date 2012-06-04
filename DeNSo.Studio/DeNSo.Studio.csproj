@@ -38,9 +38,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Windows.Shell">
+      <HintPath>.\Microsoft.Windows.Shell.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -97,6 +101,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="CarbonFiber2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DeNSo.Studio.Meta\DeNSo.Studio.Meta.csproj">
+      <Project>{97D1506B-9139-4912-B000-08BD8F27E4AE}</Project>
+      <Name>DeNSo.Studio.Meta</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="densoDB_logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
