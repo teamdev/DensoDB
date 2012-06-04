@@ -7,7 +7,7 @@ namespace DeNSo.Meta
 {
   public class Consts
   {
-    public const string DensoIDKeyName = "@id";
-    public const string DensoTSKeyName = "_ts";
+    public const string DensoIDKeyName = "_id";
+    public const string DensoTSKeyName = "@ts#";
   }
 }
