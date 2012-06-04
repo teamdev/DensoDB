@@ -46,6 +46,7 @@
     <Compile Include="BSon\BSonTypeEnum.cs" />
     <Compile Include="BSon\IBson.cs" />
     <Compile Include="BSon\Serializer.cs" />
+    <Compile Include="Consts.cs" />
     <Compile Include="Delegates.cs" />
     <Compile Include="EventCommandStatus.cs" />
     <Compile Include="ISession.cs" />

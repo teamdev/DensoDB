@@ -83,7 +83,7 @@ namespace DeNSo.Core
     private static string[] GetRealProperties(this BSonDoc document)
     {
       string[] invalidproperties = new string[] { "_collection", "_action", "_value", "_id", "_filter", "_type", 
-                                                  Configuration.DensoIDKeyName, Configuration.DensoTSKeyName };
+                                                  Consts.DensoIDKeyName, Consts.DensoTSKeyName };
       return document.Properties.Except(invalidproperties).ToArray();
     }
 
@@ -92,7 +92,7 @@ namespace DeNSo.Core
       if (document == null || string.IsNullOrEmpty(collection)) return;
       IObjectStore st = store.GetCollection(collection);
 
-      if (document.HasProperty(Configuration.DensoIDKeyName))
+      if (document.HasProperty(Consts.DensoIDKeyName))
       {
         UpdateSingleDocument(document, st); return;
       }
@@ -110,7 +110,7 @@ namespace DeNSo.Core
       if (document == null || string.IsNullOrEmpty(collection)) return;
       IObjectStore st = store.GetCollection(collection);
 
-      if (document.HasProperty(Configuration.DensoIDKeyName))
+      if (document.HasProperty(Consts.DensoIDKeyName))
       {
         ReplaceSingleDocument(document, st); return;
       }
@@ -127,9 +127,9 @@ namespace DeNSo.Core
     {
       if (document == null || string.IsNullOrEmpty(collection)) return;
       IObjectStore st = store.GetCollection(collection);
-      if (document.HasProperty(Configuration.DensoIDKeyName))
+      if (document.HasProperty(Consts.DensoIDKeyName))
       {
-        var ent = st.GetById((byte[])document[Configuration.DensoIDKeyName]);
+        var ent = st.GetById((byte[])document[Consts.DensoIDKeyName]);
         if (ent != null)
           st.Remove(ent);
       }
@@ -144,7 +144,7 @@ namespace DeNSo.Core
 
     private static void UpdateSingleDocument(BSonDoc document, IObjectStore store)
     {
-      var obj = store.GetById((byte[])document[Configuration.DensoIDKeyName]);
+      var obj = store.GetById((byte[])document[Consts.DensoIDKeyName]);
       BSonDoc val = GetValue(document);
       foreach (var p in val.GetRealProperties()) // remove properties starting with  
         if (document.HasProperty(p))

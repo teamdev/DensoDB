@@ -17,9 +17,7 @@ namespace DeNSo.Core
     private static DensoExtensions _extensions = new DensoExtensions();
     public static DensoExtensions Extensions { get { return _extensions; } }
 
-    public const string DensoIDKeyName = "_id";
-    public const string DensoTSKeyName = "@ts#";
-
+ 
     public static Guid NodeIdentity { get; private set; }
 
     static Configuration()
