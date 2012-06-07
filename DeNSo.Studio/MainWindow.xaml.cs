@@ -36,7 +36,7 @@ namespace DeNSo.Studio
 
     private void Border_MouseDown(object sender, MouseButtonEventArgs e)
     {
-      if(e.LeftButton == MouseButtonState.Pressed)
+      if (e.LeftButton == MouseButtonState.Pressed)
         try
         {
           this.DragMove();
@@ -44,6 +44,23 @@ namespace DeNSo.Studio
         catch { }
     }
 
+    private void btnExit_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+      this.Close();
+    }
 
+    private void FullScreenToggle_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+      if (this.WindowState == System.Windows.WindowState.Maximized)
+        this.WindowState = System.Windows.WindowState.Normal;
+      else
+        this.WindowState = System.Windows.WindowState.Maximized;
+    }
+
+    private void Iconify_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+
+      this.WindowState = System.Windows.WindowState.Minimized;
+    }
   }
 }
