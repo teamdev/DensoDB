@@ -9,6 +9,7 @@ namespace DeNSo.Core
   public static class Configuration
   {
     public static string BasePath { get; set; }
+    public static string IndexBasePath { get; set; }
     public static TimeSpan SaveInterval { get; set; }
     public static TimeSpan DBCheckTimeSpan { get; set; }
     public static int DictionarySplitSize { get; set; }
@@ -25,6 +26,7 @@ namespace DeNSo.Core
     static Configuration()
     {
       BasePath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DeNSo");
+      IndexBasePath = BasePath;
 
       if (File.Exists(Path.Combine(BasePath, "d.cfg")))
       {

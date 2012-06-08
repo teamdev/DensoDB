@@ -9,7 +9,6 @@ using System.Net.PeerToPeer;
 
 namespace DeNSo.P2P
 {
-
   /// <summary>
   /// Dispatch database messages to the mesh. 
   /// </summary>

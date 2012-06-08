@@ -9,7 +9,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace DeNSo.Core
 {
-
   internal static class StoreManager
   {
     internal static ManualResetEvent ShutDownEvent = new ManualResetEvent(false);
