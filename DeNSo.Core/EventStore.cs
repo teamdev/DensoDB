@@ -13,6 +13,8 @@ namespace DeNSo.Core
   public class EventStore
   {
     internal Journaling _journal = null;
+    internal Journaling _operationsLog = null;
+
     private volatile Queue<EventCommand> _waitingevents = new Queue<EventCommand>();
     private Thread _eventHandlerThread = null;
 
@@ -32,6 +34,8 @@ namespace DeNSo.Core
       _eventHandlerThread.Start();
 
       _journal = new Journaling(Configuration.BasePath, dbname);
+
+      _operationsLog = new Journaling(Configuration.BasePath, dbname);
 
       // The journal can be empty so i have to evaluate the last committed command serial number 
       // and reset Command Serial number in the journal to ensure command execution coherency.
@@ -79,15 +83,17 @@ namespace DeNSo.Core
         EventCommand we;
         lock (_waitingevents)
           we = _waitingevents.Dequeue();
-        //sDebug.Write(string.Format("step3 : {0}", DateTime.Now.ToString("ss:ffff")));
 
-        //Debug.Write(string.Format("step4 : {0}", DateTime.Now.ToString("ss:ffff")));
         EventHandlerManager.ExecuteEvent(DatabaseName, we);
-        //sDebug.Write(string.Format("step5 : {0}", DateTime.Now.ToString("ss:ffff")));
+
         LastExecutedCommandSN = we.CommandSN;
-        if (LastExecutedCommandSN % 1000 == 0)
-          Console.Write(string.Format("LEC: {0} - ", LastExecutedCommandSN));
-        //sDebug.WriteLine(string.Empty);
+
+        if (Debugger.IsAttached)
+          if (LastExecutedCommandSN % 1000 == 0)
+            Console.Write(string.Format("LEC: {0} - ", LastExecutedCommandSN));
+
+        if (Configuration.EnableOperationsLog)
+          _operationsLog.LogCommand(we);
 
         if (_waitingevents.Count == 0)
           Session.RaiseStoreUpdated(LastExecutedCommandSN);

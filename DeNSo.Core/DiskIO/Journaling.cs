@@ -49,22 +49,24 @@ namespace DeNSo.Core
     {
       lock (_filelock)
       {
-        if (OpenLogFile())
-        {
-          // Writing the journal
-          _writer.Write('K');
-          _writer.Write(++CommandSN);
-          _writer.Write(command.CommandMarker ?? string.Empty);
-          _writer.Write('D');
-          _writer.Write((int)command.Command.Length);
-          _writer.Write(command.Command);
-          //_logfile.Flush();
-
-          if (_logfile.Length - _logfile.Position < MByte)
+        CommandSN++;
+        if (Configuration.EnableJournaling)
+          if (OpenLogFile())
           {
-            IncreaseFileSize();
+            // Writing the journal
+            _writer.Write('K');
+            _writer.Write(CommandSN);
+            _writer.Write(command.CommandMarker ?? string.Empty);
+            _writer.Write('D');
+            _writer.Write((int)command.Command.Length);
+            _writer.Write(command.Command);
+            //_logfile.Flush();
+
+            if (_logfile.Length - _logfile.Position < MByte)
+            {
+              IncreaseFileSize();
+            }
           }
-        }
       }
       return CommandSN;
     }
@@ -74,7 +76,7 @@ namespace DeNSo.Core
     //  return LogCommand(new EventCommand() { Command = command });
     //}
 
-    private bool Init()
+    private bool Init(bool isoperationslog = false)
     {
       FileName = Path.Combine(BasePath, DataBaseName);
 
@@ -91,7 +93,11 @@ namespace DeNSo.Core
         return false;
       }
 
-      FileName = Path.Combine(FileName, "denso.jnl");
+      if (isoperationslog)
+        FileName = Path.Combine(FileName, "denso.log");
+      else
+        FileName = Path.Combine(FileName, "denso.jnl");
+
       return OpenLogFile();
     }
 

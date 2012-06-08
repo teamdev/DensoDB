@@ -12,7 +12,9 @@ namespace DeNSo.Core
     public static TimeSpan SaveInterval { get; set; }
     public static TimeSpan DBCheckTimeSpan { get; set; }
     public static int DictionarySplitSize { get; set; }
+
     public static bool EnableJournaling { get; set; }
+    public static bool EnableOperationsLog { get; set; }
 
     private static DensoExtensions _extensions = new DensoExtensions();
     public static DensoExtensions Extensions { get { return _extensions; } }
