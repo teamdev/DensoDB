@@ -15,6 +15,7 @@ using Lucene.Net.Store;
 
 using io = System.IO;
 using luc = Lucene.Net.Search;
+using DeNSo.Meta;
 
 namespace DeNSo.Lucene
 {
@@ -31,11 +32,7 @@ namespace DeNSo.Lucene
 
     static Indexer()
     {
-      EventHandlerManager.RegisterGlobalEventHandler(
-        (store, eventcommand) =>
-        {
-          eventcommand.Command.ToBSon();
-        });
+      EventHandlerManager.RegisterGlobalEventHandler(new Action<IStore, EventCommand>(CalcIndexFor));
     }
 
     public void SetIndex<T>(string indexname, Expression<Func<T, dynamic>> selector)
@@ -77,15 +74,24 @@ namespace DeNSo.Lucene
 
     private static IndexWriter GetIndexWriter(string database, string collection, string indexname)
     {
-      string path = io.Path.Combine(Configuration.IndexBasePath, database, collection, "L-Indexes", indexname);
-      var dirinfo = new io.DirectoryInfo(path);
-      if (!dirinfo.Exists) dirinfo.Create();
-      var dir = FSDirectory.Open(dirinfo);
-      var idx = new IndexWriter(dir, new StandardAnalyzer(global::Lucene.Net.Util.Version.LUCENE_29), false, IndexWriter.MaxFieldLength.UNLIMITED);
-      return idx;
+      lock (_indexes[database][collection][indexname])
+      {
+        string path = io.Path.Combine(Configuration.IndexBasePath, database, collection, "L-Indexes", indexname);
+        var dirinfo = new io.DirectoryInfo(path);
+        if (!dirinfo.Exists) dirinfo.Create();
+        var dir = FSDirectory.Open(dirinfo);
+
+        // maybe somethimes the index can remain locked from previous operations 
+        // and if the process id killed without a soft shutdown. 
+        if (IndexWriter.IsLocked(dir)) IndexWriter.Unlock(dir);
+
+        var idx = new IndexWriter(dir, new StandardAnalyzer(global::Lucene.Net.Util.Version.LUCENE_29), false, IndexWriter.MaxFieldLength.UNLIMITED);
+
+        return idx;
+      }
     }
 
-    private void CalcIndexFor(EventCommand eventcommand)
+    private static void CalcIndexFor(IStore store, EventCommand eventcommand)
     {
       var command = eventcommand.Command.ToBSon();
       var collection = string.Empty;
@@ -101,11 +107,12 @@ namespace DeNSo.Lucene
       {
         // I have to remove the document from the index
         case "delete":
+          RemoveFromIndex(store, collection, command);
           break;
 
         // I have to flush the index.
         case "flush":
-          FlushIndexes(collection);
+          FlushIndexes(store, collection);
           break;
 
         case "":
@@ -113,47 +120,98 @@ namespace DeNSo.Lucene
           return;
 
         default:
-
+          AddToIndexes(store, collection, command);
           break;
       }
     }
 
-    private void FlushIndexes(string collection)
+    private static void FlushIndexes(IStore store, string collection)
     {
-      if (_indexes.ContainsKey(_databasename) && _indexes[_databasename].ContainsKey(collection))
-        foreach (var index in _indexes[_databasename][collection])
+      if (_indexes.ContainsKey(store.DataBaseName) && _indexes[store.DataBaseName].ContainsKey(collection))
+        foreach (var index in _indexes[store.DataBaseName][collection])
           lock (index.Value)
-            using (var iw = GetIndexWriter(_databasename, collection, index.Key))
+            using (var iw = GetIndexWriter(store.DataBaseName, collection, index.Key))
             {
               iw.DeleteAll();
               iw.Commit();
             }
     }
 
-    private luc.Query CreateDocumentIdFixedQuery(string id)
+    private static luc.Query CreateDocumentIdFixedQuery(string id)
     {
       var q = new luc.BooleanQuery();
       q.Add(new luc.TermQuery(new Term(CommandKeyword.Id, id)), luc.BooleanClause.Occur.MUST);
       return q;
     }
 
-    private void RemoveItemFromIndexViaId(string collection, BSonDoc commanddoc)
+    private static void AddToIndexes(IStore store, string collection, BSonDoc commanddoc)
     {
-      if (_indexes.ContainsKey(_databasename) && _indexes[_databasename].ContainsKey(collection))
-        foreach (var index in _indexes[_databasename][collection])
-          lock (index.Value)
-            using (var iw = GetIndexWriter(_databasename, collection, index.Key))
-            {
-              iw.DeleteDocuments(CreateDocumentIdFixedQuery(commanddoc[CommandKeyword.Id].ToString()));
-              iw.Commit();
-            }
+      if (commanddoc.HasProperty(CommandKeyword.Id))
+      {
+        AddDocumentToIndexViaId(store, collection, commanddoc);
+        return;
+      }
+
+      if (commanddoc.HasProperty(CommandKeyword.Filter))
+        return;
     }
 
-    private void RemoveItemFromIndexViaFilter(string collection, BSonDoc commanddoc)
+    private static void AddDocumentToIndexViaId(IStore store, string collection, BSonDoc commanddoc)
     {
-      if (_indexes.ContainsKey(_databasename) && _indexes[_databasename].ContainsKey(collection))
-        foreach (var index in _indexes[_databasename][collection])
+      if (_indexes.ContainsKey(store.DataBaseName) && _indexes[store.DataBaseName].ContainsKey(collection))
+      {
+        var queryid = CreateDocumentIdFixedQuery(commanddoc[CommandKeyword.Id].ToString());
+        foreach (var index in _indexes[store.DataBaseName][collection])
+          lock (index.Value)
+            using (var iw = GetIndexWriter(store.DataBaseName, collection, index.Key))
+            {
+              iw.DeleteDocuments(queryid);
+
+
+
+              iw.Commit();
+            }
+      }
+    }
+
+    private static void AddDocumentToIndexViaFilter(IStore store, string collection, BSonDoc commanddoc)
+    {
+
+    }
+
+    private static void RemoveFromIndex(IStore store, string collection, BSonDoc commanddoc)
+    {
+      if (commanddoc.HasProperty(CommandKeyword.Id))
+      {
+        RemoveItemFromIndexViaId(store, collection, commanddoc);
+        return;
+      }
+
+      if (commanddoc.HasProperty(CommandKeyword.Filter))
+        RemoveItemsFromIndexViaFilter(store, collection, commanddoc);
+    }
+
+    private static void RemoveItemFromIndexViaId(IStore store, string collection, BSonDoc commanddoc)
+    {
+      if (_indexes.ContainsKey(store.DataBaseName) && _indexes[store.DataBaseName].ContainsKey(collection))
+      {
+        var queryid = CreateDocumentIdFixedQuery(commanddoc[CommandKeyword.Id].ToString());
+        foreach (var index in _indexes[store.DataBaseName][collection])
+          lock (index.Value)
+            using (var iw = GetIndexWriter(store.DataBaseName, collection, index.Key))
+            {
+              iw.DeleteDocuments(queryid);
+              iw.Commit();
+            }
+      }
+    }
+
+    private static void RemoveItemsFromIndexViaFilter(IStore store, string collection, BSonDoc commanddoc)
+    {
+      if (_indexes.ContainsKey(store.DataBaseName) && _indexes[store.DataBaseName].ContainsKey(collection))
+        foreach (var index in _indexes[store.DataBaseName][collection])
         {
+          //TODO: write index removal logic via _filter command.
         }
     }
   }
