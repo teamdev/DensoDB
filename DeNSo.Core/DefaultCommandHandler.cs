@@ -43,13 +43,13 @@ namespace DeNSo.Core
       BSonDoc value = null;
       var collection = string.Empty;
 
-      if (command.HasProperty("_value"))
+      if (command.HasProperty(CommandKeyword.Value))
       {
-        value = command["_value"] as BSonDoc;
+        value = command[CommandKeyword.Value] as BSonDoc;
       }
-      if (command.HasProperty("_collection"))
+      if (command.HasProperty(CommandKeyword.Collection))
       {
-        collection = (command["_collection"] ?? string.Empty).ToString();
+        collection = (command[CommandKeyword.Collection] ?? string.Empty).ToString();
       }
 
       method(value, collection, store);
@@ -58,14 +58,14 @@ namespace DeNSo.Core
     private static Type GetDocumentType(BSonDoc command)
     {
       string result = null;
-      if (command.HasProperty("_type_"))
-        result = command["_type_"].ToString();
+      if (command.HasProperty(CommandKeyword.Type))
+        result = command[CommandKeyword.Type].ToString();
       else
-        if (command.HasProperty("_value"))
+        if (command.HasProperty(CommandKeyword.Value))
         {
-          var value = command["_value"] as BSonDoc;
-          if (value != null && value.HasProperty("_type_"))
-            result = value["_type_"].ToString();
+          var value = command[CommandKeyword.Value] as BSonDoc;
+          if (value != null && value.HasProperty(CommandKeyword.Type))
+            result = value[CommandKeyword.Type].ToString();
 
         }
       if (!string.IsNullOrEmpty(result))
@@ -75,15 +75,21 @@ namespace DeNSo.Core
 
     private static BSonDoc GetValue(BSonDoc document)
     {
-      if (document.HasProperty("_value"))
-        return document["_value"] as BSonDoc;
+      if (document.HasProperty(CommandKeyword.Value))
+        return document[CommandKeyword.Value] as BSonDoc;
       return document;
     }
 
     private static string[] GetRealProperties(this BSonDoc document)
     {
-      string[] invalidproperties = new string[] { "_collection", "_action", "_value", "_id", "_filter", "_type", 
-                                                  Consts.DensoIDKeyName, Consts.DensoTSKeyName };
+      string[] invalidproperties = new string[] { CommandKeyword.Action, 
+                                                  CommandKeyword.Collection, 
+                                                  CommandKeyword.Filter, 
+                                                  CommandKeyword.Id, 
+                                                  CommandKeyword.Type, 
+                                                  CommandKeyword.Value, 
+                                                  Consts.DensoIDKeyName, 
+                                                  Consts.DensoTSKeyName };
       return document.Properties.Except(invalidproperties).ToArray();
     }
 
@@ -97,7 +103,7 @@ namespace DeNSo.Core
         UpdateSingleDocument(document, st); return;
       }
 
-      if (document.HasProperty("_filter"))
+      if (document.HasProperty(CommandKeyword.Filter))
       {
         UpdateCollection(document, st); return;
       }
@@ -115,7 +121,7 @@ namespace DeNSo.Core
         ReplaceSingleDocument(document, st); return;
       }
 
-      if (document.HasProperty("_filter"))
+      if (document.HasProperty(CommandKeyword.Filter))
       {
         UpdateCollection(document, st); return;
       }

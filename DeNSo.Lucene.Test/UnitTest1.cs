@@ -3,7 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DensoDB.Lucene;
+using DeNSo.Lucene;
 
 namespace DeNSo.Lucene.Test
 {
@@ -21,8 +21,8 @@ namespace DeNSo.Lucene.Test
     [TestMethod]
     public void TestMethod1()
     {
-      Indexer indx = Indexer.GetIndexerFor("poppe");
-      indx.SetIndex<Game>(g => g.subgame.Name);
+      Indexer indx = Indexer.GetIndexerFor("i");
+      indx.SetIndex<Game>("gamesIndexName", g => g.subgame.Name);
     }
   }
 }

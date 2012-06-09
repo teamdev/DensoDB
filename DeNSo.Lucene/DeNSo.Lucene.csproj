@@ -8,8 +8,8 @@
     <ProjectGuid>{6A508096-FAAE-4E85-B547-FDCB52D69772}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DensoDB.Lucene</RootNamespace>
-    <AssemblyName>DensoDB.Lucene</AssemblyName>
+    <RootNamespace>DeNSo.Lucene</RootNamespace>
+    <AssemblyName>DeNSo.Lucene</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
