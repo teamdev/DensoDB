@@ -23,7 +23,7 @@ namespace DeNSo.Core.EventHandlers
         collection = (command[CommandKeyword.Collection] ?? string.Empty).ToString();
       }
 
-      OnHandle(store, collection, value, command);
+      OnHandle(store, collection, command, value);
       
     }
 

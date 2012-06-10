@@ -16,12 +16,7 @@ namespace DeNSo.Core.EventHandlers
                                   BSonDoc document)
     {
       IObjectStore st = store.GetCollection(collection);
-
-      if (document.HasProperty(Consts.DensoIDKeyName))
-      {
-        ReplaceSingleDocument(document, st); return;
-      }
-      InsertElement(document, st); return;
+      st.Set(document);
     }
   }
 }
