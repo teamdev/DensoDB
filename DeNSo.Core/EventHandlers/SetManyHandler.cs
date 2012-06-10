@@ -7,29 +7,29 @@ using DeNSo.Meta.BSon;
 
 namespace DeNSo.Core.EventHandlers
 {
-  [HandlesCommand(DensoBuiltinCommands.DeleteMany)]
-  public class DeleteManyHandler : BaseCommandHandler
+  [HandlesCommand(DensoBuiltinCommands.SetMany)]
+  public class SetManyHandler : BaseCommandHandler
   {
     public override void OnHandle(IStore store,
                                   string collection,
                                   BSonDoc command,
                                   BSonDoc document)
     {
-      if (document == null || string.IsNullOrEmpty(collection)) return;
       IObjectStore st = store.GetCollection(collection);
 
-      if (document.DocType == BSonDocumentType.BSON_DocumentArray || 
+      if (document.DocType == BSonDocumentType.BSON_DocumentArray ||
           document.DocType == BSonDocumentType.BSON_Dictionary)
       {
         var documents = document.ToList();
         if (documents != null)
           foreach (var d in documents)
-          { 
-            //if(d is BSonDoc && ((BSonDoc)d).HasProperty(CommandKeyword.Id))
+            if (d is BSonDoc)
+              st.Set(d as BSonDoc);
 
-
-
-          }
+      }
+      else
+      {
+        st.Set(document);
       }
     }
   }

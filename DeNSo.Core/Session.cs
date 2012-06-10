@@ -8,6 +8,7 @@ using DeNSo.Meta;
 using System.Linq.Expressions;
 using System.Threading;
 using DeNSo.Core.Struct;
+using DeNSo.Meta.Exceptions;
 
 namespace DeNSo.Core
 {
@@ -95,12 +96,22 @@ namespace DeNSo.Core
 
     public EventCommandStatus Set<T>(T entity) where T : class
     {
-      var cmd = new { _action = "set", _value = entity, _collection = typeof(T).Name };
+      var cmd = new { _action = DensoBuiltinCommands.Set, _value = entity, _collection = typeof(T).Name };
       return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
     }
     public EventCommandStatus Set<T>(string collection, T entity) where T : class
     {
-      var cmd = new { _action = "set", _collection = collection, _value = entity };
+      var cmd = new { _action = DensoBuiltinCommands.Set, _collection = collection, _value = entity };
+      return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
+    }
+    public EventCommandStatus Set<T>(IEnumerable<T> entity) where T : class
+    {
+      var cmd = new { _action = DensoBuiltinCommands.SetMany, _collection = typeof(T).Name, _value = entity };
+      return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
+    }
+    public EventCommandStatus Set<T>(string collection, IEnumerable<T> entity) where T : class
+    {
+      var cmd = new { _action = DensoBuiltinCommands.SetMany, _collection = collection, _value = entity };
       return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
     }
 
@@ -111,8 +122,14 @@ namespace DeNSo.Core
 
     public EventCommandStatus Delete<T>(T entity) where T : class
     {
-      var cmd = new { _action = "delete", _value = entity, _collection = typeof(T).Name };
-      return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
+      var enttype = typeof(T);
+      var pi = enttype.GetProperty(DocumentMetadata.IdPropertyName);
+      if (pi != null)
+      {
+        var cmd = new { _action = DensoBuiltinCommands.Delete, _id = pi.GetValue(entity, null), _collection = typeof(T).Name };
+        return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
+      }
+      throw new DocumentWithoutIdException();
     }
     public EventCommandStatus Delete<T>(string collection, T entity)
     {

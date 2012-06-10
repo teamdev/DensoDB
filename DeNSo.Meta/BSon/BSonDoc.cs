@@ -20,8 +20,8 @@ namespace DeNSo.Meta.BSon
       }
       set
       {
-        if (value is IBSonNode)
-        { }
+        //if (value is IBSonNode)
+        //{ }
 
         if (_props.ContainsKey(index))
           _props[index].Value = value;
@@ -60,14 +60,14 @@ namespace DeNSo.Meta.BSon
     public void GetBytes(BinaryWriter writer)
     {
       writer.Write((byte)DocType); // Write document Type
-      writer.Write(Name??string.Empty);
+      writer.Write(Name ?? string.Empty);
       var position = writer.BaseStream.Position;
       writer.Write((int)0); // write initial size
 
       foreach (var kvp in _props)
         kvp.Value.GetBytes(writer);
 
-      var len = (int)(writer.BaseStream.Length - position -4);
+      var len = (int)(writer.BaseStream.Length - position - 4);
       writer.BaseStream.Position = position;
       writer.Write((int)len);
       writer.BaseStream.Seek(0, SeekOrigin.End);
@@ -82,5 +82,22 @@ namespace DeNSo.Meta.BSon
     public string Name { get; set; }
     public object Value { get { return this; } set { } }
 
+
+    public List<object> ToList()
+    {
+      if (this.DocType == BSonDocumentType.BSON_DocumentArray || 
+          this.DocType == BSonDocumentType.BSON_Dictionary)
+      {
+        List<object> result = new List<object>();
+        foreach (var p in Properties)
+        {
+          var item = this[p];
+          if (item != null)
+            result.Add(item);
+        }
+        return result;
+      }
+      return null;
+    }
   }
 }

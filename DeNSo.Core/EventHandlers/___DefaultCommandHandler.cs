@@ -88,8 +88,8 @@ namespace DeNSo.Core
                                                   CommandKeyword.Id, 
                                                   CommandKeyword.Type, 
                                                   CommandKeyword.Value, 
-                                                  Consts.DensoIDKeyName, 
-                                                  Consts.DensoTSKeyName };
+                                                  DocumentMetadata.IdPropertyName, 
+                                                  DocumentMetadata.TimeStampPropertyName };
       return document.Properties.Except(invalidproperties).ToArray();
     }
 
@@ -98,7 +98,7 @@ namespace DeNSo.Core
       if (document == null || string.IsNullOrEmpty(collection)) return;
       IObjectStore st = store.GetCollection(collection);
 
-      if (document.HasProperty(Consts.DensoIDKeyName))
+      if (document.HasProperty(DocumentMetadata.IdPropertyName))
       {
         UpdateSingleDocument(document, st); return;
       }
@@ -116,7 +116,7 @@ namespace DeNSo.Core
       if (document == null || string.IsNullOrEmpty(collection)) return;
       IObjectStore st = store.GetCollection(collection);
 
-      if (document.HasProperty(Consts.DensoIDKeyName))
+      if (document.HasProperty(DocumentMetadata.IdPropertyName))
       {
         ReplaceSingleDocument(document, st); return;
       }
@@ -133,9 +133,9 @@ namespace DeNSo.Core
     {
       if (document == null || string.IsNullOrEmpty(collection)) return;
       IObjectStore st = store.GetCollection(collection);
-      if (document.HasProperty(Consts.DensoIDKeyName))
+      if (document.HasProperty(DocumentMetadata.IdPropertyName))
       {
-        var ent = st.GetById((byte[])document[Consts.DensoIDKeyName]);
+        var ent = st.GetById((byte[])document[DocumentMetadata.IdPropertyName]);
         if (ent != null)
           st.Remove(ent);
       }
@@ -150,7 +150,7 @@ namespace DeNSo.Core
 
     private static void UpdateSingleDocument(BSonDoc document, IObjectStore store)
     {
-      var obj = store.GetById((byte[])document[Consts.DensoIDKeyName]);
+      var obj = store.GetById((byte[])document[DocumentMetadata.IdPropertyName]);
       BSonDoc val = GetValue(document);
       foreach (var p in val.GetRealProperties()) // remove properties starting with  
         if (document.HasProperty(p))

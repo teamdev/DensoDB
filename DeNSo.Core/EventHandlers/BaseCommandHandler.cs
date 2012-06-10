@@ -31,5 +31,25 @@ namespace DeNSo.Core.EventHandlers
                              string collection , 
                              BSonDoc command, 
                              BSonDoc document);
+
+    protected static BSonDoc GetValue(BSonDoc document)
+    {
+      if (document.HasProperty(CommandKeyword.Value))
+        return document[CommandKeyword.Value] as BSonDoc;
+      return document;
+    }
+
+    protected static string[] GetRealProperties(BSonDoc document)
+    {
+      string[] invalidproperties = new string[] { CommandKeyword.Action, 
+                                                  CommandKeyword.Collection, 
+                                                  CommandKeyword.Filter, 
+                                                  CommandKeyword.Id, 
+                                                  CommandKeyword.Type, 
+                                                  CommandKeyword.Value, 
+                                                  DocumentMetadata.IdPropertyName, 
+                                                  DocumentMetadata.TimeStampPropertyName };
+      return document.Properties.Except(invalidproperties).ToArray();
+    }
   }
 }

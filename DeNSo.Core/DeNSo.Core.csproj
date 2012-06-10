@@ -47,8 +47,8 @@
     <Compile Include="EventHandlers\DeleteHandler.cs" />
     <Compile Include="EventHandlers\DeleteManyHandler.cs" />
     <Compile Include="EventHandlers\SetHandler.cs" />
+    <Compile Include="EventHandlers\SetManyHandler.cs" />
     <Compile Include="EventHandlers\UpdateHandler.cs" />
-    <Compile Include="EventHandlers\UpdateManyHandler.cs" />
     <Compile Include="EventHandlers\___DefaultCommandHandler.cs" />
     <Compile Include="DiskIO\EventCommand.cs" />
     <Compile Include="EventHandler.cs" />

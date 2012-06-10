@@ -111,11 +111,11 @@ namespace DeNSo.Core
 
     private byte[] GetEntityUI(BSonDoc entity)
     {
-      if (entity.HasProperty(Consts.DensoIDKeyName) && entity[Consts.DensoIDKeyName] != null)
-        return (byte[])entity[Consts.DensoIDKeyName];
+      if (entity.HasProperty(DocumentMetadata.IdPropertyName) && entity[DocumentMetadata.IdPropertyName] != null)
+        return (byte[])entity[DocumentMetadata.IdPropertyName];
 
-      entity[Consts.DensoIDKeyName] = newIdFunction();
-      return (byte[])entity[Consts.DensoIDKeyName];
+      entity[DocumentMetadata.IdPropertyName] = newIdFunction();
+      return (byte[])entity[DocumentMetadata.IdPropertyName];
     }
 
     #endregion

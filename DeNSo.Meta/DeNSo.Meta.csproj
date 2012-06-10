@@ -40,16 +40,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\CommandAttribute.cs" />
-    <Compile Include="Attributes\EntityUniqueIdentifierAttribute.cs" />
     <Compile Include="BSon\BSonDoc.cs" />
     <Compile Include="BSon\BSonProp.cs" />
     <Compile Include="BSon\BSonTypeEnum.cs" />
     <Compile Include="BSon\IBson.cs" />
     <Compile Include="BSon\Serializer.cs" />
     <Compile Include="BuiltinCommands.cs" />
-    <Compile Include="Consts.cs" />
+    <Compile Include="DocumentMetadata.cs" />
     <Compile Include="Delegates.cs" />
     <Compile Include="EventCommandStatus.cs" />
+    <Compile Include="Exceptions\DocumentHasNoIdException.cs" />
     <Compile Include="ICommandHandler.cs" />
     <Compile Include="ISession.cs" />
     <Compile Include="IStore.cs" />

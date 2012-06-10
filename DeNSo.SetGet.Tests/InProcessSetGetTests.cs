@@ -63,6 +63,18 @@ namespace DeNSo.SetGet.Tests
       denso.WaitForNonStaleDataAt(cn);
       Assert.AreEqual(3, denso.Count<TestDataModel>());
     }
+
+    [TestMethod]
+    public void SetCollection()
+    {
+      List<TestDataModel> result = new List<TestDataModel>();
+      result.Add(new TestDataModel());
+      result.Add(new TestDataModel());
+      result.Add(new TestDataModel());
+
+      var ii = DeNSo.Meta.BSon.BSonSerializer.ToBSon(result);
+    }
+
     #endregion
 
     #region Database administrative operations

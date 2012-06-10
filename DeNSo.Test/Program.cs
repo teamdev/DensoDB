@@ -98,7 +98,6 @@ namespace DeNSo.Test
     public double Z { get; set; }
   }
 
-  [DeNSo.Meta.EntityUniqueIdentifier("Id")]
   public class myEntity
   {
     public int Id { get; set; }
