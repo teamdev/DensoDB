@@ -166,9 +166,6 @@ namespace DeNSo.Lucene
             using (var iw = GetIndexWriter(store.DataBaseName, collection, index.Key))
             {
               iw.DeleteDocuments(queryid);
-
-
-
               iw.Commit();
             }
       }

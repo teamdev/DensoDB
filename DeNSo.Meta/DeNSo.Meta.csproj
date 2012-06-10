@@ -46,9 +46,11 @@
     <Compile Include="BSon\BSonTypeEnum.cs" />
     <Compile Include="BSon\IBson.cs" />
     <Compile Include="BSon\Serializer.cs" />
+    <Compile Include="BuiltinCommands.cs" />
     <Compile Include="Consts.cs" />
     <Compile Include="Delegates.cs" />
     <Compile Include="EventCommandStatus.cs" />
+    <Compile Include="ICommandHandler.cs" />
     <Compile Include="ISession.cs" />
     <Compile Include="IStore.cs" />
     <Compile Include="Json\Bson2JsonExtensions.cs" />

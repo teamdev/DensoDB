@@ -28,7 +28,7 @@ namespace DeNSo.Core
       _globaleventhandlers.Remove(eventhandler);
     }
 
-    internal static void ExecuteEvent(string database, EventCommand waitingevent )
+    internal static void ExecuteCommandEvent(string database, EventCommand waitingevent )
     {
       var store = new ObjectStoreWrapper(database);
 
@@ -113,11 +113,11 @@ namespace DeNSo.Core
 
     private static void ExtractInfoFromCommand(BSonDoc command, ref string type, ref string action)
     {
-      if (command.HasProperty("_action"))
-        action = (command["_action"] ?? string.Empty).ToString();
+      if (command.HasProperty(CommandKeyword.Action))
+        action = (command[CommandKeyword.Action] ?? string.Empty).ToString();
 
-      if (command.HasProperty("_type"))
-        type = (command["_type"] ?? string.Empty).ToString();
+      if (command.HasProperty(CommandKeyword.Type))
+        type = (command[CommandKeyword.Type] ?? string.Empty).ToString();
     }
   }
 }

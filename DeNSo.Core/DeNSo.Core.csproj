@@ -42,9 +42,15 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="DensoExtensions.cs" />
     <Compile Include="CQRS\Command.cs" />
-    <Compile Include="DefaultCommandHandler.cs" />
+    <Compile Include="EventHandlers\CollectionFlushHandler.cs" />
+    <Compile Include="EventHandlers\___DefaultCommandHandler.cs" />
     <Compile Include="DiskIO\EventCommand.cs" />
     <Compile Include="EventHandler.cs" />
+    <Compile Include="EventHandlers\DocumentDeleteHandler.cs" />
+    <Compile Include="EventHandlers\DocumentsDeleteHandler.cs" />
+    <Compile Include="EventHandlers\DocumentSetHandler.cs" />
+    <Compile Include="EventHandlers\DocumentsUpdateHandler.cs" />
+    <Compile Include="EventHandlers\DocumentUpdateHandler.cs" />
     <Compile Include="EventStore.cs" />
     <Compile Include="CQRS\Query.cs" />
     <Compile Include="DiskIO\Journaling.cs" />

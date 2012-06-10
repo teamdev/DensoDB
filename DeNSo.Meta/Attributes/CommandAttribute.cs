@@ -5,13 +5,12 @@ using System.Text;
 
 namespace DeNSo.Meta
 {
-  public class CommandAttribute : System.Attribute
+  public class HandlesCommandAttribute : System.Attribute
   {
-    public string Action { get; set; }
-    public Type MessageType { get; set; }
-    public string Method { get; set; }
-
-    public CommandAttribute()
-    { }
+    public string Command { get; set; }
+    public HandlesCommandAttribute(string command)
+    {
+      Command = command;
+    }
   }
 }

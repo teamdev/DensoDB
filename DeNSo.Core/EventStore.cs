@@ -84,7 +84,7 @@ namespace DeNSo.Core
         lock (_waitingevents)
           we = _waitingevents.Dequeue();
 
-        EventHandlerManager.ExecuteEvent(DatabaseName, we);
+        EventHandlerManager.ExecuteCommandEvent(DatabaseName, we);
 
         LastExecutedCommandSN = we.CommandSN;
 
