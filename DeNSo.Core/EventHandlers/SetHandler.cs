@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DeNSo.Meta;
+using DeNSo.Meta.BSon;
 
 namespace DeNSo.Core.EventHandlers
 {
   [HandlesCommand(DensoBuiltinCommands.Set)]
-  public class SetHandler : ICommandHandler
+  public class SetHandler : BaseCommandHandler
   {
-    public void HandleCommand(IStore store, Meta.BSon.BSonDoc command)
+    public override void OnHandle(IStore store, 
+                                  string collection, 
+                                  BSonDoc command, 
+                                  BSonDoc document)
     {
-      throw new NotImplementedException();
+      
     }
   }
 }

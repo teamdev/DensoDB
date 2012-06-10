@@ -6,6 +6,7 @@ using System.Text;
 
 using DeNSo.Core;
 using DeNSo.Core.DiskIO;
+using DeNSo.Meta;
 using DeNSo.Meta.BSon;
 
 using Lucene.Net.Analysis;
@@ -15,7 +16,7 @@ using Lucene.Net.Store;
 
 using io = System.IO;
 using luc = Lucene.Net.Search;
-using DeNSo.Meta;
+
 
 namespace DeNSo.Lucene
 {
