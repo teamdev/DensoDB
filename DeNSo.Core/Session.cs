@@ -94,6 +94,7 @@ namespace DeNSo.Core
       return true;
     }
 
+    #region Set Methods
     public EventCommandStatus Set<T>(T entity) where T : class
     {
       var cmd = new { _action = DensoBuiltinCommands.Set, _value = entity, _collection = typeof(T).Name };
@@ -114,12 +115,14 @@ namespace DeNSo.Core
       var cmd = new { _action = DensoBuiltinCommands.SetMany, _collection = collection, _value = entity };
       return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
     }
+    #endregion
 
     public EventCommandStatus Execute<T>(T command) where T : class
     {
       return EventCommandStatus.Create(_command.Execute(DataBase, command.ToBSon().Serialize()), this);
     }
 
+    #region Delete methods
     public EventCommandStatus Delete<T>(T entity) where T : class
     {
       var enttype = typeof(T);
@@ -133,20 +136,29 @@ namespace DeNSo.Core
     }
     public EventCommandStatus Delete<T>(string collection, T entity)
     {
-      var cmd = new { _action = "delete", _collection = collection, _value = entity };
-      return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
+      var enttype = typeof(T);
+      var pi = enttype.GetProperty(DocumentMetadata.IdPropertyName);
+      if (pi != null)
+      {
+        var cmd = new { _action = DensoBuiltinCommands.Delete, _id = pi.GetValue(entity, null), _collection = collection };
+        return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
+      }
+      throw new DocumentWithoutIdException();
     }
+    #endregion
 
+    #region Flush methods
     public EventCommandStatus Flush<T>() where T : class
     {
-      var cmd = new { _action = "flush", _collection = typeof(T).Name };
+      var cmd = new { _action = DensoBuiltinCommands.CollectionFlush, _collection = typeof(T).Name };
       return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
     }
     public EventCommandStatus Flush(string collection)
     {
-      var cmd = new { _action = "flush", _collection = collection };
+      var cmd = new { _action = DensoBuiltinCommands.CollectionFlush, _collection = collection };
       return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
     }
+    #region 
 
     public IEnumerable<T> Get<T>(Expression<Func<T, bool>> filter = null) where T : class, new()
     {
