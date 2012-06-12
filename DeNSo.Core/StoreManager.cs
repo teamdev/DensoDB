@@ -6,6 +6,7 @@ using DeNSo.Meta;
 using System.Threading;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.ComponentModel.Composition;
 
 namespace DeNSo.Core
 {

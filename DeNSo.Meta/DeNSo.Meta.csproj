@@ -51,6 +51,7 @@
     <Compile Include="EventCommandStatus.cs" />
     <Compile Include="Exceptions\DocumentHasNoIdException.cs" />
     <Compile Include="ICommandHandler.cs" />
+    <Compile Include="IExtensionPlugin.cs" />
     <Compile Include="ISession.cs" />
     <Compile Include="IStore.cs" />
     <Compile Include="Json\Bson2JsonExtensions.cs" />

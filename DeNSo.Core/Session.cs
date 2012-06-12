@@ -60,6 +60,7 @@ namespace DeNSo.Core
       waitingThread.Start();
     }
 
+    #region Wait Methods
     public void WaitForNonStaleDataAt(long eventcommandnumber)
     {
       //if (_lastexecutedcommand >= eventcommandnumber) return;
@@ -71,7 +72,6 @@ namespace DeNSo.Core
       }
       _waitingfor = 0;
     }
-
     public bool WaitForNonStaleDataAt(long eventcommandnumber, TimeSpan timeout)
     {
       //if (_lastexecutedcommand >= eventcommandnumber) return;
@@ -82,7 +82,6 @@ namespace DeNSo.Core
       _waitingfor = 0;
       return true;
     }
-
     public bool WaitForNonStaleDataAt(long eventcommandnumber, int timeout)
     {
       _waitingfor = eventcommandnumber;
@@ -93,6 +92,7 @@ namespace DeNSo.Core
       _waitingfor = 0;
       return true;
     }
+    #endregion
 
     #region Set Methods
     public EventCommandStatus Set<T>(T entity) where T : class
@@ -105,12 +105,12 @@ namespace DeNSo.Core
       var cmd = new { _action = DensoBuiltinCommands.Set, _collection = collection, _value = entity };
       return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
     }
-    public EventCommandStatus Set<T>(IEnumerable<T> entity) where T : class
+    public EventCommandStatus SetAll<T>(IEnumerable<T> entity) where T : class
     {
       var cmd = new { _action = DensoBuiltinCommands.SetMany, _collection = typeof(T).Name, _value = entity };
       return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
     }
-    public EventCommandStatus Set<T>(string collection, IEnumerable<T> entity) where T : class
+    public EventCommandStatus SetAll<T>(string collection, IEnumerable<T> entity) where T : class
     {
       var cmd = new { _action = DensoBuiltinCommands.SetMany, _collection = collection, _value = entity };
       return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
@@ -125,14 +125,7 @@ namespace DeNSo.Core
     #region Delete methods
     public EventCommandStatus Delete<T>(T entity) where T : class
     {
-      var enttype = typeof(T);
-      var pi = enttype.GetProperty(DocumentMetadata.IdPropertyName);
-      if (pi != null)
-      {
-        var cmd = new { _action = DensoBuiltinCommands.Delete, _id = pi.GetValue(entity, null), _collection = typeof(T).Name };
-        return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
-      }
-      throw new DocumentWithoutIdException();
+      return Delete<T>(typeof(T).Name, entity);
     }
     public EventCommandStatus Delete<T>(string collection, T entity)
     {
@@ -144,6 +137,31 @@ namespace DeNSo.Core
         return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
       }
       throw new DocumentWithoutIdException();
+    }
+    public EventCommandStatus DeleteAll<T>(IEnumerable<T> entities) where T : class
+    {
+      return DeleteAll<T>(typeof(T).Name, entities);
+    }
+    public EventCommandStatus DeleteAll<T>(string collection, IEnumerable<T> entities) where T : class
+    {
+      var enttype = typeof(T);
+      List<object> itemsid = new List<object>();
+      foreach (var item in entities)
+      {
+        var pi = enttype.GetProperty(DocumentMetadata.IdPropertyName);
+        if (pi != null)
+        {
+          itemsid.Add(pi.GetValue(item, null));
+        }
+      }
+
+      if (itemsid.Count() > 0)
+      {
+        var cmd = new { _action = DensoBuiltinCommands.Delete, _value = itemsid, _collection = typeof(T).Name };
+        return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
+      }
+
+      return EventCommandStatus.Create(-1, this);
     }
     #endregion
 
@@ -158,8 +176,9 @@ namespace DeNSo.Core
       var cmd = new { _action = DensoBuiltinCommands.CollectionFlush, _collection = collection };
       return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
     }
-    #endregion 
+    #endregion
 
+    #region Get Methods
     public IEnumerable<T> Get<T>(Expression<Func<T, bool>> filter = null) where T : class, new()
     {
       return this.Get(typeof(T).Name, filter);
@@ -174,7 +193,9 @@ namespace DeNSo.Core
     {
       return _query.Get(DataBase, collection, filter != null ? filter.Compile() : null);
     }
+    #endregion
 
+    #region Count Methods
     public int Count<T>()
     {
       return Count(typeof(T).Name);
@@ -193,12 +214,12 @@ namespace DeNSo.Core
       var expr = visitor.Visit(filter) as Expression<Func<BSonDoc, bool>>;
       return Count(typeof(T).Name, expr);
     }
+    #endregion
 
     public static void ShutDown()
     {
       StoreManager.ShutDown();
     }
-
     public static void Start()
     {
       StoreManager.Start();

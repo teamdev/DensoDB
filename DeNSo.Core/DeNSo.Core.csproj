@@ -35,6 +35,7 @@
       <HintPath>..\Libraries\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
@@ -52,7 +53,6 @@
     <Compile Include="EventHandlers\SetHandler.cs" />
     <Compile Include="EventHandlers\SetManyHandler.cs" />
     <Compile Include="EventHandlers\UpdateHandler.cs" />
-    <Compile Include="EventHandlers\___DefaultCommandHandler.cs" />
     <Compile Include="DiskIO\EventCommand.cs" />
     <Compile Include="EventHandler.cs" />
     <Compile Include="EventStore.cs" />
@@ -75,6 +75,21 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\DeNSo.Lucene\bin\Debug\DeNSo.Lucene.dll">
+      <Link>Extensions\DeNSo.Lucene.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\DeNSo.Lucene\bin\Debug\Lucene.Net.dll">
+      <Link>Extensions\Lucene.Net.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\DeNSo.P2P\bin\Debug\DeNSo.P2P.dll">
+      <Link>Extensions\DeNSo.P2P.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Extensions\Placeholder.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -11,7 +11,12 @@ namespace DeNSo.Core.EventHandlers
   {
     public void HandleCommand(IStore store, Meta.BSon.BSonDoc command)
     {
-      throw new NotImplementedException();
+      if (command.HasProperty(CommandKeyword.Collection))
+      {
+        var cc = store.GetCollection((command[CommandKeyword.Collection] ?? string.Empty).ToString());
+        if (cc != null)
+          cc.Flush();
+      }
     }
   }
 }
