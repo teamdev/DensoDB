@@ -74,6 +74,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="W8Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -117,6 +121,24 @@
   <ItemGroup>
     <Resource Include="densoDB_sqr.png" />
     <Resource Include="densoDB_sqr_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\arrow.png" />
+    <Resource Include="icons\clip.png" />
+    <Resource Include="icons\Default-Icon.png" />
+    <Resource Include="icons\Floppy-Drive-3.png" />
+    <Resource Include="icons\graph.png" />
+    <Resource Include="icons\Hard-Drive.png" />
+    <Resource Include="icons\inbox.png" />
+    <Resource Include="icons\layout.png" />
+    <Resource Include="icons\list.png" />
+    <Resource Include="icons\Open-Folder.png" />
+    <Resource Include="icons\pdf.png" />
+    <Resource Include="icons\pencil.png" />
+    <Resource Include="icons\Program-Group.png" />
+    <Resource Include="icons\report.png" />
+    <Resource Include="icons\Settings.png" />
+    <Resource Include="icons\Text-Document.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

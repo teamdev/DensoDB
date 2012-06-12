@@ -31,7 +31,6 @@ namespace DeNSo.Studio
 
       this.leftColumn.RegisterRegion("leftArea");
       this.centerColumn.RegisterRegion("centerArea");
-      this.rightColumn.RegisterRegion("rightArea");
     }
 
     private void Border_MouseDown(object sender, MouseButtonEventArgs e)
@@ -44,12 +43,13 @@ namespace DeNSo.Studio
         catch { }
     }
 
-    private void btnExit_MouseDown(object sender, MouseButtonEventArgs e)
+
+    private void btnExit_MouseDown(object sender, RoutedEventArgs e)
     {
       this.Close();
     }
 
-    private void FullScreenToggle_MouseDown(object sender, MouseButtonEventArgs e)
+    private void FullScreenToggle_MouseDown(object sender, RoutedEventArgs e)
     {
       if (this.WindowState == System.Windows.WindowState.Maximized)
         this.WindowState = System.Windows.WindowState.Normal;
@@ -57,10 +57,17 @@ namespace DeNSo.Studio
         this.WindowState = System.Windows.WindowState.Maximized;
     }
 
-    private void Iconify_MouseDown(object sender, MouseButtonEventArgs e)
+    private void Iconify_MouseDown(object sender, RoutedEventArgs e)
     {
 
       this.WindowState = System.Windows.WindowState.Minimized;
     }
+
+    private void Thumb_DragDelta_1(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+    {
+      this.Width += e.HorizontalChange;
+      this.Height += e.VerticalChange;
+    }
+
   }
 }

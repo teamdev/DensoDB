@@ -158,7 +158,7 @@ namespace DeNSo.Core
       var cmd = new { _action = DensoBuiltinCommands.CollectionFlush, _collection = collection };
       return EventCommandStatus.Create(_command.Execute(DataBase, cmd.ToBSon().Serialize()), this);
     }
-    #region 
+    #endregion 
 
     public IEnumerable<T> Get<T>(Expression<Func<T, bool>> filter = null) where T : class, new()
     {
