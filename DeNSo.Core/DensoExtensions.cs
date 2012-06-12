@@ -23,6 +23,11 @@ namespace DeNSo.Core
       ac.Refresh();
       CompositionContainer container = new CompositionContainer(ac);
       container.ComposeParts(this);
+
+      foreach (var plugin in Extensions)
+      {
+        plugin.Init();
+      }
     }
   }
 }

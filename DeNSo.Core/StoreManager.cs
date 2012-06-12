@@ -12,10 +12,13 @@ namespace DeNSo.Core
 {
   internal static class StoreManager
   {
-    internal static ManualResetEvent ShutDownEvent = new ManualResetEvent(false);
+    private static DensoExtensions _extensions = new DensoExtensions();
     private static bool _started = false;
-    internal static bool ShuttingDown = false;
     private static Thread _saveDBThread = null;
+
+    internal static bool ShuttingDown = false;
+    internal static ManualResetEvent ShutDownEvent = new ManualResetEvent(false);
+
 
     private static Dictionary<string, Dictionary<string, IObjectStore>> _stores =
               new Dictionary<string, Dictionary<string, IObjectStore>>();
@@ -68,6 +71,10 @@ namespace DeNSo.Core
 
         _saveDBThread = new Thread(new ThreadStart(SaveDBThreadMethod));
         _saveDBThread.Start();
+
+        // Init all the extensions. 
+       _extensions.Init();
+
         _started = true;
       }
     }
