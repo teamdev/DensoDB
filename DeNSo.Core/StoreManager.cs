@@ -64,6 +64,9 @@ namespace DeNSo.Core
         ShuttingDown = false;
         ShutDownEvent.Reset();
 
+        // Init all the extensions. 
+        _extensions.Init();
+
         foreach (var db in GetDatabases())
         {
           OpenDataBase(db);
@@ -71,9 +74,7 @@ namespace DeNSo.Core
 
         _saveDBThread = new Thread(new ThreadStart(SaveDBThreadMethod));
         _saveDBThread.Start();
-
-        // Init all the extensions. 
-       _extensions.Init();
+        
 
         _started = true;
       }

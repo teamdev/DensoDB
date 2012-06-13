@@ -15,19 +15,42 @@ namespace DeNSo.Core
   public class DensoExtensions
   {
     [ImportMany(AllowRecomposition = true)]
-    public IExtensionPlugin[] Extensions { get; set; }
+    internal IExtensionPlugin[] Extensions { get; set; }
+
+    [ImportMany(AllowRecomposition = true)]
+    internal ICommandHandler[] ImportedHandlers { get; set; }
 
     public void Init()
     {
-      DirectoryCatalog ac = new DirectoryCatalog("Extensions");
-      ac.Refresh();
-      CompositionContainer container = new CompositionContainer(ac);
-      container.ComposeParts(this);
+      try
+      {
+        AggregateCatalog catalog = new AggregateCatalog();
+
+        var c1 = new DirectoryCatalog("Extensions");
+        c1.Refresh();
+        var c2 = new DirectoryCatalog("EventHandlers");
+        c2.Refresh();
+        var c3 = new AssemblyCatalog(Assembly.GetExecutingAssembly());
+
+        catalog.Catalogs.Add(c1);
+        catalog.Catalogs.Add(c2);
+        catalog.Catalogs.Add(c3);
+
+        CompositionContainer container = new CompositionContainer(catalog);
+        container.ComposeParts(this);
+      }
+      catch (Exception ex)
+      {
+        WindowsLogWriter.LogMessage("Error occurred while composing Denso Extensions", System.Diagnostics.EventLogEntryType.Error);
+        WindowsLogWriter.LogException(ex);
+      }
 
       foreach (var plugin in Extensions)
       {
         plugin.Init();
       }
+
+      EventHandlerManager.AnalyzeCommandHandlers(ImportedHandlers);
     }
   }
 }

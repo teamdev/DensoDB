@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using DeNSo.Meta;
@@ -8,6 +9,7 @@ using DeNSo.Meta.BSon;
 namespace DeNSo.Core.EventHandlers
 {
   [HandlesCommand(DensoBuiltinCommands.DeleteMany)]
+  [Export(typeof(ICommandHandler))]
   public class DeleteManyHandler : BaseCommandHandler
   {
     public override void OnHandle(IStore store,

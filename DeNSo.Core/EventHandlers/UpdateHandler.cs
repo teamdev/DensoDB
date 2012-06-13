@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
-
 using DeNSo.Meta;
 using DeNSo.Meta.BSon;
 
 namespace DeNSo.Core.EventHandlers
 {
   [HandlesCommand(DensoBuiltinCommands.Update)]
+  [Export(typeof(ICommandHandler))]
   public class UpdateHandler : BaseCommandHandler
   {
     public override void OnHandle(IStore store,

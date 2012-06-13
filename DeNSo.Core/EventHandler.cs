@@ -8,15 +8,33 @@ using DeNSo.Meta.BSon;
 using System.Diagnostics;
 using DeNSo.Meta;
 using DeNSo.Core.DiskIO;
+using System.ComponentModel.Composition;
 
 namespace DeNSo.Core
 {
   public static class EventHandlerManager
   {
-    private static Dictionary<string, Dictionary<string, Action<ObjectStoreWrapper, BSonDoc>>> _methods =
-               new Dictionary<string, Dictionary<string, Action<ObjectStoreWrapper, BSonDoc>>>();
+    //private static Dictionary<string, Dictionary<string, Action<ObjectStoreWrapper, BSonDoc>>> _methods =
+    //           new Dictionary<string, Dictionary<string, Action<ObjectStoreWrapper, BSonDoc>>>();
 
+
+    private static Dictionary<string, List<ICommandHandler>> _commandHandlers = new Dictionary<string, List<ICommandHandler>>();
     private static List<Action<IStore, EventCommand>> _globaleventhandlers = new List<Action<IStore, EventCommand>>();
+
+    internal static void AnalyzeCommandHandlers(ICommandHandler[] handlers)
+    {
+      foreach (var hand in handlers)
+      {
+        var attrs = hand.GetType().GetCustomAttributes(typeof(DeNSo.Meta.HandlesCommandAttribute), true);
+        foreach (var at in attrs)
+        {
+          string commandname = ((DeNSo.Meta.HandlesCommandAttribute)at).Command;
+          if (!_commandHandlers.ContainsKey(commandname))
+            _commandHandlers.Add(commandname, new List<ICommandHandler>());
+          _commandHandlers[commandname].Add(hand);
+        }
+      }
+    }
 
     public static void RegisterGlobalEventHandler(Action<IStore, EventCommand> eventhandler)
     {
@@ -28,10 +46,11 @@ namespace DeNSo.Core
       _globaleventhandlers.Remove(eventhandler);
     }
 
-    internal static void ExecuteCommandEvent(string database, EventCommand waitingevent )
+    internal static void ExecuteCommandEvent(string database, EventCommand waitingevent)
     {
       var store = new ObjectStoreWrapper(database);
 
+      #region Execute inline global event handlers
       foreach (var ge in _globaleventhandlers)
       {
         try
@@ -43,81 +62,36 @@ namespace DeNSo.Core
           Debug.WriteLine(ex.Message);
         }
       }
+      #endregion
 
-      Action<ObjectStoreWrapper, BSonDoc> method = FindEventHandler(waitingevent.Command.Deserialize());
-      try
-      {
-        if (method != null)
-          method(store, waitingevent.Command.Deserialize());
-      }
-      catch (Exception ex)
-      {
-        Debug.WriteLine(ex.Message);
-      }
-    }
+      var command = waitingevent.Command.Deserialize();
 
-    private static Action<ObjectStoreWrapper, BSonDoc> FindEventHandler(BSonDoc command)
-    {
-      var type = string.Empty;
-      var action = string.Empty;
-      Action<ObjectStoreWrapper, BSonDoc> mi = null;
-
-      ExtractInfoFromCommand(command, ref type, ref action);
-      mi = CheckMethodCache(type, action);
-
-      if (mi != null) return mi;
-
-      mi = ReflectMethodInfo(type, action);
-
-      if (mi != null && !_methods[type].ContainsKey(action))
-        _methods[type].Add(action, mi);
-
-      return mi;
-    }
-
-    private static Action<ObjectStoreWrapper, BSonDoc> ReflectMethodInfo(string type, string action)
-    {
-      MethodInfo mi = null;
-      if (!string.IsNullOrEmpty(type))
-      {
-        var tt = Type.GetType(type, false);
-        if (tt != null)
+      var currenthandlers = ChechHandlers(command);
+      if (currenthandlers != null)
+        foreach (var hh in currenthandlers)
         {
-          mi = tt.GetMethod(action, BindingFlags.Public | BindingFlags.Static | BindingFlags.IgnoreCase);
+          try
+          {
+            hh.HandleCommand(store, command);
+          }
+          catch (Exception ex)
+          {
+            Debug.WriteLine(ex.Message);
+          }
         }
-      }
+    }
 
-      if (mi == null)
-      {
-        var evnthandlertype = typeof(DefaultCommandHandler);
-        mi = evnthandlertype.GetMethod(action, BindingFlags.Static | BindingFlags.Public | BindingFlags.IgnoreCase);
-      }
+    private static ICommandHandler[] ChechHandlers(BSonDoc command)
+    {
+      string actionname = string.Empty;
+      if (command.HasProperty(CommandKeyword.Action))
+        actionname = (command[CommandKeyword.Action] ?? string.Empty).ToString();
 
-      if (mi != null)
-      {
-        return Delegate.CreateDelegate(typeof(Action<ObjectStoreWrapper, BSonDoc>), mi) as Action<ObjectStoreWrapper, BSonDoc>;
-      }
+      if (_commandHandlers.ContainsKey(actionname))
+        return _commandHandlers[actionname].ToArray();
+
       return null;
     }
 
-    private static Action<ObjectStoreWrapper, BSonDoc> CheckMethodCache(string type, string action)
-    {
-      Action<ObjectStoreWrapper, BSonDoc> mi = null;
-      if (!_methods.ContainsKey(type))
-        _methods.Add(type, new Dictionary<string, Action<ObjectStoreWrapper, BSonDoc>>());
-
-      if (_methods[type].ContainsKey(action))
-        mi = _methods[type][action];
-      return mi;
-    }
-
-    private static void ExtractInfoFromCommand(BSonDoc command, ref string type, ref string action)
-    {
-      if (command.HasProperty(CommandKeyword.Action))
-        action = (command[CommandKeyword.Action] ?? string.Empty).ToString();
-
-      if (command.HasProperty(CommandKeyword.Type))
-        type = (command[CommandKeyword.Type] ?? string.Empty).ToString();
-    }
   }
 }

@@ -5,10 +5,12 @@ using System.Text;
 using DeNSo.Meta;
 using DeNSo.Meta.BSon;
 using System.Diagnostics;
+using System.ComponentModel.Composition;
 
 namespace DeNSo.Core.EventHandlers
 {
   [HandlesCommand(DensoBuiltinCommands.Delete)]
+  [Export(typeof(ICommandHandler))]
   public class DeleteHandler : BaseCommandHandler
   {
     public override void OnHandle(IStore store,
