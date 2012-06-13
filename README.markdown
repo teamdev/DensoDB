@@ -79,4 +79,6 @@ What i'm working on now
 
 More detailed documentation. 
 Samples.. so you can start working more easly. 
+
+##[this project is hosted in codeplex, too](http://densodb.codeplex.com)
  
