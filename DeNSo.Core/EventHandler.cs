@@ -23,11 +23,16 @@ namespace DeNSo.Core
 
     internal static void AnalyzeCommandHandlers(ICommandHandler[] handlers)
     {
+<<<<<<< HEAD
       LogWriter.LogInformation("Start analyzing and preparing command handlers", EventLogEntryType.Warning);
       foreach (var hand in handlers)
       {
         LogWriter.LogInformation(string.Format("Registering command handler {0}", hand.GetType().Name), EventLogEntryType.Information);
 
+=======
+      foreach (var hand in handlers)
+      {
+>>>>>>> adc13efc0c52db8701845b1cf36c7d124128966d
         var attrs = hand.GetType().GetCustomAttributes(typeof(DeNSo.Meta.HandlesCommandAttribute), true);
         foreach (var at in attrs)
         {
@@ -35,7 +40,10 @@ namespace DeNSo.Core
           if (!_commandHandlers.ContainsKey(commandname))
             _commandHandlers.Add(commandname, new List<ICommandHandler>());
           _commandHandlers[commandname].Add(hand);
+<<<<<<< HEAD
           LogWriter.LogInformation(string.Format(" Handler registered for command {0}", commandname), EventLogEntryType.SuccessAudit);
+=======
+>>>>>>> adc13efc0c52db8701845b1cf36c7d124128966d
         }
       }
     }
@@ -56,7 +64,10 @@ namespace DeNSo.Core
     {
       var store = new ObjectStoreWrapper(database);
 
+<<<<<<< HEAD
       LogWriter.LogInformation("Executing waiting event", EventLogEntryType.Information);
+=======
+>>>>>>> adc13efc0c52db8701845b1cf36c7d124128966d
       #region Execute inline global event handlers
       foreach (var ge in _globaleventhandlers)
       {
@@ -83,7 +94,11 @@ namespace DeNSo.Core
           }
           catch (Exception ex)
           {
+<<<<<<< HEAD
             LogWriter.LogException(ex);
+=======
+            Debug.WriteLine(ex.Message);
+>>>>>>> adc13efc0c52db8701845b1cf36c7d124128966d
           }
         }
     }
@@ -94,8 +109,11 @@ namespace DeNSo.Core
       if (command.HasProperty(CommandKeyword.Action))
         actionname = (command[CommandKeyword.Action] ?? string.Empty).ToString();
 
+<<<<<<< HEAD
       LogWriter.LogInformation(string.Format("Executing action {0}", string.Empty), EventLogEntryType.Information);
 
+=======
+>>>>>>> adc13efc0c52db8701845b1cf36c7d124128966d
       if (_commandHandlers.ContainsKey(actionname))
         return _commandHandlers[actionname].ToArray();
 
