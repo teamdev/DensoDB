@@ -61,20 +61,24 @@ namespace DeNSo.Core
     {
       if (!_started)
       {
+        LogWriter.LogInformation("Starting StoreManager", System.Diagnostics.EventLogEntryType.Warning);
         ShuttingDown = false;
         ShutDownEvent.Reset();
 
+        LogWriter.LogInformation("Initializing Extensions", System.Diagnostics.EventLogEntryType.Warning);
+        // Init all the extensions. 
+        _extensions.Init();
+
         foreach (var db in GetDatabases())
         {
+          LogWriter.LogInformation(string.Format("Opening Database {0}", db), System.Diagnostics.EventLogEntryType.Warning);
           OpenDataBase(db);
         }
 
         _saveDBThread = new Thread(new ThreadStart(SaveDBThreadMethod));
         _saveDBThread.Start();
 
-        // Init all the extensions. 
-       _extensions.Init();
-
+        LogWriter.LogInformation("Store Manager initialization completed", System.Diagnostics.EventLogEntryType.SuccessAudit);
         _started = true;
       }
     }

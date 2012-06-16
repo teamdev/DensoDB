@@ -9,6 +9,7 @@ namespace DeNSo.Core.CQRS
   {
     public long Execute(string databasename, byte[] command)
     {
+      LogWriter.LogInformation("Received command", System.Diagnostics.EventLogEntryType.Information);
       var es = StoreManager.GetEventStore(databasename);
       return es.Enqueue(command);
     }

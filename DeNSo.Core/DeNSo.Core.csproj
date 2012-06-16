@@ -66,7 +66,7 @@
     <Compile Include="StoreManager.cs" />
     <Compile Include="Struct\StoreKey.cs" />
     <Compile Include="Struct\StoreItem.cs" />
-    <Compile Include="WindowsLogWriter.cs" />
+    <Compile Include="LogWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeNSo.Meta\DeNSo.Meta.csproj">
@@ -75,18 +75,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\DeNSo.Lucene\bin\Debug\DeNSo.Lucene.dll">
-      <Link>Extensions\DeNSo.Lucene.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\DeNSo.Lucene\bin\Debug\Lucene.Net.dll">
-      <Link>Extensions\Lucene.Net.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\DeNSo.P2P\bin\Debug\DeNSo.P2P.dll">
-      <Link>Extensions\DeNSo.P2P.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="EventHandlers\PlaceHolder.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

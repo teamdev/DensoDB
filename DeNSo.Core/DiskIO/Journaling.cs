@@ -79,17 +79,20 @@ namespace DeNSo.Core
     private bool Init(bool isoperationslog = false)
     {
       FileName = Path.Combine(BasePath, DataBaseName);
+      LogWriter.SeparationLine();
+      LogWriter.LogInformation("Initializing Journaling", EventLogEntryType.Information);
 
       try
       {
         if (!Directory.Exists(FileName))
         {
+          LogWriter.LogInformation("Directory for Journaling does not exists. creating it", EventLogEntryType.Warning);
           Directory.CreateDirectory(FileName);
         }
       }
       catch (Exception ex)
       {
-        WindowsLogWriter.LogException(ex);
+        LogWriter.LogException(ex);
         return false;
       }
 
@@ -98,6 +101,8 @@ namespace DeNSo.Core
       else
         FileName = Path.Combine(FileName, "denso.jnl");
 
+
+      LogWriter.LogInformation("Completed", EventLogEntryType.SuccessAudit);
       return OpenLogFile();
     }
 
@@ -117,6 +122,7 @@ namespace DeNSo.Core
 
     private void IncreaseFileSize()
     {
+      LogWriter.LogInformation("Journalig file is too small, make it bigger", EventLogEntryType.Information);
       var pos = _logfile.Position;
       _logfile.SetLength(pos + _increasefileby);
       //_logfile.Flush();
@@ -134,10 +140,10 @@ namespace DeNSo.Core
           _writer = new BinaryWriter(_logfile);
 
           if (_logfile != null)
-            WindowsLogWriter.LogMessage(string.Format("Log File ready: {0}", FileName), System.Diagnostics.EventLogEntryType.Information);
+            LogWriter.LogMessage(string.Format("Log File ready: {0}", FileName), System.Diagnostics.EventLogEntryType.Information);
           else
           {
-            WindowsLogWriter.LogMessage(string.Format("Unable to open logfile: {0}", FileName), System.Diagnostics.EventLogEntryType.Error);
+            LogWriter.LogMessage(string.Format("Unable to open logfile: {0}", FileName), System.Diagnostics.EventLogEntryType.Error);
             //Server.EmergencyShutdown();
           }
 
@@ -146,7 +152,7 @@ namespace DeNSo.Core
       }
       catch (Exception ex)
       {
-        WindowsLogWriter.LogException(ex);
+        LogWriter.LogException(ex);
         //Server.EmergencyShutdown();
         return false;
       }
@@ -155,6 +161,7 @@ namespace DeNSo.Core
 
     internal void ShrinkToSN(long commandsn)
     {
+      LogWriter.LogInformation("File Shrink requested", EventLogEntryType.Warning);
       CloseFile();
       lock (_filelock)
       {
@@ -164,6 +171,7 @@ namespace DeNSo.Core
           using (var br = new BinaryReader(readerfs))
           using (var bw = new BinaryWriter(writerfs))
           {
+            LogWriter.LogInformation("Compressing file", EventLogEntryType.Information);
             while (readerfs.Position < readerfs.Length)
             {
               var cmd = ReadCommand(br);
@@ -172,10 +180,14 @@ namespace DeNSo.Core
                   WriteCommand(bw, cmd);
             }
 
+            LogWriter.LogInformation("File shrink completed", EventLogEntryType.SuccessAudit);
             readerfs.Close();
             writerfs.Flush();
+            LogWriter.LogInformation("Free empty space", EventLogEntryType.SuccessAudit);
             writerfs.SetLength(writerfs.Position);
             writerfs.Close();
+
+            LogWriter.LogInformation("Shringk completed", EventLogEntryType.SuccessAudit);
           }
       }
     }

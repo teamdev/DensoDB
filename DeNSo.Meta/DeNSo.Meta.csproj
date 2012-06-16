@@ -54,7 +54,7 @@
     <Compile Include="IExtensionPlugin.cs" />
     <Compile Include="ISession.cs" />
     <Compile Include="IStore.cs" />
-    <Compile Include="Json\Bson2JsonExtensions.cs" />
+    <Compile Include="BSon\Bson2JsonExtensions.cs" />
     <Compile Include="CommandKeyword.cs" />
     <Compile Include="Linq\EntityQueryable.cs" />
     <Compile Include="Linq\Generic2BsonLambdaConverter.cs" />
