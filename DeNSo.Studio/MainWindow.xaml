@@ -32,7 +32,10 @@
 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,0,80,0">
 
 
-          <Button BorderThickness="0" Background="#22cccccc" Height="Auto" VerticalAlignment="Stretch" VerticalContentAlignment="Bottom" Margin="0,0,15,0" 
+          <Button BorderThickness="0" Background="#22cccccc" Height="Auto" 
+                  VerticalAlignment="Stretch" VerticalContentAlignment="Bottom" 
+                  Click="btn_OpenNewDatabase"
+                  Margin="0,0,15,0" 
                   >
 
             <StackPanel Orientation="Horizontal">
@@ -45,7 +48,8 @@
 
           </Button>
 
-          <Button BorderThickness="0" Background="#22cccccc" Height="Auto" VerticalAlignment="Stretch" VerticalContentAlignment="Bottom" Margin="0,0,15,0" >
+          <Button BorderThickness="0" Background="#22cccccc" 
+                  Height="Auto" VerticalAlignment="Stretch" VerticalContentAlignment="Bottom" Margin="0,0,15,0" >
 
             <StackPanel Orientation="Horizontal">
               <!--<Border Background="{DynamicResource OpenIcon}" Width="32" Height="32" 

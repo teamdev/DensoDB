@@ -15,6 +15,7 @@ using DeNSo.Studio.Meta;
 using System.Runtime.InteropServices;
 using System.Drawing.Printing;
 using System.Windows.Interop;
+using DeNSo.Studio.UserControls;
 
 namespace DeNSo.Studio
 {
@@ -31,6 +32,8 @@ namespace DeNSo.Studio
 
       this.leftColumn.RegisterRegion("leftArea");
       this.centerColumn.RegisterRegion("centerArea");
+
+      new ConfiguredStoreList().ShowInRegion("leftArea");
     }
 
     private void Border_MouseDown(object sender, MouseButtonEventArgs e)
@@ -67,6 +70,11 @@ namespace DeNSo.Studio
     {
       this.Width += e.HorizontalChange;
       this.Height += e.VerticalChange;
+    }
+
+    private void btn_OpenNewDatabase(object sender, RoutedEventArgs e)
+    {
+
     }
 
   }

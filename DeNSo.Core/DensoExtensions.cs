@@ -41,13 +41,8 @@ namespace DeNSo.Core
       }
       catch (Exception ex)
       {
-<<<<<<< HEAD
         LogWriter.LogMessage("Error occurred while composing Denso Extensions", System.Diagnostics.EventLogEntryType.Error);
         LogWriter.LogException(ex);
-=======
-        WindowsLogWriter.LogMessage("Error occurred while composing Denso Extensions", System.Diagnostics.EventLogEntryType.Error);
-        WindowsLogWriter.LogException(ex);
->>>>>>> adc13efc0c52db8701845b1cf36c7d124128966d
       }
 
       foreach (var plugin in Extensions)

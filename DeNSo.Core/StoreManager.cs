@@ -65,10 +65,7 @@ namespace DeNSo.Core
         ShuttingDown = false;
         ShutDownEvent.Reset();
 
-<<<<<<< HEAD
         LogWriter.LogInformation("Initializing Extensions", System.Diagnostics.EventLogEntryType.Warning);
-=======
->>>>>>> adc13efc0c52db8701845b1cf36c7d124128966d
         // Init all the extensions. 
         _extensions.Init();
 
@@ -80,13 +77,8 @@ namespace DeNSo.Core
 
         _saveDBThread = new Thread(new ThreadStart(SaveDBThreadMethod));
         _saveDBThread.Start();
-<<<<<<< HEAD
 
         LogWriter.LogInformation("Store Manager initialization completed", System.Diagnostics.EventLogEntryType.SuccessAudit);
-=======
-        
-
->>>>>>> adc13efc0c52db8701845b1cf36c7d124128966d
         _started = true;
       }
     }

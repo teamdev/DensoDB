@@ -63,6 +63,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="UserControls\CollectionList.xaml.cs">
+      <DependentUpon>CollectionList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ConfiguredStoreList.xaml.cs">
+      <DependentUpon>ConfiguredStoreList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\DensoStoreConfigurationEditor.xaml.cs">
+      <DependentUpon>DensoStoreConfigurationEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\sizeConverter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -75,6 +85,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UserControls\CollectionList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ConfiguredStoreList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\DensoStoreConfigurationEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="W8Styles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -109,6 +131,14 @@
     <Resource Include="CarbonFiber2.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DeNSo.Core\DeNSo.Core.csproj">
+      <Project>{60B0B52B-2846-41DF-931D-24032CF4E9E8}</Project>
+      <Name>DeNSo.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DeNSo.Meta\DeNSo.Meta.csproj">
+      <Project>{FDBAC522-A00C-46A1-B197-FA9AC2788422}</Project>
+      <Name>DeNSo.Meta</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DeNSo.Studio.Meta\DeNSo.Studio.Meta.csproj">
       <Project>{97D1506B-9139-4912-B000-08BD8F27E4AE}</Project>
       <Name>DeNSo.Studio.Meta</Name>
