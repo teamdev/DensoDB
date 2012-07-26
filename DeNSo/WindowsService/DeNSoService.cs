@@ -16,8 +16,6 @@ namespace DeNSo
 {
   public partial class DeNSoService : ServiceBase
   {
-    private WebServiceHost host = null;
-
     public DeNSoService()
     {
       InitializeComponent();
@@ -37,6 +35,7 @@ namespace DeNSo
 
       Console.ForegroundColor = ConsoleColor.Green;
       Console.WriteLine("DENSO: Stopped Successfully");
+
     }
 
     protected override void OnStart(string[] args)
@@ -48,39 +47,25 @@ namespace DeNSo
       DeNSo.Core.Configuration.IndexBasePath = ConfigurationManager.AppSettings["IndexBasePath"];
 
       Session.Start();
-
-      StartSelfHostedRest();
-    
-    
     }
 
     protected override void OnStop()
     {
-      if (host != null)
-        try
-        {
-          host.Close();
-        }
-        catch { }
-
       Session.ShutDown();
     }
 
     public void StartSelfHostedRest()
     {
-      // Problems with Design times access rights
-      // http://go.microsoft.com/fwlink/?LinkId=70353
-
-      host = new WebServiceHost(typeof(restservice));
-      //ServiceEndpoint ep = host.AddServiceEndpoint(typeof(restservice), new WebHttpBinding(), "");
+      WebServiceHost host = new WebServiceHost(typeof(restservice), new Uri("http://localhost:8000"));
+      ServiceEndpoint ep = host.AddServiceEndpoint(typeof(restservice), new WebHttpBinding(), "");
       ServiceDebugBehavior stp = host.Description.Behaviors.Find<ServiceDebugBehavior>();
       stp.HttpHelpPageEnabled = false;
       host.Open();
 
       Console.WriteLine("Service is up and running");
-      //Console.WriteLine("Press enter to quit ");
-      //Console.ReadLine();
-      //host.Close();
+      Console.WriteLine("Press enter to quit ");
+      Console.ReadLine();
+      host.Close();
     }
   }
 }

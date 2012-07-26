@@ -6,7 +6,6 @@ using System.ComponentModel.Composition;
 using DeNSo.Meta;
 using System.ComponentModel.Composition.Hosting;
 using System.Reflection;
-using System.Diagnostics;
 
 namespace DeNSo.Core
 {
@@ -23,39 +22,35 @@ namespace DeNSo.Core
 
     public void Init()
     {
-      AggregateCatalog catalog = new AggregateCatalog();
-      catalog.Catalogs.Add(new AssemblyCatalog(Assembly.GetExecutingAssembly()));
-
-      AddDirectoryCatalog(catalog, "Extensions");
-      AddDirectoryCatalog(catalog, "EventHandlers");
-
-      CompositionContainer container = new CompositionContainer(catalog);
-      container.ComposeParts(this);
-
-
-      if (Extensions != null)
-        foreach (var plugin in Extensions)
-        {
-          plugin.Init();
-        }
-
-      EventHandlerManager.AnalyzeCommandHandlers(ImportedHandlers);
-    }
-
-    private static void AddDirectoryCatalog(AggregateCatalog catalog, string directoryname)
-    {
       try
       {
-        var c1 = new DirectoryCatalog(directoryname);
+        AggregateCatalog catalog = new AggregateCatalog();
+
+        var c1 = new DirectoryCatalog("Extensions");
         c1.Refresh();
+        var c2 = new DirectoryCatalog("EventHandlers");
+        c2.Refresh();
+        var c3 = new AssemblyCatalog(Assembly.GetExecutingAssembly());
+
         catalog.Catalogs.Add(c1);
+        catalog.Catalogs.Add(c2);
+        catalog.Catalogs.Add(c3);
+
+        CompositionContainer container = new CompositionContainer(catalog);
+        container.ComposeParts(this);
       }
       catch (Exception ex)
       {
-        Debug.WriteLine(ex.Message);
         LogWriter.LogMessage("Error occurred while composing Denso Extensions", System.Diagnostics.EventLogEntryType.Error);
         LogWriter.LogException(ex);
       }
+
+      foreach (var plugin in Extensions)
+      {
+        plugin.Init();
+      }
+
+      EventHandlerManager.AnalyzeCommandHandlers(ImportedHandlers);
     }
   }
 }
