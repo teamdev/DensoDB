@@ -6,15 +6,26 @@ using System.Windows;
 using System.Runtime.InteropServices;
 using System.Drawing.Printing;
 using System.Windows.Interop;
+using System.Windows.Controls;
 
 namespace DeNSo.Studio.Meta
 {
   public static class UIManager
   {
-    private static Dictionary<string, FrameworkElement> _regions = new Dictionary<string, FrameworkElement>();
-    public static void RegisterRegion(this FrameworkElement item, string name)
+    private static Dictionary<string, Border> _regions = new Dictionary<string, Border>();
+    public static void RegisterRegion(this Border item, string name)
     {
-      _regions.Add(name, item);
+      if (_regions.ContainsKey(name))
+        _regions[name] = item;
+      else
+        _regions.Add(name, item);
+    }
+
+
+    public static void ShowInRegion(this UIElement item, string name)
+    {
+      if (_regions.ContainsKey(name))
+        _regions[name].Child = item;
     }
 
     #region DropShadow the main Window

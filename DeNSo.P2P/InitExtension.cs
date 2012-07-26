@@ -13,6 +13,7 @@ namespace DeNSo.P2P
     public void Init()
     {
       EventP2PDispatcher.EnableP2PEventMesh();
+      DeNSo.Core.Configuration.EnableOperationsLog = true;
     }
   }
 }

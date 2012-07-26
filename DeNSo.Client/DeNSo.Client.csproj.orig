@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{FDBAC522-A00C-46A1-B197-FA9AC2788422}</ProjectGuid>
+    <ProjectGuid>{941FADB8-09C5-4531-A300-C23FBE4A3FB8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DeNSo.Meta</RootNamespace>
-    <AssemblyName>DeNSo.Meta</AssemblyName>
+    <RootNamespace>DeNSo.Client</RootNamespace>
+    <AssemblyName>DeNSo.Client</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,43 +33,56 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.XML" />
-    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\CommandAttribute.cs" />
-    <Compile Include="BSon\BSonDoc.cs" />
-    <Compile Include="BSon\BSonProp.cs" />
-    <Compile Include="BSon\BSonTypeEnum.cs" />
-    <Compile Include="BSon\IBson.cs" />
-    <Compile Include="BSon\Serializer.cs" />
-    <Compile Include="BuiltinCommands.cs" />
-    <Compile Include="DocumentMetadata.cs" />
-    <Compile Include="Delegates.cs" />
-    <Compile Include="EventCommandStatus.cs" />
-    <Compile Include="Exceptions\DocumentHasNoIdException.cs" />
-    <Compile Include="ICommandHandler.cs" />
-    <Compile Include="IExtensionPlugin.cs" />
-    <Compile Include="ISession.cs" />
-    <Compile Include="IStore.cs" />
-    <Compile Include="BSon\Bson2JsonExtensions.cs" />
-    <Compile Include="CommandKeyword.cs" />
-    <Compile Include="Linq\EntityQueryable.cs" />
-    <Compile Include="Linq\Generic2BsonLambdaConverter.cs" />
-    <Compile Include="Linq\Lambda2JsonSerializer.cs" />
-    <Compile Include="Linq\Lambda2XmlSerializer.cs" />
-    <Compile Include="Linq\SerializationExtensions.cs" />
-    <Compile Include="Linq\Xml2LambdaParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SessionExtensions.cs" />
-    <Compile Include="_global_\ReflectionExtensions.cs" />
+    <Compile Include="Service References\RestClient\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DeNSo.Meta\DeNSo.Meta.csproj">
+      <Project>{FDBAC522-A00C-46A1-B197-FA9AC2788422}</Project>
+      <Name>DeNSo.Meta</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="LICENSE.txt" />
+    <None Include="Service References\RestClient\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\RestClient\configuration.svcinfo" />
+    <None Include="Service References\RestClient\configuration91.svcinfo" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Service References\RestClient\Arrays.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\RestClient\service.wsdl" />
+    <None Include="Service References\RestClient\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\RestClient\service1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\RestClient\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

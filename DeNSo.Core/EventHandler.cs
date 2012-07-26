@@ -23,8 +23,11 @@ namespace DeNSo.Core
 
     internal static void AnalyzeCommandHandlers(ICommandHandler[] handlers)
     {
+      LogWriter.LogInformation("Start analyzing and preparing command handlers", EventLogEntryType.Warning);
       foreach (var hand in handlers)
       {
+        LogWriter.LogInformation(string.Format("Registering command handler {0}", hand.GetType().Name), EventLogEntryType.Information);
+
         var attrs = hand.GetType().GetCustomAttributes(typeof(DeNSo.Meta.HandlesCommandAttribute), true);
         foreach (var at in attrs)
         {
@@ -32,17 +35,20 @@ namespace DeNSo.Core
           if (!_commandHandlers.ContainsKey(commandname))
             _commandHandlers.Add(commandname, new List<ICommandHandler>());
           _commandHandlers[commandname].Add(hand);
+          LogWriter.LogInformation(string.Format(" Handler registered for command {0}", commandname), EventLogEntryType.SuccessAudit);
         }
       }
     }
 
     public static void RegisterGlobalEventHandler(Action<IStore, EventCommand> eventhandler)
     {
+      LogWriter.LogInformation("Registering a global event handler", EventLogEntryType.SuccessAudit);
       _globaleventhandlers.Add(eventhandler);
     }
 
     public static void UnRegisterGlobalEventHandler(Action<IStore, EventCommand> eventhandler)
     {
+      LogWriter.LogInformation("Unregistering a global event handler", EventLogEntryType.SuccessAudit);
       _globaleventhandlers.Remove(eventhandler);
     }
 
@@ -50,6 +56,7 @@ namespace DeNSo.Core
     {
       var store = new ObjectStoreWrapper(database);
 
+      LogWriter.LogInformation("Executing waiting event", EventLogEntryType.Information);
       #region Execute inline global event handlers
       foreach (var ge in _globaleventhandlers)
       {
@@ -59,7 +66,7 @@ namespace DeNSo.Core
         }
         catch (Exception ex)
         {
-          Debug.WriteLine(ex.Message);
+          LogWriter.LogException(ex);
         }
       }
       #endregion
@@ -76,7 +83,7 @@ namespace DeNSo.Core
           }
           catch (Exception ex)
           {
-            Debug.WriteLine(ex.Message);
+            LogWriter.LogException(ex);
           }
         }
     }
@@ -86,6 +93,8 @@ namespace DeNSo.Core
       string actionname = string.Empty;
       if (command.HasProperty(CommandKeyword.Action))
         actionname = (command[CommandKeyword.Action] ?? string.Empty).ToString();
+
+      LogWriter.LogInformation(string.Format("Executing action {0}", string.Empty), EventLogEntryType.Information);
 
       if (_commandHandlers.ContainsKey(actionname))
         return _commandHandlers[actionname].ToArray();
