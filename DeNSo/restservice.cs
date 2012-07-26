@@ -49,7 +49,7 @@ namespace DeNSo
     /// <returns></returns>
     [OperationContract]
     [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "{database}/{collection}/count/{filter}")]
-    public int CollectionCount(string database, string collection, string filter)
+    public int FilteredCollectionCount(string database, string collection, string filter)
     {
       //TODO: complete count filtered implementation. 
       // depends on filter Linq deserialization
@@ -65,7 +65,7 @@ namespace DeNSo
     /// <returns></returns>
     [OperationContract]
     [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "{database}/{collection}/{id}")]
-    public IEnumerable<string> GetItem(string database, string collection, int id)
+    public IEnumerable<string> GetItem(string database, string collection, string id)
     {
       var jw = JsonReaderWriterFactory.CreateJsonWriter(null);
 
@@ -89,6 +89,15 @@ namespace DeNSo
         result.Add(d.Serialize());
 
       return result.AsEnumerable();
+    }
+
+    [OperationContract]
+    [WebInvoke(RequestFormat = WebMessageFormat.Json, 
+               ResponseFormat = WebMessageFormat.Json, 
+               UriTemplate = "{database}/execute")]
+    public void ExecuteJson(string database, string jsoncommand)
+    {
+      new Command().Execute(database, jsoncommand.ToBSon().Serialize());
     }
   }
 }
