@@ -11,24 +11,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using DeNSo.Core;
-using DeNSo.Studio.Meta.Entities;
 
-namespace DeNSo.Studio.UserControls
+namespace DeNSo.Studio.Management
 {
   /// <summary>
-  /// Interaction logic for DensoStoreConfigurationEditor.xaml
+  /// Interaction logic for CreateDBConnection.xaml
   /// </summary>
-  public partial class DensoStoreConfigurationEditor : UserControl
+  public partial class CreateDBConnection : UserControl
   {
-    public DensoStoreConfigurationEditor()
+    public CreateDBConnection()
     {
       InitializeComponent();
-    }
-
-    private void Button_Click_1(object sender, RoutedEventArgs e)
-    {
-      Session.New.Set<ConfiguredStore>(this.DataContext as ConfiguredStore);
     }
   }
 }

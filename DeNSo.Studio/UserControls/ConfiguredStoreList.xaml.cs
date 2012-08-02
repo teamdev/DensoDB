@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DeNSo.Studio.Meta;
+using DeNSo.Studio.Meta.Entities;
 
 namespace DeNSo.Studio.UserControls
 {
@@ -22,6 +24,16 @@ namespace DeNSo.Studio.UserControls
     public ConfiguredStoreList()
     {
       InitializeComponent();
+    }
+
+    private void btnNew_Click_1(object sender, RoutedEventArgs e)
+    {
+      DensoStoreConfigurationEditor editor = new DensoStoreConfigurationEditor();
+
+      editor.DataContext = new ConfiguredStore() { Id = Guid.NewGuid().ToByteArray() };
+
+      UIManager.ShowInRegion(editor, "centerArea");
+
     }
   }
 }

@@ -35,7 +35,7 @@
             <Image Width="24" Height="24" RenderOptions.BitmapScalingMode="Fant" Source="/icons/inbox.png" ></Image>
           </Button>
           <Button Margin="1" VerticalAlignment="Center" BorderThickness="0" Background="#22cccccc" >
-            <Image Width="24" Height="24" RenderOptions.BitmapScalingMode="Fant" Source="/icons/web.png" ></Image>
+            <Image Width="24" Height="24" RenderOptions.BitmapScalingMode="Fant"  ></Image>
           </Button>
 
         </StackPanel>
@@ -96,7 +96,7 @@
       <StackPanel.Resources>
         <SolidColorBrush x:Key="forecolor" Color="#FF555555" />
       </StackPanel.Resources>
-      <Button Height="24" Name="btnNew" Background="White" Margin="0,0,10,0" BorderThickness="0" >
+      <Button Height="24" Name="btnNew" Background="White" Margin="0,0,10,0" BorderThickness="0" Click="btnNew_Click_1">
         <StackPanel Orientation="Horizontal">
           <Path Data="M-1,0 L 1,0 M 0,-1 L 0,1" Stroke="{StaticResource forecolor}" StrokeThickness="2" Stretch="Fill" Width="10"  Height="10"
                 VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="4"/>
