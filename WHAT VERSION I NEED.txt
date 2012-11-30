@@ -1,0 +1,11 @@
+denso is moving to different platforms very fast. 
+in this folder you'll find many different implementation of densso for different platforms. 
+
+I'm trying to keep all togheter and have a unique source code to maintain platform implementations aligned . 
+But some platforms lacks features i need to develop denso, so you will find the full source only in the 
+WINDOWS folder. 
+
+What about other folders. 
+WINDOWS PHONE folder and MONO folder contains solution with linked source, 
+this mean that the REAL source code i use is the source code in WINDOWS folder, 
+other folders contains only the differences i developed to maintain cross-platform compatibility.

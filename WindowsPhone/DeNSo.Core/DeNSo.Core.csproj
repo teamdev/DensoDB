@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{13E0994E-801A-4D61-9A1D-7E5059ABD98F}</ProjectGuid>
+    <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DeNSo.Core</RootNamespace>
+    <AssemblyName>DeNSo.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>Bin\x86\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>
+    </PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>Bin\x86\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>
+    </PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>Bin\ARM\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>
+    </PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>Bin\ARM\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>
+    </PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\Windows\DeNSo.Core\Configuration.cs">
+      <Link>Configuration.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\CQRS\Command.cs">
+      <Link>CQRS\Command.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\CQRS\Query.cs">
+      <Link>CQRS\Query.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\DensoExtensions.cs">
+      <Link>DensoExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\DiskIO\EventCommand.cs">
+      <Link>DiskIO\EventCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\DiskIO\Journaling.cs">
+      <Link>DiskIO\Journaling.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\EventHandler.cs">
+      <Link>EventHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\EventHandlers\BaseCommandHandler.cs">
+      <Link>EventHandlers\BaseCommandHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\EventHandlers\CollectionFlushHandler.cs">
+      <Link>EventHandlers\CollectionFlushHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\EventHandlers\DeleteHandler.cs">
+      <Link>EventHandlers\DeleteHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\EventHandlers\DeleteManyHandler.cs">
+      <Link>EventHandlers\DeleteManyHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\EventHandlers\SetHandler.cs">
+      <Link>EventHandlers\SetHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\EventHandlers\SetManyHandler.cs">
+      <Link>EventHandlers\SetManyHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\EventHandlers\UpdateHandler.cs">
+      <Link>EventHandlers\UpdateHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\EventStore.cs">
+      <Link>EventStore.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\LogWriter.cs">
+      <Link>LogWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\ObjectStore.cs">
+      <Link>ObjectStore.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\ObjectStoreKeyType.cs">
+      <Link>ObjectStoreKeyType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\ObjectStoreWrapper.cs">
+      <Link>ObjectStoreWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\Session.cs">
+      <Link>Session.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\StoreManager.cs">
+      <Link>StoreManager.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\Struct\StoreItem.cs">
+      <Link>Struct\StoreItem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Core\Struct\StoreKey.cs">
+      <Link>Struct\StoreKey.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Windows\DeNSo.Core\EventHandlers\PlaceHolder.txt">
+      <Link>EventHandlers\PlaceHolder.txt</Link>
+    </Content>
+    <Content Include="..\..\Windows\DeNSo.Core\LICENSE.txt">
+      <Link>LICENSE.txt</Link>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DeNSo.Meta\DeNSo.Meta.csproj">
+      <Project>{B49E3B92-1C11-43EC-8246-D9CA226A51AD}</Project>
+      <Name>DeNSo.Meta</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\miniMef\miniMef.csproj">
+      <Project>{D7635DAE-41C7-4121-8195-563A83FD8944}</Project>
+      <Name>miniMef</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib.Extensions" />
+    <Reference Include="System" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

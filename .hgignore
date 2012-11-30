@@ -1,4 +1,5 @@
 glob:*/bin/*
+glob:*/Bin/*
 glob:*/obj/*
 glob:TestResults/*
 glob:Tests/*

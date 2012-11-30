@@ -1,0 +1,3 @@
+This project contains linked references to original sources in Denso for windows project.
+Open the Mono solution with Visual Studio to see linked files. 
+This let me more coerent in developing only one source that works in different platforms. 
