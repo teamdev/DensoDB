@@ -35,7 +35,8 @@ namespace DeNSo.Core
 
       _journal = new Journaling(Configuration.BasePath, dbname);
 
-      _operationsLog = new Journaling(Configuration.BasePath, dbname);
+      if (Configuration.EnableOperationsLog)
+        _operationsLog = new Journaling(Configuration.BasePath, dbname, true);
 
       // The journal can be empty so i have to evaluate the last committed command serial number 
       // and reset Command Serial number in the journal to ensure command execution coherency.

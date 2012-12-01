@@ -99,7 +99,8 @@ namespace DeNSo.Meta.BSon
 
       var properties = tt.GetProperties();
       foreach (var p in properties)
-        doc[p.Name] = entity.NavigateProperty<T>(p.Name);
+        if (p.GetCustomAttributes(typeof(NonSerializedAttribute), false).Length == 0)
+          doc[p.Name] = entity.NavigateProperty<T>(p.Name);
       return doc;
     }
 
@@ -349,7 +350,7 @@ namespace DeNSo.Meta.BSon
 #if WINDOWS_PHONE
         case BSonTypeEnum.BSON_decimal: return (decimal)reader.ReadDouble();
 #else
-          case BSonTypeEnum.BSON_decimal: return reader.ReadDecimal();
+        case BSonTypeEnum.BSON_decimal: return reader.ReadDecimal();
 #endif
         case BSonTypeEnum.BSON_GUID: return new Guid(reader.ReadBytes(16));
         case BSonTypeEnum.BSON_bynary:

@@ -19,6 +19,9 @@ namespace DeNSo.Test
 
       Configuration.BasePath = @"c:\densodb";
       Configuration.EnableJournaling = true;
+      Configuration.EnableOperationsLog = true;
+
+      LogWriter.VerboseLevel = 2;
 
       Session.DefaultDataBase = "prova123";
       var ss = Session.New;
@@ -42,7 +45,8 @@ namespace DeNSo.Test
 
       points.Clear();
       points = null;
-      
+
+      Console.WriteLine("Press Enter.");
       Console.ReadLine();
 
       GC.Collect(1);
@@ -53,6 +57,7 @@ namespace DeNSo.Test
 
       GC.GetTotalMemory(true);
 
+      Console.WriteLine("Press Enter.");
       Console.ReadLine();
 
       Expression<Func<myPoint, bool>> expression = p => p.Z == 30.003743 && p.Y > 0;
@@ -67,6 +72,8 @@ namespace DeNSo.Test
 
 
       var rr = ss.Get("myPoint", epr);
+
+      Console.WriteLine("Press Enter.");
       Console.ReadLine();
       Session.ShutDown();
 

@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
+using System.Security;
 using System.Security.Permissions;
 namespace DeNSo.Core
 {
@@ -13,6 +14,10 @@ namespace DeNSo.Core
   {
     private static string _logname = "Application";
     private static string _eventsourcename = "DeNSo DB";
+    private static bool _writetoSystemlog = true;
+
+    public static int VerboseLevel { get; set; }
+
     public static string LogName
     {
       get
@@ -68,7 +73,17 @@ namespace DeNSo.Core
     public static void LogMessage(string message, string applicationname, LogEntryType entrytype)
     {
 #if WINDOWS
-      string verbose = string.Empty;
+      //string verbose = string.Empty;
+      if (VerboseLevel < 0) return;
+      if (VerboseLevel == 0 && (entrytype & (LogEntryType.Information |
+                                             LogEntryType.Warning |
+                                             LogEntryType.SuccessAudit |
+                                             LogEntryType.FailureAudit)) > 0) return;
+
+      if (VerboseLevel == 1 && (entrytype & (LogEntryType.Information |
+                                             LogEntryType.Warning)) > 0) return;
+
+      if (VerboseLevel == 2 && entrytype == LogEntryType.Information) return;
 
       if (Environment.UserInteractive)
       {
@@ -98,9 +113,8 @@ namespace DeNSo.Core
 
       try
       {
-        if (!(verbose == "0") || entrytype == LogEntryType.Error)
-        {
-          if (!(verbose == "1") || entrytype == LogEntryType.Error || entrytype == LogEntryType.Warning)
+        if (_writetoSystemlog)
+          if (entrytype == LogEntryType.Error || entrytype == LogEntryType.Warning)
           {
             if (!EventLog.SourceExists(LogWriter._eventsourcename))
             {
@@ -111,10 +125,17 @@ namespace DeNSo.Core
               Source = LogWriter._eventsourcename
             }.WriteEntry(message, (EventLogEntryType)entrytype);
           }
-        }
       }
-      catch
+      catch (SecurityException ex)
       {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine(ex.Message);
+        Console.ResetColor();
+        _writetoSystemlog = false;
+      }
+      catch (Exception ex)
+      {
+        Debug.Write(ex.Message);
       }
 #endif
     }

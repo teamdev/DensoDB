@@ -7,7 +7,7 @@ using System.Diagnostics;
 //using System.Runtime.Serialization.Formatters.Binary;
 using DeNSo.Core.DiskIO;
 
-#if WINDOWS 
+#if WINDOWS
 using System.Runtime.Remoting;
 #endif
 
@@ -21,7 +21,8 @@ namespace DeNSo.Core
     private BinaryWriter _writer = null;
     //private BinaryFormatter _bf = new BinaryFormatter();
     private const int MByte = 1024 * 1204;
-    private int _increasefileby = 1 * MByte;
+    private int _increasefileby = 2 * MByte;
+    private int _logfilefreespace = (int)(0.5 * (double)MByte);
     #endregion
 
     #region public properties
@@ -41,11 +42,11 @@ namespace DeNSo.Core
     }
     #endregion
 
-    internal Journaling(string basepath, string databasename)
+    internal Journaling(string basepath, string databasename, bool isoperationlog = false)
     {
       BasePath = basepath;
       DataBaseName = databasename;
-      Init();
+      Init(isoperationlog);
     }
 
     public long LogCommand(EventCommand command)
@@ -65,7 +66,7 @@ namespace DeNSo.Core
             _writer.Write(command.Command);
             //_logfile.Flush();
 
-            if (_logfile.Length - _logfile.Position < MByte)
+            if (_logfile.Length - _logfile.Position < _logfilefreespace)
             {
               IncreaseFileSize();
             }
@@ -128,7 +129,7 @@ namespace DeNSo.Core
       LogWriter.LogInformation("Journalig file is too small, make it bigger", LogEntryType.Information);
       var pos = _logfile.Position;
       _logfile.SetLength(pos + _increasefileby);
-      //_logfile.Flush();
+      _logfile.Flush();
       _logfile.Position = pos;
     }
 
@@ -143,7 +144,7 @@ namespace DeNSo.Core
           _writer = new BinaryWriter(_logfile);
 
           if (_logfile != null)
-            LogWriter.LogMessage(string.Format("Log File ready: {0}", FileName),LogEntryType.Information);
+            LogWriter.LogMessage(string.Format("Log File ready: {0}", FileName), LogEntryType.Information);
           else
           {
             LogWriter.LogMessage(string.Format("Unable to open logfile: {0}", FileName), LogEntryType.Error);
