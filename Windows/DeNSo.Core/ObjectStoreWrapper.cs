@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DeNSo.Meta;
+using DeNSo;
 
-namespace DeNSo.Core
+namespace DeNSo
 {
   public class ObjectStoreWrapper: IStore
   {

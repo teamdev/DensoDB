@@ -5,7 +5,7 @@ using System.Text;
 using System.Linq.Expressions;
 using System.ComponentModel;
 
-namespace DeNSo.Core.DiskIO
+namespace DeNSo.DiskIO
 {
   /// <summary>
   /// this class is used to store the command at the event dispatcher level

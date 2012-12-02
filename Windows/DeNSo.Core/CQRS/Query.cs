@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DeNSo.Meta.BSon;
+using DeNSo.BSon;
 
-namespace DeNSo.Core.CQRS
+namespace DeNSo.CQRS
 {
   public class Query
   {

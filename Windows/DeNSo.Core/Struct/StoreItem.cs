@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DeNSo.Core.Struct
+namespace DeNSo.Struct
 {
   public struct StoreKey
   {

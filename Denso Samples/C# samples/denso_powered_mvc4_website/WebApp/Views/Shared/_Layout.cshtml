@@ -1,0 +1,25 @@
+﻿@{
+  Layout = "~/Views/Shared/_Layout_Base.cshtml";
+}
+<div class="pagecontainer container marketing">
+  <hr class="featurette-divider">
+  <div class="alert fade in alert-success" style="display: none; z-index: 90; margin-top:-60px;">
+    <button type="button" class="close" data-dismiss="alert">X</button>
+    <strong></strong>
+  </div>
+  @RenderBody()
+
+    <!-- FOOTER -->
+  <footer>
+    <p class="pull-right"><a href="#">Back to top</a></p>
+    <p>&copy; Dot Net Umbria 2012  &middot; </p>
+  </footer>
+</div>
+
+@section scripts
+{
+  @RenderSection("scripts", false)
+  <script type="text/javascript">
+    $(".alert").alert();
+  </script>
+}

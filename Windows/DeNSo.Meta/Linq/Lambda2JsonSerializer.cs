@@ -5,7 +5,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Linq.Expressions;
 
-namespace DeNSo.Meta
+namespace DeNSo
 {
 
   public class Lambda2JsonSerializer : ExpressionVisitor

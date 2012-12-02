@@ -5,13 +5,13 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 //using System.Runtime.Serialization.Formatters.Binary;
-using DeNSo.Core.DiskIO;
+using DeNSo.DiskIO;
 
 #if WINDOWS
 using System.Runtime.Remoting;
 #endif
 
-namespace DeNSo.Core
+namespace DeNSo
 {
   internal class Journaling
   {

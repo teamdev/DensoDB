@@ -5,9 +5,9 @@ using System.Text;
 using System.Xml.Linq;
 using System.Linq.Expressions;
 using System.Diagnostics;
-using DeNSo.Meta.BSon;
+using DeNSo.BSon;
 
-namespace DeNSo.Meta
+namespace DeNSo
 {
   public static class SerializationExtensions
   {

@@ -5,9 +5,9 @@ using System.Text;
 using System.ServiceModel;
 using DeNSo.P2P.Interfaces;
 using DeNSo.P2P.Messages;
-using DeNSo.Core;
-using DeNSo.Meta.BSon;
-using DeNSo.Core.DiskIO;
+using DeNSo;
+using DeNSo.BSon;
+using DeNSo.DiskIO;
 
 namespace DeNSo.P2P.Services
 {

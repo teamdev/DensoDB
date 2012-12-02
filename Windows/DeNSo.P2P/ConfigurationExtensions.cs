@@ -8,7 +8,7 @@ namespace DeNSo.P2P
   public static class ConfigurationExtensions
   {
     private static P2PConfiguration _configuration = new P2PConfiguration();
-    public static P2PConfiguration P2P(this DeNSo.Core.DensoExtensions extensions)
+    public static P2PConfiguration P2P(this DeNSo.DensoExtensions extensions)
     {
       return _configuration;
     }

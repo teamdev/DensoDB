@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace DeNSo.Meta.BSon
+namespace DeNSo.BSon
 {
   public interface IBSonNode
   {

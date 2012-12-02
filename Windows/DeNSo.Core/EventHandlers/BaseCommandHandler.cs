@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DeNSo.Meta;
-using DeNSo.Meta.BSon;
+using DeNSo;
+using DeNSo.BSon;
 
-namespace DeNSo.Core.EventHandlers
+namespace DeNSo.EventHandlers
 {
   public abstract class BaseCommandHandler: ICommandHandler
   {
-    public void HandleCommand(IStore store, Meta.BSon.BSonDoc command)
+    public void HandleCommand(IStore store, BSon.BSonDoc command)
       {
       BSonDoc value = null;
       var collection = string.Empty;

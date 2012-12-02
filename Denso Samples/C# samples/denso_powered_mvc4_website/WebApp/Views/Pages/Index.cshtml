@@ -1,0 +1,84 @@
+﻿@model IEnumerable<WebApp.Models.Content>
+
+@{
+  ViewBag.Title = "Index";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>Elenco delle pagine</h1>
+<p>
+  @Html.ActionLink("Create", "Create", null, new { @class = "btn btn-success btn-large" })
+</p>
+<table class="table table-stripped table-hover">
+  <tr>
+    <th>
+      @Html.DisplayNameFor(model => model.Name)
+    </th>
+    <th>
+      @Html.DisplayNameFor(model => model.Title)
+    </th>
+    <th>
+      @Html.DisplayNameFor(model => model.Path)
+    </th>
+    <th>
+      @Html.DisplayNameFor(model => model.Body)
+    </th>
+    <th>
+      @Html.DisplayNameFor(model => model.Image)
+    </th>
+    <th>
+      @Html.DisplayNameFor(model => model.Category)
+    </th>
+    <th></th>
+  </tr>
+  @if (Model != null)
+  {
+    foreach (var item in Model)
+    {
+    <tr class="itemid-@item.Id">
+      <td>
+        @Html.DisplayFor(modelItem => item.Name)
+      </td>
+      <td>
+        @Html.DisplayFor(modelItem => item.Title)
+      </td>
+      <td>
+        @Html.DisplayFor(modelItem => item.Path)
+      </td>
+      <td>
+        @Html.DisplayFor(modelItem => item.Body)
+      </td>
+      <td>
+        @Html.DisplayFor(modelItem => item.Image)
+      </td>
+      <td>
+        @Html.DisplayFor(modelItem => item.Category)
+      </td>
+      <td>
+        <div class="btn-group">
+          @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-warning" })
+          <a class="btn btn-danger" href="javascript:deleteItem(@item.Id)">Delete</a>
+        </div>
+      </td>
+    </tr>
+    }
+  }
+
+</table>
+@section scripts
+{
+  <script type="text/javascript">
+    function deleteItem(itemid) {
+      $.get("@Url.Content("~/Pages/Delete")/" + itemid, null, function (data) {
+        if (Boolean(data)) {
+          $(".itemid-" + itemid).remove();
+          ShowAlert("Il contenuto è stato cancellato ");
+        }
+        else {
+          ShowAlert(data);
+        }
+      });
+    }
+
+    ShowWarning("Attenzione: Non verrà chiesta alcuna conferma per la cancellazione dei contenuti");
+  </script>
+}

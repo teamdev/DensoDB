@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace DeNSo.Core.Struct
+namespace DeNSo.Struct
 {
   /// <summary>
   /// StoreGuid create an ordinated Guid so that data can be order also using GUID. 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DeNSo.Meta;
+using DeNSo;
 using System.Threading;
 using System.IO;
 
@@ -11,7 +11,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.ComponentModel.Composition;
 #endif
 
-namespace DeNSo.Core
+namespace DeNSo
 {
   internal static class StoreManager
   {

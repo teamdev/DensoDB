@@ -1,0 +1,58 @@
+﻿@using System.Data.Linq
+@using WebApp.Models
+@{
+  Layout = "~/Views/Shared/_Layout_Base.cshtml";
+  var db = DeNSo.Session.New;
+  var slideposts = db.Get<Content>(c => c.Category == "slider").ToList();
+}
+<!-- Carousel
+    ================================================== -->
+<div class="pagecontainer">
+  <div id="myCarousel" class="carousel slide">
+    <div class="carousel-inner">
+      @foreach (var item in slideposts)
+      {
+        <div class="item">
+          <img src="@item.GetImageUri()" alt="">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>@item.Title</h1>
+              <span class="lead">@MvcHtmlString.Create(item.Body)</span>
+              @if (!string.IsNullOrEmpty(item.Path))
+              {
+                <a class="btn btn-large btn-primary" href="/Pages/Show/@item.Name">dettagli</a>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+    <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+  </div>
+  <!-- /.carousel -->
+  <div class=" container marketing">
+
+
+    @RenderBody()
+
+    <!-- START THE FEATURETTES -->
+
+
+    @RenderSection("columns", false)
+
+    <hr class="featurette-divider">
+  </div>
+</div>
+<!-- /.container -->
+@section scripts
+{
+  @RenderSection("scripts", false)
+  <script>
+    !function ($) {
+      $(function () {
+        $('#myCarousel').carousel()
+      })
+    }(window.jQuery)
+  </script>
+}

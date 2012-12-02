@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ServiceModel;
-using DeNSo.Core;
+using DeNSo;
 
 namespace DeNSo.P2P.Messages
 {

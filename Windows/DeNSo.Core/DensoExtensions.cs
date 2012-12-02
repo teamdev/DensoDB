@@ -6,9 +6,9 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Reflection;
 using System.Diagnostics;
-using DeNSo.Meta;
+using DeNSo;
 
-namespace DeNSo.Core
+namespace DeNSo
 {
   /// <summary>
   /// DensoExtensions use MEF to load extensions in densodb

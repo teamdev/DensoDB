@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
-using DeNSo.Meta;
-using DeNSo.Meta.BSon;
+using DeNSo;
+using DeNSo.BSon;
 
-namespace DeNSo.Core.EventHandlers
+namespace DeNSo.EventHandlers
 {
   [HandlesCommand(DensoBuiltinCommands.Set)]
   [Export(typeof(ICommandHandler))]

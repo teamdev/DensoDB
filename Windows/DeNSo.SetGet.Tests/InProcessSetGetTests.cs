@@ -3,7 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DeNSo.Core;
+using DeNSo;
 
 namespace DeNSo.SetGet.Tests
 {
@@ -72,7 +72,7 @@ namespace DeNSo.SetGet.Tests
       result.Add(new TestDataModel());
       result.Add(new TestDataModel());
 
-      var ii = DeNSo.Meta.BSon.BSonSerializer.ToBSon(result);
+      var ii = DeNSo.BSon.BSonSerializer.ToBSon(result);
     }
 
     #endregion
@@ -143,6 +143,19 @@ namespace DeNSo.SetGet.Tests
       denso.Set(item).Wait();
 
       var result = denso.Get<TestDataModel>(m => m.StringValue1.Contains("P") && m.StringValue1.StartsWith("P"));
+
+      Assert.AreEqual(1, result.Count());
+    }
+
+    [TestMethod]
+    public void Get2Lambda_MethodCall_equals_string_variable()
+    {
+      var denso = Session.New;
+      var item = CreateSingleItem(i => i.StringValue1 = "Prova");
+
+      denso.Set(item).Wait();
+      var test = "Prova";
+      var result = denso.Get<TestDataModel>(m => m.StringValue1 == test);
 
       Assert.AreEqual(1, result.Count());
     }

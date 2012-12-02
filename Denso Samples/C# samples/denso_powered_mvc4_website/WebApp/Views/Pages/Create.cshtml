@@ -1,0 +1,107 @@
+﻿@model WebApp.Models.Content
+
+@{
+  ViewBag.Title = "Create";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Crea una nuova pagina</h2>
+
+@using (Html.BeginForm("Create", "Pages", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+{
+  @Html.ValidationSummary(true)
+
+  <fieldset>
+    <legend></legend>
+    <style>
+      .control-label, .controls {
+        text-align: left;
+      }
+    </style>
+
+
+    <div class="control-group">
+      @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+      <div class="controls">
+        @Html.EditorFor(model => model.Name)
+        @Html.ValidationMessageFor(model => model.Name)
+      </div>
+    </div>
+
+
+    <div class="control-group">
+      @Html.LabelFor(model => model.Title, new { @class = "control-label" })
+
+      <div class="controls">
+        @Html.TextBoxFor(model => model.Title, new { style = "width:80%;" })
+        @Html.ValidationMessageFor(model => model.Title)
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="span7">
+        <div class="control-group">
+          @Html.LabelFor(model => model.Path, new { @class = "control-label" })
+          <div class="controls">
+            @Html.TextBoxFor(model => model.Path, new { style = "width:80%;" })
+            @Html.ValidationMessageFor(model => model.Path)
+          </div>
+        </div>
+      </div>
+      <div class="span4">
+        <div class="control-group">
+          @Html.LabelFor(model => model.Category, new { @class = "control-label" })
+
+          <div class="controls">
+            <select id="Category" name="Category">
+              <option value="slider">Slider</option>
+              <option value="homecontent">Home Content</option>
+              <option value="homecolumns">Home Columns</option>
+              <option value="contentmenu">Content Menu</option>
+              <option value="linked">Linked Content</option>
+
+            </select>
+            @Html.ValidationMessageFor(model => model.Category)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      @Html.LabelFor(model => model.Body, new { @class = "control-label" })
+
+      <div class="controls">
+        @Html.EditorFor(model => model.Body)
+        @Html.ValidationMessageFor(model => model.Body)
+      </div>
+    </div>
+
+    <div class="control-group">
+      @Html.LabelFor(model => model.Image, new { @class = "control-label" })
+
+      <div class="controls">
+        @Html.UploadFor(model => model.File)
+        @Html.ValidationMessageFor(model => model.File)
+      </div>
+    </div>
+
+    <div class="control-group">
+      <div class="btn-group controls">
+        <input type="submit" class="btn btn-success btn-large" value="Salva" />
+        @Html.ActionLink("Annulla", "Index", null, new { @class = "btn btn-large btn-warning" })
+      </div>
+    </div>
+
+  </fieldset>
+}
+
+
+@section Scripts {
+  @Scripts.Render("~/bundles/jqueryval")
+  <script src="@Url.Content("~/Scripts/ckeditor/ckeditor.js")" type="text/javascript"></script>
+
+  <script type="text/javascript">
+    $(".Body").ckeditor();
+  </script>
+
+}

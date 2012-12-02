@@ -1,0 +1,17 @@
+﻿@using WebApp.Models
+@model WebApp.Models.Content
+@{
+  Layout = null;
+}
+<div class="featurette">
+  @if (!string.IsNullOrEmpty(Model.Image))
+  {
+    <img class="featurette-image pull-right" src="@Model.GetImageUri()" >
+  }
+  <h2 class="featurette-heading">@Model.Title</h2>
+  <span class="lead">@MvcHtmlString.Create(Model.Body)</span>
+  @if(!string.IsNullOrEmpty(Model.Path))
+  {
+  <p><a class="btn" href="@Model.Path">...</a></p>
+  }
+</div>

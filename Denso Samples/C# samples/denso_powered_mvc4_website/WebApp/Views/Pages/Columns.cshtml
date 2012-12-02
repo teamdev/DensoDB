@@ -1,0 +1,13 @@
+﻿@model IEnumerable<WebApp.Models.Content>
+@{
+  Layout = null;
+}
+<div class="row">
+  @foreach (var item in Model)
+  { 
+    <div class="span3">
+      @Html.Partial("Column", item)
+    </div>
+  }
+</div>
+

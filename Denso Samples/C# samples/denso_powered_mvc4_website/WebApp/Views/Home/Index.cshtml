@@ -1,0 +1,12 @@
+﻿@{
+  ViewBag.Title = "Home Page";
+  Layout = "~/Views/Shared/_Layout_Carousel.cshtml";
+}
+
+@Html.Action("IndexCategory", "Pages", new { id = "homecontent" })
+
+@section columns
+{
+  @Html.Action("IndexCategory", "Pages", new { id="homecolumns", layout="columns"})
+}
+

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DeNSo.Meta;
-using DeNSo.Meta.BSon;
+using DeNSo;
+using DeNSo.BSon;
 using System.Diagnostics;
 using System.ComponentModel.Composition;
 
-namespace DeNSo.Core.EventHandlers
+namespace DeNSo.EventHandlers
 {
   [HandlesCommand(DensoBuiltinCommands.Delete)]
   [Export(typeof(ICommandHandler))]

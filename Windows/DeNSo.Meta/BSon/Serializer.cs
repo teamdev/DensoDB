@@ -7,7 +7,7 @@ using System.Collections;
 using System.Threading;
 using System.Reflection;
 
-namespace DeNSo.Meta.BSon
+namespace DeNSo.BSon
 {
   public static class BSonSerializer
   {
@@ -99,7 +99,7 @@ namespace DeNSo.Meta.BSon
 
       var properties = tt.GetProperties();
       foreach (var p in properties)
-        if (p.GetCustomAttributes(typeof(NonSerializedAttribute), false).Length == 0)
+        if (p.GetCustomAttributes(typeof(IgnorePropertyAttribute), false).Length == 0)
           doc[p.Name] = entity.NavigateProperty<T>(p.Name);
       return doc;
     }

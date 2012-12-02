@@ -4,7 +4,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Security;
 using System.Security.Permissions;
-namespace DeNSo.Core
+namespace DeNSo
 {
   [Description("Log messages and exceptions in the Machine EventLog")]
 #if WINDOWS

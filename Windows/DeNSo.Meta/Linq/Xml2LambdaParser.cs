@@ -6,7 +6,7 @@ using System.Xml.Linq;
 using System.Linq.Expressions;
 using System.Diagnostics;
 
-namespace DeNSo.Meta
+namespace DeNSo
 {
   public class XmlToLambdaParser
   {

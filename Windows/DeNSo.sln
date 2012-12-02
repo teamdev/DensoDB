@@ -29,8 +29,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{CB780F
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeNSo.Linq", "DeNSo.Linq\DeNSo.Linq.csproj", "{C4DFFCE4-EB90-47B7-BFB8-7A2FD777415C}"
-EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = DeNSo.vsmdi
@@ -106,16 +104,6 @@ Global
 		{F42396A5-E2CD-44FA-8461-218737FA827C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{F42396A5-E2CD-44FA-8461-218737FA827C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F42396A5-E2CD-44FA-8461-218737FA827C}.Release|x86.ActiveCfg = Release|Any CPU
-		{C4DFFCE4-EB90-47B7-BFB8-7A2FD777415C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C4DFFCE4-EB90-47B7-BFB8-7A2FD777415C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C4DFFCE4-EB90-47B7-BFB8-7A2FD777415C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{C4DFFCE4-EB90-47B7-BFB8-7A2FD777415C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{C4DFFCE4-EB90-47B7-BFB8-7A2FD777415C}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{C4DFFCE4-EB90-47B7-BFB8-7A2FD777415C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C4DFFCE4-EB90-47B7-BFB8-7A2FD777415C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C4DFFCE4-EB90-47B7-BFB8-7A2FD777415C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{C4DFFCE4-EB90-47B7-BFB8-7A2FD777415C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{C4DFFCE4-EB90-47B7-BFB8-7A2FD777415C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

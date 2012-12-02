@@ -1,0 +1,50 @@
+﻿@using System.Linq
+@using System.Data
+@using WebApp.Models
+@{
+  Layout = null;
+}
+<!-- NAVBAR
+    ================================================== -->
+<!-- Wrap the .navbar in .container to center it on the page and provide easy way to target it with .navbar-wrapper. -->
+<div class="container navbar-wrapper">
+
+  <div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+      <!-- Responsive Navbar Part 1: Button for triggering responsive navbar (not covered in tutorial). Include responsive CSS to utilize. -->
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <a class="brand" href="/">DNU - Moving to Azure...</a>
+      <!-- Responsive Navbar Part 2: Place all navbar contents you want collapsed withing .navbar-collapse.collapse. -->
+      <div class="nav-collapse collapse">
+        <ul class="nav">
+          <li><a href="/">Home</a></li>
+          <li><a href="/Pages/Show/About">About</a></li>
+          <li><a href="/Pages/Show/Contact">Contatti</a></li>
+          <!-- Read about Bootstrap dropdowns at http://twitter.github.com/bootstrap/javascript.html#dropdowns -->
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Argomenti <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              @{
+                var db = DeNSo.Session.New;
+                
+                foreach (Content item in db.Get<Content>(c => c.Category == "linkedcontent").ToList())
+                {
+                <li><a href="/Pages/Show/@item.Name">@item.Title</a></li>  
+                }
+              }
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+    <!-- /.navbar-inner -->
+  </div>
+  <!-- /.navbar -->
+
+</div>
+<!-- /.container -->

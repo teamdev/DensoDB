@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.Linq.Expressions;
-using DeNSo.Meta.BSon;
+using DeNSo.BSon;
 using System.Diagnostics;
-using DeNSo.Meta;
-using DeNSo.Core.DiskIO;
+using DeNSo;
+using DeNSo.DiskIO;
 using System.ComponentModel.Composition;
 
-namespace DeNSo.Core
+namespace DeNSo
 {
   public static class EventHandlerManager
   {
@@ -28,10 +28,10 @@ namespace DeNSo.Core
       {
         LogWriter.LogInformation(string.Format("Registering command handler {0}", hand.GetType().Name), LogEntryType.Information);
 
-        var attrs = hand.GetType().GetCustomAttributes(typeof(DeNSo.Meta.HandlesCommandAttribute), true);
+        var attrs = hand.GetType().GetCustomAttributes(typeof(DeNSo.HandlesCommandAttribute), true);
         foreach (var at in attrs)
         {
-          string commandname = ((DeNSo.Meta.HandlesCommandAttribute)at).Command;
+          string commandname = ((DeNSo.HandlesCommandAttribute)at).Command;
           if (!_commandHandlers.ContainsKey(commandname))
             _commandHandlers.Add(commandname, new List<ICommandHandler>());
           _commandHandlers[commandname].Add(hand);

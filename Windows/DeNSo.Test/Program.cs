@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DeNSo.Core;
-using DeNSo.Meta.BSon;
+
+using DeNSo.BSon;
 using System.Diagnostics;
 using System.Reflection;
 using System.IO;
 using System.Linq.Expressions;
-using DeNSo.Meta;
+using DeNSo;
 
 namespace DeNSo.Test
 {

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reflection;
-using DeNSo.Core.Struct;
-using DeNSo.Meta;
-using DeNSo.Meta.BSon;
+using DeNSo.Struct;
+using DeNSo;
+using DeNSo.BSon;
 
-namespace DeNSo.Core
+namespace DeNSo
 {
   // Changes list. 
   // 2012-04-23 -> converted storekey from int to byte[] to store multiple types value. 

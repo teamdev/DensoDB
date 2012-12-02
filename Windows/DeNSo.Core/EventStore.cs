@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using DeNSo.Core.DiskIO;
-using DeNSo.Meta.BSon;
+using DeNSo.DiskIO;
+using DeNSo.BSon;
 using System.Diagnostics;
 using System.IO;
 
-namespace DeNSo.Core
+namespace DeNSo
 {
   public class EventStore
   {

@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Xml.Linq;
 using System.Diagnostics;
 
-namespace DeNSo.Meta
+namespace DeNSo
 {
   public class Lambda2XmlSerializer : ExpressionVisitor
   {

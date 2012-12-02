@@ -8,7 +8,7 @@
     <ProjectGuid>{FDBAC522-A00C-46A1-B197-FA9AC2788422}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DeNSo.Meta</RootNamespace>
+    <RootNamespace>DeNSo</RootNamespace>
     <AssemblyName>DeNSo.Meta</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -33,9 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.5.7\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\CommandAttribute.cs" />
+    <Compile Include="Attributes\IgnorePropertyAttribute.cs" />
     <Compile Include="BSon\BSonDoc.cs" />
     <Compile Include="BSon\BSonProp.cs" />
     <Compile Include="BSon\BSonTypeEnum.cs" />

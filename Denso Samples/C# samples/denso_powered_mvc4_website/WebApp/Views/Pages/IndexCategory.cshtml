@@ -1,0 +1,13 @@
+﻿@model IEnumerable<WebApp.Models.Content>
+
+@{
+  Layout = null;
+}
+@if (Model != null)
+{
+  foreach (var item in Model)
+  {
+    @Html.Partial("ShowItem",item)
+    <hr class="featurette-divider">
+  }
+}

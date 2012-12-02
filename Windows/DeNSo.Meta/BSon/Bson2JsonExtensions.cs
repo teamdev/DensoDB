@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DeNSo.Meta.BSon
+namespace DeNSo.BSon
 {
   public static class Bson2JsonExtensions
   {

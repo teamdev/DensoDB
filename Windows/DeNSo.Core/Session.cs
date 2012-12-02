@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DeNSo.Core.CQRS;
-using DeNSo.Meta.BSon;
-using DeNSo.Meta;
+using DeNSo.CQRS;
+using DeNSo.BSon;
+using DeNSo;
 using System.Linq.Expressions;
 using System.Threading;
-using DeNSo.Core.Struct;
-using DeNSo.Meta.Exceptions;
+using DeNSo.Struct;
+using DeNSo.Exceptions;
 
-namespace DeNSo.Core
+namespace DeNSo
 {
   public delegate void StoreUpdatedHandler(long executedcommandsn);
 
-  public class Session : DeNSo.Meta.ISession, IDisposable
+  public class Session : DeNSo.ISession, IDisposable
   {
     private Command _command = new Command();
     private Query _query = new Query();

@@ -48,7 +48,7 @@ namespace DeNSo.P2P
     /// </summary>
     private static void RegisterP2PDispatcherInEventStore()
     {
-      DeNSo.Core.EventHandlerManager.RegisterGlobalEventHandler(
+      DeNSo.EventHandlerManager.RegisterGlobalEventHandler(
         (store, doc) =>
         {
           if (doc.HasMarker(P2PConfiguration.NoRedispatch))
@@ -56,11 +56,11 @@ namespace DeNSo.P2P
 
           Dispatch(new Messages.EventMessage()
           {
-            NodeIdentity = DeNSo.Core.Configuration.NodeIdentity,
+            NodeIdentity = DeNSo.Configuration.NodeIdentity,
             Database = store.DataBaseName,
             Command = doc.Command,
             CommandSN = doc.CommandSN, 
-            MaxHop = DeNSo.Core.Configuration.Extensions.P2P().MaxHop
+            MaxHop = DeNSo.Configuration.Extensions.P2P().MaxHop
           });
         });
     }

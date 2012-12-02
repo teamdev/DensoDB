@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
-using DeNSo.Meta;
+using DeNSo;
 
-namespace DeNSo.Core.EventHandlers
+namespace DeNSo.EventHandlers
 {
   [HandlesCommand(DensoBuiltinCommands.CollectionFlush)]
   [Export(typeof(ICommandHandler))]
   public class CollectionFlushHandler : ICommandHandler
   {
-    public void HandleCommand(IStore store, Meta.BSon.BSonDoc command)
+    public void HandleCommand(IStore store, BSon.BSonDoc command)
     {
       if (command.HasProperty(CommandKeyword.Collection))
       {

@@ -1,0 +1,15 @@
+﻿@using WebApp.Models
+@model WebApp.Models.Content
+@{
+  Layout = null;
+}
+@if (!string.IsNullOrEmpty(Model.Image))
+{
+  <img class="img-rounded img-140" src="@Model.GetImageUri()" >
+}
+<h2>@Model.Title</h2>
+<p>@MvcHtmlString.Create(Model.Body)</p>
+@if(!string.IsNullOrEmpty(Model.Path))
+{
+  <p><a class="btn" href="/Pages/Show/@Model.Path">approfondisci</a></p>
+}

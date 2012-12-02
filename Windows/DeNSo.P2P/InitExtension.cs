@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DeNSo.Meta;
+using DeNSo;
 using System.ComponentModel.Composition;
 
 namespace DeNSo.P2P
@@ -13,7 +13,7 @@ namespace DeNSo.P2P
     public void Init()
     {
       EventP2PDispatcher.EnableP2PEventMesh();
-      DeNSo.Core.Configuration.EnableOperationsLog = true;
+      DeNSo.Configuration.EnableOperationsLog = true;
     }
   }
 }

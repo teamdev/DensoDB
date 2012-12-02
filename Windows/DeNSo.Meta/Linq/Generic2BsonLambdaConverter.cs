@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Linq.Expressions;
-using DeNSo.Meta.BSon;
+using DeNSo.BSon;
 
-namespace DeNSo.Meta
+namespace DeNSo
 {
   public class Generic2BsonLambdaConverter : ExpressionVisitor
   {
@@ -61,7 +61,8 @@ namespace DeNSo.Meta
 
     protected override Expression VisitConstant(ConstantExpression node)
     {
-      return base.VisitConstant(node);
+      var result = base.VisitConstant(node);
+      return result;
     }
 
     protected override Expression VisitMember(MemberExpression node)
@@ -74,6 +75,10 @@ namespace DeNSo.Meta
       }
       else
       {
+        if (node.Expression.NodeType == ExpressionType.Constant)
+        {
+          return node;
+        }
         var mi = node.Expression.Type.GetProperty(node.Member.Name, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
         if (node.Expression.Type != baseresult.Type)
           baseresult = Expression.Convert(baseresult, node.Expression.Type);
