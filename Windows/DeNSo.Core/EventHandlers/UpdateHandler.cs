@@ -35,7 +35,7 @@ namespace DeNSo.EventHandlers
 
     private static void UpdateSingleDocument(BSonDoc document, IObjectStore store)
     {
-      var obj = store.GetById((byte[])document[DocumentMetadata.IdPropertyName]);
+      var obj = store.GetById((string)document[DocumentMetadata.IdPropertyName]);
       BSonDoc val = GetValue(document);
       foreach (var p in GetRealProperties(val)) // remove properties starting with  
         if (document.HasProperty(p))

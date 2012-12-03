@@ -28,14 +28,14 @@ namespace DeNSo
     //private int _storeintuid = 0;
     //private Guid _storeGuid = Guid.Empty;
 
-    private byte[] newIdFunction() { return Guid.NewGuid().ToByteArray(); }
+    private string newIdFunction() { return Guid.NewGuid().ToString(); }
     //private Func<byte[]> currentIdFunction;
 
     #endregion
 
     #region Private fields
 
-    internal volatile List<Dictionary<byte[], byte[]>> _primarystore = new List<Dictionary<byte[], byte[]>>();
+    internal volatile List<Dictionary<string, byte[]>> _primarystore = new List<Dictionary<string, byte[]>>();
     #endregion
 
     //#region Constructor
@@ -111,20 +111,20 @@ namespace DeNSo
 
     #region private entities methods
 
-    private byte[] GetEntityUI(BSonDoc entity)
+    private string GetEntityUI(BSonDoc entity)
     {
       if (entity.HasProperty(DocumentMetadata.IdPropertyName) && entity[DocumentMetadata.IdPropertyName] != null)
-        return (byte[])entity[DocumentMetadata.IdPropertyName];
+        return (string)entity[DocumentMetadata.IdPropertyName];
 
       entity[DocumentMetadata.IdPropertyName] = newIdFunction();
-      return (byte[])entity[DocumentMetadata.IdPropertyName];
+      return (string)entity[DocumentMetadata.IdPropertyName];
     }
 
     #endregion
 
     #region private DeNSo Dictionaries manipulations methods
 
-    private BSonDoc dGet(byte[] key)
+    private BSonDoc dGet(string key)
     {
       foreach (var d in _primarystore)
       {
@@ -134,7 +134,7 @@ namespace DeNSo
       return null;
     }
 
-    private void dSet(byte[] key, BSonDoc doc)
+    private void dSet(string key, BSonDoc doc)
     {
       lock (_primarystore)
       {
@@ -143,11 +143,11 @@ namespace DeNSo
       }
     }
 
-    private void dInsert(byte[] key, BSonDoc doc)
+    private void dInsert(string key, BSonDoc doc)
     {
       //doc["@ts#"
 
-      Dictionary<byte[], byte[]> freedictionary = null;
+      Dictionary<string, byte[]> freedictionary = null;
       foreach (var d in _primarystore)
         if (d.Count < Configuration.DictionarySplitSize)
         {
@@ -156,7 +156,7 @@ namespace DeNSo
 
       if (freedictionary == null)
       {
-        freedictionary = new Dictionary<byte[], byte[]>();
+        freedictionary = new Dictionary<string, byte[]>();
         _primarystore.Add(freedictionary);
       }
 
@@ -164,7 +164,7 @@ namespace DeNSo
         freedictionary.Add(key, doc.Serialize());
     }
 
-    private bool dUpdate(byte[] key, BSonDoc doc)
+    private bool dUpdate(string key, BSonDoc doc)
     {
       lock (_primarystore)
         foreach (var d in _primarystore)
@@ -176,7 +176,7 @@ namespace DeNSo
       return false;
     }
 
-    private bool dContains(byte[] key)
+    private bool dContains(string key)
     {
       foreach (var d in _primarystore)
       {
@@ -186,11 +186,11 @@ namespace DeNSo
       return false;
     }
 
-    private bool dRemove(byte[] key)
+    private bool dRemove(string key)
     {
       lock (_primarystore)
       {
-        Dictionary<byte[], byte[]> realdictionary = null;
+        Dictionary<string, byte[]> realdictionary = null;
         foreach (var d in _primarystore)
           if (d.ContainsKey(key))
           {
@@ -208,9 +208,9 @@ namespace DeNSo
 
     #endregion
 
-    internal void dInsert(byte[] key, byte[] data)
+    internal void dInsert(string key, byte[] data)
     {
-      Dictionary<byte[], byte[]> freedictionary = null;
+      Dictionary<string, byte[]> freedictionary = null;
       foreach (var d in _primarystore)
         if (d.Count < Configuration.DictionarySplitSize)
         {
@@ -219,7 +219,7 @@ namespace DeNSo
 
       if (freedictionary == null)
       {
-        freedictionary = new Dictionary<byte[], byte[]>();
+        freedictionary = new Dictionary<string, byte[]>();
         _primarystore.Add(freedictionary);
       }
 
@@ -260,7 +260,7 @@ namespace DeNSo
       yield break;
     }
 
-    public BSonDoc GetById(byte[] key)
+    public BSonDoc GetById(string key)
     {
       return dGet(key);
     }

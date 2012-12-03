@@ -81,8 +81,9 @@ namespace DeNSo.BSon
 
       var properties = tt.GetProperties();
       foreach (var p in properties)
-        if (doc.HasProperty(p.Name))
-          entity.FastSet(p.Name, doc[p.Name]);
+        if (doc.HasProperty(p.Name) && doc[p.Name] != null)
+          if (p.PropertyType.IsAssignableFrom(doc[p.Name].GetType()))
+            entity.FastSet(p.Name, doc[p.Name]);
 
       return entity;
     }

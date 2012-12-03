@@ -22,13 +22,13 @@ namespace DeNSo.EventHandlers
 
       if (command.HasProperty(CommandKeyword.Id))
       {
-        var ent = st.GetById((byte[])command[CommandKeyword.Id]);
+        var ent = st.GetById((string)command[CommandKeyword.Id]);
         if (ent != null) st.Remove(ent);
       }
 
       if (document != null && document.HasProperty(DocumentMetadata.IdPropertyName))
       {
-        var ent = st.GetById((byte[])document[DocumentMetadata.IdPropertyName]);
+        var ent = st.GetById((string)document[DocumentMetadata.IdPropertyName]);
         if (ent != null) st.Remove(ent);
       }
     }

@@ -7,9 +7,9 @@
 
 <h2>Modifica questa pagina</h2>
 
-@using (Html.BeginForm("Edit", "Pages", new { id = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+@using (Html.BeginForm("Edit", "Pages", new { id = Model._Id }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
 {
-  @Html.HiddenFor(model => model.Id)
+  @Html.HiddenFor(model => model._Id)
   @Html.HiddenFor(model => model.Image)
   @Html.HiddenFor(model => model.Name)
   @Html.ValidationSummary(true)

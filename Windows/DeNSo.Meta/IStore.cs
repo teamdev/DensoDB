@@ -18,6 +18,6 @@ namespace DeNSo
     void Set(BSonDoc entity);
     void Remove(BSonDoc entity);
     void Flush();
-    BSonDoc GetById(byte[] key);
+    BSonDoc GetById(string key);
   }
 }

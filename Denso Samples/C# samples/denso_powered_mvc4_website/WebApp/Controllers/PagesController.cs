@@ -62,11 +62,11 @@ namespace WebApp.Controllers
       return View(model);
     }
 
-    public JsonResult Delete(int id)
+    public JsonResult Delete(string id)
     {
       var db = d.Session.New;
 
-      var item = db.Get<Content>(i => i.Id == id).FirstOrDefault();
+      var item = db.Get<Content>(i => i._Id == id).FirstOrDefault();
       if (item != null)
         try
         {
@@ -80,16 +80,16 @@ namespace WebApp.Controllers
       return Json(true, JsonRequestBehavior.AllowGet);
     }
 
-    public ActionResult Edit(int id)
+    public ActionResult Edit(string id)
     {
       var db = d.Session.New;
 
-      var item = db.Get<Content>(i => i.Id == id).FirstOrDefault();
+      var item = db.Get<Content>(i => i._Id == id).FirstOrDefault();
       return View(item);
     }
 
     [HttpPost]
-    public ActionResult Edit(int id, Content model)
+    public ActionResult Edit(string id, Content model)
     {
       if (ModelState.IsValid)
       {

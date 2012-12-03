@@ -34,7 +34,7 @@
   {
     foreach (var item in Model)
     {
-    <tr class="itemid-@item.Id">
+    <tr class="itemid-@item._Id">
       <td>
         @Html.DisplayFor(modelItem => item.Name)
       </td>
@@ -55,8 +55,8 @@
       </td>
       <td>
         <div class="btn-group">
-          @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-warning" })
-          <a class="btn btn-danger" href="javascript:deleteItem(@item.Id)">Delete</a>
+          @Html.ActionLink("Edit", "Edit", new { id = item._Id }, new { @class = "btn btn-warning" })
+          <a class="btn btn-danger" href="javascript:deleteItem('@item._Id')">Delete</a>
         </div>
       </td>
     </tr>

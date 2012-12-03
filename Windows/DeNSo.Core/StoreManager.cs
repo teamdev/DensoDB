@@ -183,7 +183,7 @@ namespace DeNSo
             foreach (var item in dstore)
             {
               writer.Write((int)item.Value.Length); // Data Lenght
-              writer.Write((byte)item.Key.Length);
+              //writer.Write((byte)item.Key.Length);
               writer.Write(item.Key); // Database _id
               writer.Write(item.Value); // Data
             }
@@ -201,8 +201,8 @@ namespace DeNSo
           while (fs.Position < fs.Length)
           {
             var len = br.ReadInt32();
-            var klen = br.ReadByte();
-            var id = br.ReadBytes(klen);
+            //var klen = br.ReadByte();
+            var id = br.ReadString();
             var data = br.ReadBytes(len);
 
             store.dInsert(id, data);
