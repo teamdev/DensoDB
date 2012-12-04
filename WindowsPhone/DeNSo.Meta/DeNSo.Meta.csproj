@@ -53,6 +53,9 @@
     <Compile Include="..\..\Windows\DeNSo.Meta\Attributes\CommandAttribute.cs">
       <Link>Attributes\CommandAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\..\Windows\DeNSo.Meta\Attributes\IgnorePropertyAttribute.cs">
+      <Link>Attributes\IgnorePropertyAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\..\Windows\DeNSo.Meta\BSon\Bson2JsonExtensions.cs">
       <Link>BSon\Bson2JsonExtensions.cs</Link>
     </Compile>

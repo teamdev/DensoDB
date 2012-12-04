@@ -9,7 +9,12 @@ namespace System.ComponentModel.Composition.Hosting
   {
     public override IQueryable<Primitevs.ComposablePartDefinition> Parts
     {
-      get { throw new NotImplementedException(); }
+      get
+      {
+        return (from c in Catalogs
+                from p in c.Parts
+                select p).AsQueryable();
+      }
     }
 
     public AggregateCatalog()

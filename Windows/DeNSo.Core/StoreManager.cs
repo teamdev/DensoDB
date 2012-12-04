@@ -22,6 +22,10 @@ namespace DeNSo
     internal static bool ShuttingDown = false;
     internal static ManualResetEvent ShutDownEvent = new ManualResetEvent(false);
 
+#if WINDOWS_PHONE
+    internal static System.IO.IsolatedStorage.IsolatedStorageFile iss = System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForApplication();
+#endif
+
 
     private static Dictionary<string, Dictionary<string, IObjectStore>> _stores =
               new Dictionary<string, Dictionary<string, IObjectStore>>();
@@ -128,8 +132,13 @@ namespace DeNSo
         var filename = Path.Combine(Path.Combine(Configuration.BasePath, databasename), "denso.trn");
 
         long eventcommandsn = 0;
-        if (File.Exists(filename))
+#if WINDOWS_PHONE
+        if (iss.FileExists(filename))
+          using (var fs = iss.OpenFile(Path.Combine(Path.Combine(Configuration.BasePath, databasename), "denso.trn"), FileMode.Open, FileAccess.Read))
+#else
+                  if (File.Exists(filename))
           using (var fs = File.OpenRead(Path.Combine(Path.Combine(Configuration.BasePath, databasename), "denso.trn")))
+#endif
             if (fs.Length > 0)
               using (var br = new BinaryReader(fs))
                 eventcommandsn = br.ReadInt64();
@@ -159,7 +168,11 @@ namespace DeNSo
         SaveCollection(databasename, coll);
 
       var es = GetEventStore(databasename);
+#if WINDOWS_PHONE
+      using (var fs = iss.CreateFile(Path.Combine(Path.Combine(Configuration.BasePath, databasename), "denso.trn")))
+#else
       using (var fs = File.Create(Path.Combine(Path.Combine(Configuration.BasePath, databasename), "denso.trn")))
+#endif
       using (var bw = new BinaryWriter(fs))
         bw.Write(es.LastExecutedCommandSN);
 
@@ -173,8 +186,13 @@ namespace DeNSo
       {
         var fullpath = Path.Combine(Path.Combine(Configuration.BasePath, database), collection + ".coll");
 
+#if WINDOWS_PHONE
+        if (!iss.DirectoryExists(Path.GetDirectoryName(fullpath)))
+          iss.CreateDirectory(Path.GetDirectoryName(fullpath));
+#else
         if (!Directory.Exists(Path.GetDirectoryName(fullpath)))
           Directory.CreateDirectory(Path.GetDirectoryName(fullpath));
+#endif
 
         using (var file = File.Open(fullpath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None))
         using (var writer = new BinaryWriter(file))
@@ -195,8 +213,13 @@ namespace DeNSo
     {
       var store = new ObjectStore();
       var fullpath = Path.Combine(Path.Combine(Configuration.BasePath, database), collection + ".coll");
+#if WINDOWS_PHONE
+      if (iss.FileExists(fullpath))
+        using (var fs = iss.OpenFile(fullpath, FileMode.Open, FileAccess.Read, FileShare.None))
+#else
       if (File.Exists(fullpath))
         using (var fs = File.Open(fullpath, FileMode.Open, FileAccess.Read, FileShare.None))
+#endif
         using (var br = new BinaryReader(fs))
           while (fs.Position < fs.Length)
           {

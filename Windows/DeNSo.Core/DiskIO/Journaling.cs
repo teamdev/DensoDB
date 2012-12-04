@@ -16,6 +16,11 @@ namespace DeNSo
   internal class Journaling
   {
     #region private fields
+
+#if WINDOWS_PHONE
+    private System.IO.IsolatedStorage.IsolatedStorageFile iss = System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForApplication();
+#endif
+
     private object _filelock = new object();
     private FileStream _logfile = null;
     private BinaryWriter _writer = null;
@@ -88,11 +93,19 @@ namespace DeNSo
 
       try
       {
+#if WINDOWS_PHONE
+        if (!iss.DirectoryExists(FileName))
+        {
+          LogWriter.LogInformation("Directory for Journaling does not exists. creating it", LogEntryType.Warning);
+          iss.CreateDirectory(FileName);
+        }
+#else
         if (!Directory.Exists(FileName))
         {
           LogWriter.LogInformation("Directory for Journaling does not exists. creating it", LogEntryType.Warning);
           Directory.CreateDirectory(FileName);
         }
+#endif
       }
       catch (Exception ex)
       {
@@ -139,7 +152,11 @@ namespace DeNSo
       {
         if (_logfile == null)
         {
+#if WINDOWS_PHONE
+          _logfile = iss.OpenFile(FileName, FileMode.Append, FileAccess.Write, FileShare.Read);
+#else
           _logfile = File.Open(FileName, FileMode.Append, FileAccess.Write, FileShare.Read);
+#endif
           IncreaseFileSize();
           _writer = new BinaryWriter(_logfile);
 
@@ -169,9 +186,16 @@ namespace DeNSo
       CloseFile();
       lock (_filelock)
       {
+#if WINDOWS_PHONE
+        if (iss.FileExists(FileName))
+          using (var readerfs = iss.OpenFile(FileName, FileMode.Open, FileAccess.Read, FileShare.Write))
+          using (var writerfs = iss.OpenFile(FileName, FileMode.Open, FileAccess.Write, FileShare.Read))
+#else
         if (File.Exists(FileName))
           using (var readerfs = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Write))
           using (var writerfs = File.Open(FileName, FileMode.Open, FileAccess.Write, FileShare.Read))
+#endif
+
           using (var br = new BinaryReader(readerfs))
           using (var bw = new BinaryWriter(writerfs))
           {

@@ -15,6 +15,10 @@ namespace DeNSo
     internal Journaling _journal = null;
     internal Journaling _operationsLog = null;
 
+#if WINDOWS_PHONE
+    internal System.IO.IsolatedStorage.IsolatedStorageFile iss = System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForApplication();
+#endif
+
     private volatile Queue<EventCommand> _waitingevents = new Queue<EventCommand>();
     private Thread _eventHandlerThread = null;
 
@@ -48,8 +52,14 @@ namespace DeNSo
       long journalsn = 0;
 
       var jnlfile = Path.Combine(Path.Combine(Configuration.BasePath, DatabaseName), "denso.jnl");
+
+#if WINDOWS_PHONE
+      if (iss.FileExists(jnlfile))
+        using (var fs = iss.OpenFile(jnlfile, FileMode.Open, FileAccess.Read))
+#else
       if (File.Exists(jnlfile))
         using (var fs = File.Open(jnlfile, FileMode.Open, FileAccess.Read))
+#endif
         using (var br = new BinaryReader(fs))
         {
           while (fs.Position < fs.Length)

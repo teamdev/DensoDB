@@ -21,12 +21,17 @@ namespace System.ComponentModel.Composition.Hosting
     public void ComposeParts(object objecttocompose)
     {
       var otype = objecttocompose.GetType();
-      var oproperties = otype.GetProperties(Reflection.BindingFlags.Public | Reflection.BindingFlags.NonPublic);
+      var oproperties = otype.GetProperties(Reflection.BindingFlags.NonPublic |
+                                            Reflection.BindingFlags.Public | 
+                                            BindingFlags.Instance);
 
       foreach (var p in oproperties)
       {
         foreach (var ca in p.GetCustomAttributes(typeof(ImportAttribute), false))
           ComposeImport(p, objecttocompose, ca as ImportAttribute);
+
+        foreach (var ca in p.GetCustomAttributes(typeof(ImportManyAttribute), false))
+          ComposeImportMany(p, objecttocompose, ca as ImportManyAttribute);
       }
     }
 
@@ -54,7 +59,7 @@ namespace System.ComponentModel.Composition.Hosting
                 from i in d
                 select i;
 
-        var createmethod = this.GetType().GetMethod("CreateItemsArray", BindingFlags.NonPublic);
+        var createmethod = this.GetType().GetMethod("CreateItemsArray", BindingFlags.NonPublic | BindingFlags.Instance);
         createmethod.MakeGenericMethod(att.ContractType).Invoke(this, new object[] { p, target, r.AsEnumerable() });
       }
     }

@@ -15,10 +15,12 @@ public static class ReflectionExtensions
   {
     _gethelper = typeof(ReflectionExtensions).GetMethod("InternalCreateGetDelegate", BindingFlags.Static |
                                                                                      BindingFlags.NonPublic |
+                                                                                     BindingFlags.Public |
                                                                                      BindingFlags.ExactBinding);
 
     _sethelper = typeof(ReflectionExtensions).GetMethod("InternalCreateSetDelegate", BindingFlags.Static |
                                                                                      BindingFlags.NonPublic |
+                                                                                     BindingFlags.Public |
                                                                                      BindingFlags.ExactBinding);
   }
 
@@ -60,8 +62,12 @@ public static class ReflectionExtensions
     return (Action<object, object>)shelper.Invoke(null, new object[] { method });
   }
 
-  private static Func<object, object> InternalCreateGetDelegate<T, TReturn>(MethodInfo method)
-    where T : class
+#if WINDOWS_PHONE
+  public static Func<object, object> InternalCreateGetDelegate<T, TReturn>(MethodInfo method)
+#else
+    private static Func<object, object> InternalCreateGetDelegate<T, TReturn>(MethodInfo method)
+#endif
+ where T : class
   {
     // Convert the slow MethodInfo into a fast, strongly typed, open delegate
     var mdelegate = (Func<T, TReturn>)Delegate.CreateDelegate(typeof(Func<T, TReturn>), method);
@@ -71,8 +77,12 @@ public static class ReflectionExtensions
     return (object target) => mdelegate((T)target);
   }
 
+#if WINDOWS_PHONE
+  public static Action<object, object> InternalCreateSetDelegate<T, TValue>(MethodInfo method)
+#else
   private static Action<object, object> InternalCreateSetDelegate<T, TValue>(MethodInfo method)
-    where T : class
+#endif
+ where T : class
   {
     // Convert the slow MethodInfo into a fast, strongly typed, open delegate
     var mdelegate = (Action<T, TValue>)Delegate.CreateDelegate(typeof(Action<T, TValue>), method);

@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Reflection;
+
+#if WINDOWS_PHONE
+using System.IO.IsolatedStorage;
+#endif
 
 namespace DeNSo
 {
@@ -24,24 +29,37 @@ namespace DeNSo
 
     static Configuration()
     {
+#if WINDOWS_PHONE
+      BasePath = "DeNSo";
+#else
       BasePath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DeNSo");
+#endif
       IndexBasePath = BasePath;
 
+
+#if WINDOWS_PHONE
+      if (FileExists(Path.Combine(BasePath, "d.cfg")))
+      {
+        NodeIdentity = new Guid(ReadAllBytes(Path.Combine(BasePath, "d.cfg")));
+      }
+#else
       if (File.Exists(Path.Combine(BasePath, "d.cfg")))
       {
-#if WINDOWS_PHONE
-        NodeIdentity = new Guid(ReadAllBytes(Path.Combine(BasePath, "d.cfg")));
-#else
         NodeIdentity = new Guid(File.ReadAllBytes(Path.Combine(BasePath, "d.cfg")));
-#endif
       }
+#endif
       else
       {
         NodeIdentity = Guid.NewGuid();
       }
 
+#if WINDOWS_PHONE
+      if (!DirectoryExists(BasePath))
+        DirectoryCreate(BasePath);
+#else
       if (!Directory.Exists(BasePath))
         Directory.CreateDirectory(BasePath);
+#endif
 
 #if WINDOWS_PHONE
       WriteAllBytes(Path.Combine(BasePath, "d.cfg"), NodeIdentity.ToByteArray());
@@ -56,10 +74,29 @@ namespace DeNSo
     }
 
 #if WINDOWS_PHONE
+    private static bool FileExists(string path)
+    {
+      using (IsolatedStorageFile iss = IsolatedStorageFile.GetUserStoreForApplication())
+        return iss.FileExists(path);
+    }
+
+    private static bool DirectoryExists(string path)
+    {
+      using (IsolatedStorageFile iss = IsolatedStorageFile.GetUserStoreForApplication())
+        return iss.DirectoryExists(path);
+    }
+
+    private static void DirectoryCreate(string path)
+    {
+      using (IsolatedStorageFile iss = IsolatedStorageFile.GetUserStoreForApplication())
+        iss.CreateDirectory(path);
+    }
+
     // In windows Phone we does not  have this method in File class
     private static byte[] ReadAllBytes(string path)
     {
-      using (var file = File.OpenRead(path))
+      using (IsolatedStorageFile iss = IsolatedStorageFile.GetUserStoreForApplication())
+      using (var file = iss.OpenFile(path, FileMode.Open))
       {
         var buffer = new byte[file.Length];
         file.Read(buffer, 0, (int)file.Length);
@@ -70,7 +107,8 @@ namespace DeNSo
     // In windows Phone we does not  have this method in File class
     private static void WriteAllBytes(string path, byte[] data)
     {
-      using (var file = File.OpenWrite(path))
+      using (IsolatedStorageFile iss = IsolatedStorageFile.GetUserStoreForApplication())
+      using (var file = iss.OpenFile(path, FileMode.Create))
       {
         file.Write(data, 0, data.Length);
       }

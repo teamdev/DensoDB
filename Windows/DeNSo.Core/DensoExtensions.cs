@@ -18,10 +18,10 @@ namespace DeNSo
     private AggregateCatalog catalog = new AggregateCatalog();
 
     [ImportMany(typeof(IExtensionPlugin))]
-    internal IExtensionPlugin[] Extensions { get; set; }
+    public IExtensionPlugin[] Extensions { get; set; }
 
     [ImportMany(typeof(ICommandHandler))]
-    internal ICommandHandler[] ImportedHandlers { get; set; }
+    public ICommandHandler[] ImportedHandlers { get; set; }
 
     public DensoExtensions()
     {
@@ -39,8 +39,8 @@ namespace DeNSo
       AddDirectoryCatalog(catalog, "Extensions");
       AddDirectoryCatalog(catalog, "EventHandlers");
 #endif
-
       CompositionContainer container = new CompositionContainer(catalog);
+
       container.ComposeParts(this);
 
       if (Extensions != null)

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeNSo.Core", "DeNSo.Core\De
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "miniMef", "miniMef\miniMef.csproj", "{D7635DAE-41C7-4121-8195-563A83FD8944}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneApp1", "PhoneApp1\PhoneApp1.csproj", "{9690ED5B-A6AC-4BC3-B5B9-1837321DEF30}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,16 @@ Global
 		{D7635DAE-41C7-4121-8195-563A83FD8944}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D7635DAE-41C7-4121-8195-563A83FD8944}.Release|ARM.ActiveCfg = Release|Any CPU
 		{D7635DAE-41C7-4121-8195-563A83FD8944}.Release|x86.ActiveCfg = Release|Any CPU
+		{9690ED5B-A6AC-4BC3-B5B9-1837321DEF30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9690ED5B-A6AC-4BC3-B5B9-1837321DEF30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9690ED5B-A6AC-4BC3-B5B9-1837321DEF30}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{9690ED5B-A6AC-4BC3-B5B9-1837321DEF30}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{9690ED5B-A6AC-4BC3-B5B9-1837321DEF30}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9690ED5B-A6AC-4BC3-B5B9-1837321DEF30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9690ED5B-A6AC-4BC3-B5B9-1837321DEF30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9690ED5B-A6AC-4BC3-B5B9-1837321DEF30}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{9690ED5B-A6AC-4BC3-B5B9-1837321DEF30}.Release|ARM.ActiveCfg = Release|Any CPU
+		{9690ED5B-A6AC-4BC3-B5B9-1837321DEF30}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
