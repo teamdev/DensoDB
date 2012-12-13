@@ -16,6 +16,11 @@ namespace DeNSo.BSon
     private static MethodInfo _IDictToBSonG;
     private static MethodInfo _IDictToBSon;
 
+    private static MethodInfo _BSonToIEnum;
+    private static MethodInfo _BSonToIEnumG;
+    private static MethodInfo _BSonToEntityG;
+    private static MethodInfo _FormBsonG;
+
     static BSonSerializer()
     {
       var t = typeof(BSonSerializer);
@@ -23,9 +28,15 @@ namespace DeNSo.BSon
       _IDictToBSonG = t.GetMethod("IDictionaryToBSonG", BindingFlags.Static | BindingFlags.NonPublic);
       _IEnumToBSon = t.GetMethod("IEnumerableToBSon", BindingFlags.Static | BindingFlags.NonPublic);
       _IDictToBSon = t.GetMethod("IDictionaryToBSon", BindingFlags.Static | BindingFlags.NonPublic);
+
+      _BSonToIEnum = t.GetMethod("BSonToIEnumerable", BindingFlags.Static | BindingFlags.NonPublic);
+      _BSonToIEnumG = t.GetMethod("BSonToIEnumerableG", BindingFlags.Static | BindingFlags.NonPublic);
+
+      _BSonToEntityG = t.GetMethod("BSonToEntityG", BindingFlags.Static | BindingFlags.NonPublic);
+      _FormBsonG = t.GetMethod("FromBSon", BindingFlags.Static | BindingFlags.Public);
     }
 
-    public static byte[] Serialize(this BSonDoc document)
+    public static byte[] Serialize(this IBSonNode document)
     {
       MemoryStream ms = new MemoryStream();
       BinaryWriter writer = new BinaryWriter(ms);
@@ -42,9 +53,20 @@ namespace DeNSo.BSon
       return result;
     }
 
-    public static BSonDoc ToBSon(this object entity)
+    public static IBSonNode ToBSon(this object entity)
     {
+      if (entity == null)
+        throw new ArgumentNullException();
+
       var tt = entity.GetType();
+
+      if (tt.IsValueType ||
+          entity is string ||
+          entity is Guid ||
+          entity is DateTime ||
+          entity is byte[])
+        return new BSonProp() { Name = "", Value = GetValue(entity) };
+
       if (entity is IEnumerable)
       {
         if (tt.IsGenericType)
@@ -74,17 +96,66 @@ namespace DeNSo.BSon
       return entity.DocumentToBSon();
     }
 
-    public static T FromBSon<T>(this BSonDoc doc) where T : class, new()
+    public static T FromBSon<T>(this IBSonNode node) //where T : class, new()
     {
-      var entity = new T();
       var tt = typeof(T);
 
-      var properties = tt.GetProperties();
+      if (tt.IsValueType ||
+          tt == typeof(string) ||
+          tt == typeof(DateTime) ||
+          tt == typeof(byte[]) ||
+          tt == typeof(Guid))
+      {
+        if (node.Value != null && !node.IsDoc)
+          if (tt.IsAssignableFrom(node.Value.GetType()))
+            return (T)node.Value;
+      }
+
+      if (typeof(IEnumerable).IsAssignableFrom(tt))
+      {
+        if (tt.IsGenericType)
+        {
+          var gmi = _BSonToIEnumG.MakeGenericMethod(tt.GetGenericArguments());
+          return (T)gmi.Invoke(null, new object[] { node });
+        }
+        else
+        {
+          return (T)_BSonToIEnum.Invoke(null, new object[] { node });
+        }
+      }
+
+      if (node.IsDoc)
+      {
+        var gmi = _BSonToEntityG.MakeGenericMethod(tt);
+        return (T)gmi.Invoke(null, new object[] { node });
+      }
+      return default(T);
+    }
+
+    private static object DeserializeValue(this object val, Type propertytype)
+    {
+      if (val is IBSonNode)
+      {
+        var mi = _FormBsonG.MakeGenericMethod(propertytype);
+        return mi.Invoke(null, new object[] { (IBSonNode)val });
+      }
+      return val;
+    }
+
+    private static T BSonToEntityG<T>(IBSonNode node) where T : class, new()
+    {
+      T entity = new T();
+      var doc = node as BSonDoc;
+      var properties = typeof(T).GetProperties();
       foreach (var p in properties)
         if (doc.HasProperty(p.Name) && doc[p.Name] != null)
-          if (p.PropertyType.IsAssignableFrom(doc[p.Name].GetType()))
-            entity.FastSet(p.Name, doc[p.Name]);
-
+        {
+          object val = doc[p.Name].DeserializeValue(p.PropertyType);
+          if (p.PropertyType.IsAssignableFrom(val.GetType()))
+          {
+            entity.FastSet(p.Name, val); continue;
+          }
+        }
       return entity;
     }
 
@@ -114,7 +185,7 @@ namespace DeNSo.BSon
       int x = 0;
       foreach (var item in entities)
       {
-        doc[string.Format("i{0}", x++)] = item.ToBSon();
+        doc[string.Format("i{0}", x++)] = (item.GetBSonType() == BSonTypeEnum.BSON_Document ? (object)item.ToBSon() : (object)item);
       }
       return doc;
     }
@@ -128,6 +199,37 @@ namespace DeNSo.BSon
         doc[string.Format("i{0}", x++)] = item.ToBSon();
       }
       return doc;
+    }
+
+    private static IEnumerable BSonToIEnumerable(this BSonDoc doc)
+    {
+      ArrayList list = new ArrayList();
+      foreach (var p in doc.Properties)
+      {
+        var val = doc[p];
+        if (val is IBSonNode)
+          list.Add(((IBSonNode)val));
+        else
+          list.Add(val);
+      }
+      return list;
+    }
+
+    private static IEnumerable<T> BSonToIEnumerableG<T>(this BSonDoc doc)
+    {
+      List<T> list = new List<T>();
+      foreach (var p in doc.Properties)
+      {
+        var val = doc[p];
+        T rval = default(T);
+        if (val is IBSonNode)
+          rval = ((IBSonNode)val).FromBSon<T>();
+        else if (typeof(T).IsAssignableFrom(val.GetType()))
+          rval = (T)val;
+
+        list.Add(rval);
+      }
+      return list;
     }
 
     private static BSonDoc IDictionaryToBSonG<TK, T>(this IDictionary<TK, T> entities) where T : class
@@ -156,6 +258,11 @@ namespace DeNSo.BSon
     private static object NavigateProperty<T>(this T entity, string name) where T : class
     {
       var value = entity.FastGet(name);
+      return GetValue(value);
+    }
+
+    private static object GetValue(object value)
+    {
       if (value == null) return null; // Return Null if Null
 
       var tt = value.GetType();
@@ -252,6 +359,9 @@ namespace DeNSo.BSon
       if (value is IEnumerable) return BSonTypeEnum.BSON_DocumentArray;
       if (value is IDictionary) return BSonTypeEnum.BSON_Dictionary;
       if (value is Type) return BSonTypeEnum.BSON_objectType;
+
+      if (value is BSonProp) return GetBSonType(((BSonProp)value).Value);
+      if (value is BSonDoc) return (BSonTypeEnum)((BSonDoc)value).DocType;
       return BSonTypeEnum.BSON_Document;
     }
 

@@ -21,6 +21,13 @@ namespace DeNSo.SetGet.Tests
     public DateTime DateValue2 { get; set; }
     public DateTime DateValue3 { get; set; }
     public DateTime DateValue4 { get; set; }
-    
+
+    public List<string> StringList { get; set; }
+
+    public TestDataModel()
+    {
+      StringList = new List<string>();
+    }
+
   }
 }

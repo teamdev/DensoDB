@@ -190,6 +190,10 @@ namespace DeNSo
       return Get(collection, expr).Select(doc => doc.FromBSon<T>()).AsEnumerable();
     }
 
+    public IEnumerable<T> Get<T>(Expression<Func<BSonDoc, bool>> filter = null) where T : class, new()
+    {
+      return Get(typeof(T).Name, filter).Select(doc => doc.FromBSon<T>()).AsEnumerable();
+    }
 
     public IEnumerable<BSonDoc> Get(string collection, Expression<Func<BSonDoc, bool>> filter = null)
     {

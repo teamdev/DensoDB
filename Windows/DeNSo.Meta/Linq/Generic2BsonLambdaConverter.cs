@@ -67,11 +67,12 @@ namespace DeNSo
 
     protected override Expression VisitMember(MemberExpression node)
     {
-      var baseresult = Visit(node.Expression);
-      if (baseresult.Type == typeof(BSonDoc))
+      if (node.Expression == null)
       {
-        var mi = typeof(BSonDoc).GetMethod("get_Item", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-        return Expression.Call(baseresult, mi, Expression.Constant(node.Member.Name));
+        if (node.NodeType == ExpressionType.MemberAccess)
+        {
+          return node;
+        }
       }
       else
       {
@@ -79,11 +80,22 @@ namespace DeNSo
         {
           return node;
         }
-        var mi = node.Expression.Type.GetProperty(node.Member.Name, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-        if (node.Expression.Type != baseresult.Type)
-          baseresult = Expression.Convert(baseresult, node.Expression.Type);
-        return Expression.MakeMemberAccess(baseresult, mi);
+
+        var baseresult = Visit(node.Expression);
+        if (baseresult != null && baseresult.Type == typeof(BSonDoc))
+        {
+          var mi = typeof(BSonDoc).GetMethod("get_Item", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+          return Expression.Call(baseresult, mi, Expression.Constant(node.Member.Name));
+        }
+        else
+        {
+          var mi = node.Expression.Type.GetProperty(node.Member.Name, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+          if (node.Expression.Type != baseresult.Type)
+            baseresult = Expression.Convert(baseresult, node.Expression.Type);
+          return Expression.MakeMemberAccess(baseresult, mi);
+        }
       }
+      return node;
     }
 
     protected override Expression VisitParameter(ParameterExpression node)
@@ -111,10 +123,29 @@ namespace DeNSo
 
     protected override Expression VisitMethodCall(MethodCallExpression node)
     {
-      var member = Visit(node.Object);
-      var declaringtype = node.Method.DeclaringType;
-      var convertedexpression = Expression.Convert(member, declaringtype);
-      return Expression.Call(convertedexpression, node.Method, node.Arguments);
+      if (node.Object == null)
+      {
+        switch (node.Method.Name)
+        {
+          case "Contains":
+            var mcall = Visit(node.Arguments[0]) as MethodCallExpression;
+            if (mcall != null)
+            {
+              var mtype = ((System.Reflection.PropertyInfo)((MemberExpression)node.Arguments[0]).Member).PropertyType;
+              var convertedexpression = Expression.Convert(mcall, mtype);
+              return Expression.Call(node.Method, convertedexpression, Visit(node.Arguments[1]));
+            }
+            break;
+        }
+        return node;
+      }
+      else
+      {
+        var member = Visit(node.Object);
+        var declaringtype = node.Method.DeclaringType;
+        var convertedexpression = Expression.Convert(member, declaringtype);
+        return Expression.Call(convertedexpression, node.Method, node.Arguments);
+      }
       //return base.VisitMethodCall(node);
 
       //var nn = new XElement(node.NodeType.ToString());

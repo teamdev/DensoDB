@@ -28,6 +28,14 @@ namespace DeNSo.Meta.Tests
     }
 
     [TestMethod]
+    public void StringToBson()
+    {
+      var ent = "check";
+      var rr = ent.ToBSon().Serialize();
+      Assert.AreEqual(true, rr.Length > 0);
+    }
+
+    [TestMethod]
     public void SimpleEntityGenericArrayToBSonSerialized()
     {
       var ent = new myEntity() { Property1 = 1, Property2 = 56.09, Property3 = "testtest" };

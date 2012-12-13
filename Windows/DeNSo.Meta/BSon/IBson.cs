@@ -10,6 +10,7 @@ namespace DeNSo.BSon
   {
     string Name { get; set; }
     object Value { get; set; }
+    bool IsDoc { get; }
     int GetLength();
     byte[] GetBytes();
     void GetBytes(BinaryWriter writer);

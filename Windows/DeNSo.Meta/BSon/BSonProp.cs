@@ -13,6 +13,7 @@ namespace DeNSo.BSon
   {
     public string Name { get; set; }
     public object Value { get; set; }
+    public bool IsDoc { get { return false; } }
 
     public int GetLength()
     {

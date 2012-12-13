@@ -12,6 +12,7 @@ namespace DeNSo.BSon
   public class BSonDoc : IBSonNode
   {
     private Dictionary<string, IBSonNode> _props = new Dictionary<string, IBSonNode>();
+
     public object this[string index]
     {
       get
@@ -22,14 +23,22 @@ namespace DeNSo.BSon
       }
       set
       {
-        //if (value is IBSonNode)
-        //{ }
-
         if (_props.ContainsKey(index))
-          _props[index].Value = value;
+          _props[index].Value = GetValueContainer(value, index);
         else
-          _props.Add(index, new BSonProp() { Name = index, Value = value });
+          _props.Add(index, GetValueContainer(value, index));
       }
+    }
+
+    private IBSonNode GetValueContainer(object value, string name)
+    {
+      var node = value as IBSonNode;
+      if (node == null)
+      {
+        node = new BSonProp() { Value = value };
+      }
+      node.Name = name;
+      return node;
     }
 
     public bool HasProperty(string index)
@@ -83,11 +92,12 @@ namespace DeNSo.BSon
 
     public string Name { get; set; }
     public object Value { get { return this; } set { } }
+    public bool IsDoc { get { return true; } }
 
 
     public List<object> ToList()
     {
-      if (this.DocType == BSonDocumentType.BSON_DocumentArray || 
+      if (this.DocType == BSonDocumentType.BSON_DocumentArray ||
           this.DocType == BSonDocumentType.BSON_Dictionary)
       {
         List<object> result = new List<object>();
