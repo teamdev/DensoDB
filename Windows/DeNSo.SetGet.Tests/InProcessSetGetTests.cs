@@ -201,26 +201,6 @@ namespace DeNSo.SetGet.Tests
     }
 
     [TestMethod]
-    public void Get4Lambda_MemberAccess_EmptyString2()
-    {
-      var denso = Session.New;
-      var item = CreateSingleItem(i => { i.StringValue1 = "Prova"; i.DateValue1 = new DateTime(2012, 05, 20); });
-      item.StringList.Add("value1");
-      denso.Set(item).Wait();
-
-      object check = "Prova";
-
-      var bdoc = item.ToBSon();
-      //var ii = bdoc["StringList"];
-
-      var result = denso.Get<TestDataModel>((BSonDoc m) => ((BSonDoc)m["StringList"]).FromBSon<List<String>>().Contains(check)).FirstOrDefault();
-
-      result = denso.Get<TestDataModel>(m => m.StringList.Contains(check)).FirstOrDefault();
-
-      Assert.AreEqual(null, result);
-    }
-
-    [TestMethod]
     public void Get4Lambda_MemberAccess_EmptyString3()
     {
       var denso = Session.New;
@@ -230,7 +210,7 @@ namespace DeNSo.SetGet.Tests
 
       object check = "Prova";
 
-      var result = denso.Get<TestDataModel>(m => m.StringList.Contains((check ?? string.Empty).ToString())).FirstOrDefault();
+      var result = denso.Get<TestDataModel>((BSonDoc m) => m.FromBSon<TestDataModel>().StringList.Contains(check) ).FirstOrDefault();
 
       Assert.AreEqual(null, result);
     }
