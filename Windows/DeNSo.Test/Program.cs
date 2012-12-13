@@ -71,7 +71,7 @@ namespace DeNSo.Test
       var epr = visitor.Visit(expression) as Expression<Func<BSonDoc, bool>>;
 
 
-      var rr = ss.Get("myPoint", epr);
+      var rr = ss.Get("myPoint", epr.Compile());
 
       Console.WriteLine("Press Enter.");
       Console.ReadLine();

@@ -187,17 +187,24 @@ namespace DeNSo
     {
       Generic2BsonLambdaConverter visitor = new Generic2BsonLambdaConverter();
       var expr = visitor.Visit(filter) as Expression<Func<BSonDoc, bool>>;
-      return Get(collection, expr).Select(doc => doc.FromBSon<T>()).AsEnumerable();
+      return Get(collection, expr != null ? expr.Compile() : null).Select(doc => doc.FromBSon<T>()).AsEnumerable();
     }
-
-    public IEnumerable<T> Get<T>(Expression<Func<BSonDoc, bool>> filter = null) where T : class, new()
+    public IEnumerable<T> Get<T>(Func<BSonDoc, bool> filter = null) where T : class, new()
     {
       return Get(typeof(T).Name, filter).Select(doc => doc.FromBSon<T>()).AsEnumerable();
     }
-
-    public IEnumerable<BSonDoc> Get(string collection, Expression<Func<BSonDoc, bool>> filter = null)
+    public IEnumerable<T> Get<T>(Func<BSonDoc, bool> bsonfilter = null,
+                                 Func<T, bool> entityfilter = null) where T : class, new()
     {
-      return _query.Get(DataBase, collection, filter != null ? filter.Compile() : null);
+      var rr = Get(typeof(T).Name, bsonfilter).Select(doc => doc.FromBSon<T>());
+      if (entityfilter != null)
+        rr = rr.Where(entityfilter);
+      return rr.AsEnumerable();
+    }
+
+    public IEnumerable<BSonDoc> Get(string collection, Func<BSonDoc, bool> filter = null)
+    {
+      return _query.Get(DataBase, collection, filter);
     }
     #endregion
 
