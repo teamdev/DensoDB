@@ -69,6 +69,7 @@ namespace DeNSo
             _writer.Write('D');
             _writer.Write((int)command.Command.Length);
             _writer.Write(command.Command);
+            _writer.Flush();
             //_logfile.Flush();
 
             if (_logfile.Length - _logfile.Position < _logfilefreespace)
@@ -202,7 +203,8 @@ namespace DeNSo
             LogWriter.LogInformation("Compressing file", LogEntryType.Information);
             while (readerfs.Position < readerfs.Length)
             {
-              var cmd = ReadCommand(br);
+              char kchar;
+              var cmd = ReadCommand(br, out kchar);
               if (cmd != null)
                 if (cmd.CommandSN > commandsn)
                   WriteCommand(bw, cmd);
@@ -230,9 +232,9 @@ namespace DeNSo
       bw.Write(command.Command);
     }
 
-    internal static EventCommand ReadCommand(BinaryReader br)
+    internal static EventCommand ReadCommand(BinaryReader br, out char keychar)
     {
-      var k = br.ReadChar();
+      var k = keychar = br.ReadChar();
       if (k == 'K')
       {
         var csn = br.ReadInt64();

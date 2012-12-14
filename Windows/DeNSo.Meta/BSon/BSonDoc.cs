@@ -24,7 +24,12 @@ namespace DeNSo.BSon
       set
       {
         if (_props.ContainsKey(index))
-          _props[index].Value = GetValueContainer(value, index);
+        {
+          if (value is IBSonNode)
+            _props[index] = value as IBSonNode;
+          else
+            _props[index].Value = value;
+        }
         else
           _props.Add(index, GetValueContainer(value, index));
       }

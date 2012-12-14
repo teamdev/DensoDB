@@ -189,6 +189,11 @@ namespace DeNSo
       var expr = visitor.Visit(filter) as Expression<Func<BSonDoc, bool>>;
       return Get(collection, expr != null ? expr.Compile() : null).Select(doc => doc.FromBSon<T>()).AsEnumerable();
     }
+    public IEnumerable<T> Get<T>() where T : class, new()
+    {
+      return Get(typeof(T).Name, bsonfilter: null).Select(doc => doc.FromBSon<T>()).AsEnumerable();
+    }
+
     public IEnumerable<T> Get<T>(Func<BSonDoc, bool> filter = null) where T : class, new()
     {
       return Get(typeof(T).Name, filter).Select(doc => doc.FromBSon<T>()).AsEnumerable();
@@ -202,9 +207,9 @@ namespace DeNSo
       return rr.AsEnumerable();
     }
 
-    public IEnumerable<BSonDoc> Get(string collection, Func<BSonDoc, bool> filter = null)
+    public IEnumerable<BSonDoc> Get(string collection, Func<BSonDoc, bool> bsonfilter = null)
     {
-      return _query.Get(DataBase, collection, filter);
+      return _query.Get(DataBase, collection, bsonfilter);
     }
     #endregion
 

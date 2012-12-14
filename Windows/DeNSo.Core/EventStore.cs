@@ -58,13 +58,15 @@ namespace DeNSo
         using (var fs = iss.OpenFile(jnlfile, FileMode.Open, FileAccess.Read))
 #else
       if (File.Exists(jnlfile))
-        using (var fs = File.Open(jnlfile, FileMode.Open, FileAccess.Read))
+        using (var fs = File.Open(jnlfile, FileMode.Open, FileAccess.Read, FileShare.None))
 #endif
         using (var br = new BinaryReader(fs))
         {
           while (fs.Position < fs.Length)
           {
-            var cmd = Journaling.ReadCommand(br);
+            char kchar;
+            var cmd = Journaling.ReadCommand(br, out kchar);
+            if (kchar == 0) break;
             if (cmd != null)
             {
               if (cmd.CommandSN > LastExecutedCommandSN)

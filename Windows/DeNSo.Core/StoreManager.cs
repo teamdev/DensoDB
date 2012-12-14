@@ -9,6 +9,7 @@ using System.IO;
 #if WINDOWS
 using System.Runtime.Serialization.Formatters.Binary;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 #endif
 
 namespace DeNSo
@@ -136,7 +137,7 @@ namespace DeNSo
         if (iss.FileExists(filename))
           using (var fs = iss.OpenFile(Path.Combine(Path.Combine(Configuration.BasePath, databasename), "denso.trn"), FileMode.Open, FileAccess.Read))
 #else
-                  if (File.Exists(filename))
+        if (File.Exists(filename))
           using (var fs = File.OpenRead(Path.Combine(Path.Combine(Configuration.BasePath, databasename), "denso.trn")))
 #endif
             if (fs.Length > 0)
@@ -195,16 +196,20 @@ namespace DeNSo
 #endif
 
         using (var file = File.Open(fullpath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None))
-        using (var writer = new BinaryWriter(file))
         {
-          foreach (var dstore in store._primarystore)
-            foreach (var item in dstore)
-            {
-              writer.Write((int)item.Value.Length); // Data Lenght
-              //writer.Write((byte)item.Key.Length);
-              writer.Write(item.Key); // Database _id
-              writer.Write(item.Value); // Data
-            }
+          using (var writer = new BinaryWriter(file))
+          {
+            foreach (var dstore in store._primarystore)
+              foreach (var item in dstore)
+              {
+                writer.Write((int)item.Value.Length); // Data Lenght
+                //writer.Write((byte)item.Key.Length);
+                writer.Write(item.Key); // Database _id
+                writer.Write(item.Value); // Data
+              }
+          }
+          file.Flush();
+          file.SetLength(file.Position);
         }
       }
     }
@@ -220,15 +225,22 @@ namespace DeNSo
       if (File.Exists(fullpath))
         using (var fs = File.Open(fullpath, FileMode.Open, FileAccess.Read, FileShare.None))
 #endif
-        using (var br = new BinaryReader(fs))
-          while (fs.Position < fs.Length)
+          try
           {
-            var len = br.ReadInt32();
-            //var klen = br.ReadByte();
-            var id = br.ReadString();
-            var data = br.ReadBytes(len);
+            using (var br = new BinaryReader(fs))
+              while (fs.Position < fs.Length)
+              {
+                var len = br.ReadInt32();
+                //var klen = br.ReadByte();
+                var id = br.ReadString();
+                var data = br.ReadBytes(len);
 
-            store.dInsert(id, data);
+                store.dInsert(id, data);
+              }
+          }
+          catch (OutOfMemoryException ex)
+          {
+            LogWriter.LogException(ex);
           }
       return store;
     }
