@@ -58,7 +58,7 @@ namespace DeNSo
         using (var fs = iss.OpenFile(jnlfile, FileMode.Open, FileAccess.Read))
 #else
       if (File.Exists(jnlfile))
-        using (var fs = File.Open(jnlfile, FileMode.Open, FileAccess.Read, FileShare.None))
+        using (var fs = File.Open(jnlfile, FileMode.Open, FileAccess.Read, FileShare.Read))
 #endif
         using (var br = new BinaryReader(fs))
         {

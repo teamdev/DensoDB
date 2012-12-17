@@ -138,7 +138,7 @@ namespace DeNSo
           using (var fs = iss.OpenFile(Path.Combine(Path.Combine(Configuration.BasePath, databasename), "denso.trn"), FileMode.Open, FileAccess.Read))
 #else
         if (File.Exists(filename))
-          using (var fs = File.OpenRead(Path.Combine(Path.Combine(Configuration.BasePath, databasename), "denso.trn")))
+          using (var fs = File.Open(Path.Combine(Path.Combine(Configuration.BasePath, databasename), "denso.trn"), FileMode.Open, FileAccess.Read, FileShare.Read))
 #endif
             if (fs.Length > 0)
               using (var br = new BinaryReader(fs))
@@ -207,9 +207,10 @@ namespace DeNSo
                 writer.Write(item.Key); // Database _id
                 writer.Write(item.Value); // Data
               }
-          }
-          file.Flush();
-          file.SetLength(file.Position);
+            writer.Flush();
+            file.Flush();
+            file.SetLength(file.Position);
+          }          
         }
       }
     }
