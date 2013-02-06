@@ -2,6 +2,6 @@
 Some operation will be broadcasted to all the nodes in the mesh. 
 Other operations will be dispatched only to some nodes. 
 
-Read the IEventP2PService documentation to undertand it. 
+Read the IEventP2PService documentation to understand it. 
 
 This implementation can be replaced with a different P2P implementation. 
