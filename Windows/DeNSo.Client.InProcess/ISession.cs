@@ -34,5 +34,9 @@ namespace DeNSo
     EventCommandStatus Set<T>(T entity) where T : class;
     EventCommandStatus SetAll<T>(System.Collections.Generic.IEnumerable<T> entity) where T : class;
     EventCommandStatus SetAll<T>(string collection, System.Collections.Generic.IEnumerable<T> entity) where T : class;
+
+    void WaitForNonStaleDataAt(long eventcommandnumber);
+    bool WaitForNonStaleDataAt(long eventcommandnumber, TimeSpan timeout);
+    bool WaitForNonStaleDataAt(long eventcommandnumber, int timeout);
   }
 }

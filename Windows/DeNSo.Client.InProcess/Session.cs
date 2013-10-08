@@ -21,9 +21,9 @@ namespace DeNSo
     private Command _command = new Command();
     private Query _query = new Query();
 
-    //private ManualResetEvent _waiting = new ManualResetEvent(false);
-    //private long _waitingfor = 0;
-    //private long _lastexecutedcommand = 0;
+    private ManualResetEvent _waiting = new ManualResetEvent(false);
+    private long _waitingfor = 0;
+    private long _lastexecutedcommand = 0;
 
     public static string DefaultDataBase { get; set; }
     public static Session New { get { return new Session() { DataBase = DefaultDataBase ?? string.Empty }; } }
@@ -47,54 +47,54 @@ namespace DeNSo
     {
     }
 
-    //private void RegisterWaitEventAsync()
-    //{
-    //  Thread waitingThread = new Thread((ThreadStart)delegate
-    //  {
-    //    Session.StoreUpdatedHandler += (sn) =>
-    //    {
-    //      _lastexecutedcommand = sn;
-    //      //if (_waitingfor <= sn)
-    //      _waiting.Set();
-    //    };
-    //  });
-    //  waitingThread.IsBackground = true;
-    //  waitingThread.Start();
-    //}
+    private void RegisterWaitEventAsync()
+    {
+      Thread waitingThread = new Thread((ThreadStart)delegate
+      {
+        Session.StoreUpdatedHandler += (sn) =>
+        {
+          _lastexecutedcommand = sn;
+          //if (_waitingfor <= sn)
+          _waiting.Set();
+        };
+      });
+      waitingThread.IsBackground = true;
+      waitingThread.Start();
+    }
 
-    //#region Wait Methods
-    //public void WaitForNonStaleDataAt(long eventcommandnumber)
-    //{
-    //  //if (_lastexecutedcommand >= eventcommandnumber) return;
-    //  _waitingfor = eventcommandnumber;
-    //  while (_lastexecutedcommand < eventcommandnumber)
-    //  {
-    //    _waiting.WaitOne(200);
-    //    _waiting.Reset();
-    //  }
-    //  _waitingfor = 0;
-    //}
-    //public bool WaitForNonStaleDataAt(long eventcommandnumber, TimeSpan timeout)
-    //{
-    //  //if (_lastexecutedcommand >= eventcommandnumber) return;
-    //  _waitingfor = eventcommandnumber;
-    //  _waiting.WaitOne(timeout);
-    //  if (_lastexecutedcommand < eventcommandnumber) return false;
-    //  _waiting.Reset();
-    //  _waitingfor = 0;
-    //  return true;
-    //}
-    //public bool WaitForNonStaleDataAt(long eventcommandnumber, int timeout)
-    //{
-    //  _waitingfor = eventcommandnumber;
+    #region Wait Methods
+    public void WaitForNonStaleDataAt(long eventcommandnumber)
+    {
+      //if (_lastexecutedcommand >= eventcommandnumber) return;
+      _waitingfor = eventcommandnumber;
+      while (_lastexecutedcommand < eventcommandnumber)
+      {
+        _waiting.WaitOne(200);
+        _waiting.Reset();
+      }
+      _waitingfor = 0;
+    }
+    public bool WaitForNonStaleDataAt(long eventcommandnumber, TimeSpan timeout)
+    {
+      //if (_lastexecutedcommand >= eventcommandnumber) return;
+      _waitingfor = eventcommandnumber;
+      _waiting.WaitOne(timeout);
+      if (_lastexecutedcommand < eventcommandnumber) return false;
+      _waiting.Reset();
+      _waitingfor = 0;
+      return true;
+    }
+    public bool WaitForNonStaleDataAt(long eventcommandnumber, int timeout)
+    {
+      _waitingfor = eventcommandnumber;
 
-    //  _waiting.WaitOne(timeout);
-    //  if (_lastexecutedcommand < eventcommandnumber) return false;
-    //  _waiting.Reset();
-    //  _waitingfor = 0;
-    //  return true;
-    //}
-    //#endregion
+      _waiting.WaitOne(timeout);
+      if (_lastexecutedcommand < eventcommandnumber) return false;
+      _waiting.Reset();
+      _waitingfor = 0;
+      return true;
+    }
+    #endregion
 
     #region Set Methods
     public EventCommandStatus Set<T>(T entity) where T : class
