@@ -3,43 +3,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DeNSo;
-using DeNSo.BSon;
+
+using Newtonsoft.Json.Linq;
 
 namespace DeNSo.EventHandlers
 {
-  public abstract class BaseCommandHandler: ICommandHandler
+  public abstract class BaseCommandHandler : ICommandHandler
   {
-    public void HandleCommand(IStore store, BSon.BSonDoc command)
-      {
-      BSonDoc value = null;
+    public void HandleCommand(IStore store, JObject command)
+    {
+      JObject value = null;
       var collection = string.Empty;
 
-      if (command.HasProperty(CommandKeyword.Value))
+      var r = command.Property(CommandKeyword.Value);
+      if (r != null)
       {
-        value = command[CommandKeyword.Value] as BSonDoc;
+        value = r.Value as JObject;
       }
-      if (command.HasProperty(CommandKeyword.Collection))
+
+      r = command.Property(CommandKeyword.Collection);
+      if (r != null)
       {
-        collection = (command[CommandKeyword.Collection] ?? string.Empty).ToString();
+        collection = (string)r.Value;
       }
 
       OnHandle(store, collection, command, value);
-      
+
     }
 
-    public abstract void OnHandle(IStore store, 
-                             string collection , 
-                             BSonDoc command, 
-                             BSonDoc document);
+    public abstract void OnHandle(IStore store,
+                             string collection,
+                             JObject command,
+                             JObject document);
 
-    protected static BSonDoc GetValue(BSonDoc document)
-    {
-      if (document.HasProperty(CommandKeyword.Value))
-        return document[CommandKeyword.Value] as BSonDoc;
-      return document;
-    }
+    //protected static JToken GetValue(JObject document)
+    //{
+    //  if (document.HasProperty(CommandKeyword.Value))
+    //    return document[CommandKeyword.Value] as BSonDoc;
+    //  return document;
+    //}
 
-    protected static string[] GetRealProperties(BSonDoc document)
+    protected static string[] GetRealProperties(JObject document)
     {
       string[] invalidproperties = new string[] { CommandKeyword.Action, 
                                                   CommandKeyword.Collection, 
@@ -49,7 +53,7 @@ namespace DeNSo.EventHandlers
                                                   CommandKeyword.Value, 
                                                   DocumentMetadata.IdPropertyName, 
                                                   DocumentMetadata.TimeStampPropertyName };
-      return document.Properties.Except(invalidproperties).ToArray();
+      return document.Properties().Select(p => p.Name).Except(invalidproperties).ToArray();
     }
   }
 }

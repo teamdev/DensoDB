@@ -4,7 +4,8 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using DeNSo;
-using DeNSo.BSon;
+
+using Newtonsoft.Json.Linq;
 
 namespace DeNSo.EventHandlers
 {
@@ -14,25 +15,25 @@ namespace DeNSo.EventHandlers
   {
     public override void OnHandle(IStore store,
                                   string collection,
-                                  BSonDoc command,
-                                  BSonDoc document)
+                                  JObject command,
+                                  JObject document)
     {
       if (document == null || string.IsNullOrEmpty(collection)) return;
       IObjectStore st = store.GetCollection(collection);
 
-      if (document.DocType == BSonDocumentType.BSON_DocumentArray || 
-          document.DocType == BSonDocumentType.BSON_Dictionary)
-      {
-        var documents = document.ToList();
-        if (documents != null)
-          foreach (var d in documents)
-          { 
-            //if(d is BSonDoc && ((BSonDoc)d).HasProperty(CommandKeyword.Id))
+      //if (document.Type == BSonDocumentType.BSON_DocumentArray || 
+      //    document.DocType == BSonDocumentType.BSON_Dictionary)
+      //{
+      //  var documents = document.ToList();
+      //  if (documents != null)
+      //    foreach (var d in documents)
+      //    { 
+      //      //if(d is BSonDoc && ((BSonDoc)d).HasProperty(CommandKeyword.Id))
 
 
 
-          }
-      }
+      //    }
+      //}
     }
   }
 }

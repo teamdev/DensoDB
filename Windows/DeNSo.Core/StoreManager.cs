@@ -10,15 +10,19 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 #endif
+
 
 namespace DeNSo
 {
-  internal static class StoreManager
+  public static class StoreManager
   {
     private static DensoExtensions _extensions = new DensoExtensions();
     private static bool _started = false;
+
     private static Thread _saveDBThread = null;
+    private static Thread _indexerThread = null;
 
     internal static bool ShuttingDown = false;
     internal static ManualResetEvent ShutDownEvent = new ManualResetEvent(false);
@@ -28,10 +32,10 @@ namespace DeNSo
 #endif
 
 
-    private static Dictionary<string, Dictionary<string, IObjectStore>> _stores =
+    private volatile static Dictionary<string, Dictionary<string, IObjectStore>> _stores =
               new Dictionary<string, Dictionary<string, IObjectStore>>();
 
-    private static Dictionary<string, EventStore> _eventStore =
+    private volatile static Dictionary<string, EventStore> _eventStore =
               new Dictionary<string, EventStore>();
 
     static StoreManager()
@@ -48,19 +52,22 @@ namespace DeNSo
 
     public static EventStore GetEventStore(string databasename)
     {
-      if (!_eventStore.ContainsKey(databasename))
-        _eventStore.Add(databasename, new EventStore(databasename, 0));
+      lock (_eventStore)
+        if (!_eventStore.ContainsKey(databasename))
+          _eventStore.Add(databasename, new EventStore(databasename, 0));
 
       return _eventStore[databasename];
     }
 
     public static ObjectStore GetObjectStore(string databasename, string collection)
     {
-      if (!_stores.ContainsKey(databasename))
-        _stores.Add(databasename, new Dictionary<string, IObjectStore>());
+      lock (_stores)
+        if (!_stores.ContainsKey(databasename))
+          _stores.Add(databasename, new Dictionary<string, IObjectStore>());
 
-      if (!_stores[databasename].ContainsKey(collection))
-        _stores[databasename].Add(collection, LoadCollection(databasename, collection));
+      lock (_stores[databasename])
+        if (!_stores[databasename].ContainsKey(collection))
+          _stores[databasename].Add(collection, LoadCollection(databasename, collection));
 
       return _stores[databasename][collection] as ObjectStore;
     }
@@ -86,6 +93,10 @@ namespace DeNSo
         _saveDBThread = new Thread(new ThreadStart(SaveDBThreadMethod));
         _saveDBThread.Start();
 
+        _indexerThread = new Thread(new ThreadStart(CheckBloomIndexes));
+        _indexerThread.IsBackground = true;
+        _indexerThread.Start();
+
         LogWriter.LogInformation("Store Manager initialization completed", LogEntryType.SuccessAudit);
         _started = true;
       }
@@ -93,15 +104,17 @@ namespace DeNSo
 
     public static void ShutDown()
     {
-      Journaling.RaiseCloseEvent();
+      JournalWriter.RaiseCloseEvent();
       ShuttingDown = true;
       ShutDownEvent.Set();
       if (_saveDBThread != null)
         _saveDBThread.Join((int)new TimeSpan(0, 5, 0).TotalMilliseconds);
 
       // remove all Event Store
-      _eventStore.Clear();
-      _stores.Clear();
+      lock (_eventStore)
+        _eventStore.Clear();
+      lock (_stores)
+        _stores.Clear();
 
       _started = false;
     }
@@ -128,24 +141,25 @@ namespace DeNSo
 
     private static void OpenDataBase(string databasename)
     {
-      if (!_eventStore.ContainsKey(databasename))
-      {
-        var filename = Path.Combine(Path.Combine(Configuration.BasePath, databasename), "denso.trn");
+      lock (_eventStore)
+        if (!_eventStore.ContainsKey(databasename))
+        {
+          var filename = Path.Combine(Path.Combine(Configuration.BasePath, databasename), "denso.trn");
 
-        long eventcommandsn = 0;
+          long eventcommandsn = 0;
 #if WINDOWS_PHONE
         if (iss.FileExists(filename))
           using (var fs = iss.OpenFile(Path.Combine(Path.Combine(Configuration.BasePath, databasename), "denso.trn"), FileMode.Open, FileAccess.Read))
 #else
-        if (File.Exists(filename))
-          using (var fs = File.Open(Path.Combine(Path.Combine(Configuration.BasePath, databasename), "denso.trn"), FileMode.Open, FileAccess.Read, FileShare.Read))
+          if (File.Exists(filename))
+            using (var fs = File.Open(Path.Combine(Path.Combine(Configuration.BasePath, databasename), "denso.trn"), FileMode.Open, FileAccess.Read, FileShare.Read))
 #endif
-            if (fs.Length > 0)
-              using (var br = new BinaryReader(fs))
-                eventcommandsn = br.ReadInt64();
+              if (fs.Length > 0)
+                using (var br = new BinaryReader(fs))
+                  eventcommandsn = br.ReadInt64();
 
-        _eventStore.Add(databasename, new EventStore(databasename, eventcommandsn));
-      }
+          _eventStore.Add(databasename, new EventStore(databasename, eventcommandsn));
+        }
     }
 
     private static void SaveDBThreadMethod()
@@ -153,13 +167,37 @@ namespace DeNSo
       while (!ShutDownEvent.WaitOne(2))
       {
         ShutDownEvent.WaitOne(Configuration.SaveInterval);
-        foreach (var db in _stores.Keys)
-        {
-          SaveDataBase(db);
-          ShutDownEvent.WaitOne(Configuration.DBCheckTimeSpan);
-        }
+        lock (_stores)
+          foreach (var db in _stores.Keys)
+          {
+            SaveDataBase(db);
+            ShutDownEvent.WaitOne(Configuration.DBCheckTimeSpan);
+          }
       }
       ShutDownEvent.Reset();
+    }
+
+    private static void CheckBloomIndexes()
+    {
+      while (!ShutDownEvent.WaitOne(Configuration.ReindexCheck))
+      {
+        var dbkeys = _stores.Keys.ToArray();
+        foreach (var d in dbkeys)
+        {
+          var collkeys = _stores[d].Keys.ToArray();
+          foreach (var c in collkeys)
+          {
+            var errorratio = _stores[d][c].IncoerenceIndexRatio();
+            if (errorratio > 1)
+            {
+              LogWriter.LogInformation(string.Format("Reindexing {0} - {1} - IndexRatio: {2}", d, c, errorratio), LogEntryType.Warning);
+              _stores[d][c].Reindex();
+              LogWriter.LogInformation(string.Format("Completed {0} - {1}", d, c), LogEntryType.Warning);
+            }
+          }
+        }
+
+      }
     }
 
     internal static void SaveDataBase(string databasename)
@@ -210,7 +248,7 @@ namespace DeNSo
             writer.Flush();
             file.Flush();
             file.SetLength(file.Position);
-          }          
+          }
         }
       }
     }
@@ -224,7 +262,7 @@ namespace DeNSo
         using (var fs = iss.OpenFile(fullpath, FileMode.Open, FileAccess.Read, FileShare.None))
 #else
       if (File.Exists(fullpath))
-        using (var fs = File.Open(fullpath, FileMode.Open, FileAccess.Read, FileShare.None))
+        using (var fs = File.Open(fullpath, FileMode.Open, FileAccess.Read, FileShare.Read))
 #endif
           try
           {
@@ -234,9 +272,9 @@ namespace DeNSo
                 var len = br.ReadInt32();
                 //var klen = br.ReadByte();
                 var id = br.ReadString();
-                var data = br.ReadBytes(len);
+                var data = br.ReadString();
 
-                store.dInsert(id, data);
+                store.InternalDictionaryInsert(id, data);
               }
           }
           catch (OutOfMemoryException ex)

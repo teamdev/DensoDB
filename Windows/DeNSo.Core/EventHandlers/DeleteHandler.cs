@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DeNSo;
-using DeNSo.BSon;
+
 using System.Diagnostics;
 using System.ComponentModel.Composition;
+using Newtonsoft.Json.Linq;
 
 namespace DeNSo.EventHandlers
 {
@@ -15,21 +16,25 @@ namespace DeNSo.EventHandlers
   {
     public override void OnHandle(IStore store,
                                   string collection,
-                                  BSonDoc command,
-                                  BSonDoc document)
+                                  JObject command,
+                                  JObject document)
     {
       IObjectStore st = store.GetCollection(collection);
 
-      if (command.HasProperty(CommandKeyword.Id))
+      JToken r = command.Property(CommandKeyword.Id);
+      if (r != null)
       {
-        var ent = st.GetById((string)command[CommandKeyword.Id]);
-        if (ent != null) st.Remove(ent);
+        st.Remove((string)r);
+        return;
       }
 
-      if (document != null && document.HasProperty(DocumentMetadata.IdPropertyName))
+      if (document != null)
       {
-        var ent = st.GetById((string)document[DocumentMetadata.IdPropertyName]);
-        if (ent != null) st.Remove(ent);
+        JToken r2 = document.Property(DocumentMetadata.IdPropertyName);
+        if (r2 != null)
+        {
+          st.Remove((string)r2);
+        }
       }
     }
   }

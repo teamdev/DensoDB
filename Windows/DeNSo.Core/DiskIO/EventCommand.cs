@@ -30,7 +30,7 @@ namespace DeNSo.DiskIO
     /// the user command
     /// </summary>
     [Description("the user command. ")]
-    public byte[] Command { get; set; }
+    public string Command { get; set; }
 
     /// <summary>
     /// set the marker to the command

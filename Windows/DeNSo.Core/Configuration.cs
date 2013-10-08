@@ -17,10 +17,13 @@ namespace DeNSo
     public static string IndexBasePath { get; set; }
     public static TimeSpan SaveInterval { get; set; }
     public static TimeSpan DBCheckTimeSpan { get; set; }
+    public static TimeSpan ReindexCheck { get; set; }
     public static int DictionarySplitSize { get; set; }
 
     public static bool EnableJournaling { get; set; }
     public static bool EnableOperationsLog { get; set; }
+
+    public static bool EnsureAtomicWrites { get; set; }
 
     private static DensoExtensions _extensions = new DensoExtensions();
     public static DensoExtensions Extensions { get { return _extensions; } }
@@ -32,45 +35,25 @@ namespace DeNSo
 #if WINDOWS_PHONE
       BasePath = "DeNSo";
 #else
-      BasePath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DeNSo");
+      BasePath = "DeNSo";
+      try
+      {
+        BasePath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DeNSo");
+      }
+      catch (Exception ex)
+      {
+
+      }
 #endif
       IndexBasePath = BasePath;
 
 
-#if WINDOWS_PHONE
-      if (FileExists(Path.Combine(BasePath, "d.cfg")))
-      {
-        NodeIdentity = new Guid(ReadAllBytes(Path.Combine(BasePath, "d.cfg")));
-      }
-#else
-      if (File.Exists(Path.Combine(BasePath, "d.cfg")))
-      {
-        NodeIdentity = new Guid(File.ReadAllBytes(Path.Combine(BasePath, "d.cfg")));
-      }
-#endif
-      else
-      {
-        NodeIdentity = Guid.NewGuid();
-      }
-
-#if WINDOWS_PHONE
-      if (!DirectoryExists(BasePath))
-        DirectoryCreate(BasePath);
-#else
-      if (!Directory.Exists(BasePath))
-        Directory.CreateDirectory(BasePath);
-#endif
-
-#if WINDOWS_PHONE
-      WriteAllBytes(Path.Combine(BasePath, "d.cfg"), NodeIdentity.ToByteArray());
-#else
-      File.WriteAllBytes(Path.Combine(BasePath, "d.cfg"), NodeIdentity.ToByteArray());
-#endif
-
       SaveInterval = new TimeSpan(0, 5, 0);
+      ReindexCheck = new TimeSpan(0, 0, 10);
       DBCheckTimeSpan = new TimeSpan(0, 0, 10);
       DictionarySplitSize = 20000;
       EnableJournaling = true;
+      EnsureAtomicWrites = false;
     }
 
 #if WINDOWS_PHONE

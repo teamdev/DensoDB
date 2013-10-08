@@ -5,7 +5,9 @@ using System.Text;
 using System.Reflection;
 using DeNSo.Struct;
 using DeNSo;
-using DeNSo.BSon;
+
+using Newtonsoft.Json.Linq;
+using DeNSo.Core.Filters;
 
 namespace DeNSo
 {
@@ -17,279 +19,245 @@ namespace DeNSo
 #endif
   public class ObjectStore : IObjectStore
   {
-    //public byte[] CurrentId { get { return currentIdFunction(); } }
-    public long LastEventSN { get; internal set; }
+    private int _indexpossibleincoerences = 0;
+    private volatile BloomFilter<string> _bloomfilter = new BloomFilter<string>(Configuration.DictionarySplitSize * 2);
+
+    internal volatile List<Dictionary<string, string>> _primarystore = new List<Dictionary<string, string>>();
+
     public int ChangesFromLastSave { get; set; }
+    public long LastEventSN { get; internal set; }
 
-    //public ObjectStoreKeyType KeyType { get; set; }
-
-    #region Private Fields and function for storeid
-
-    //private int _storeintuid = 0;
-    //private Guid _storeGuid = Guid.Empty;
-
-    private string newIdFunction() { return Guid.NewGuid().ToString(); }
-    //private Func<byte[]> currentIdFunction;
-
-    #endregion
-
-    #region Private fields
-
-    internal volatile List<Dictionary<string, byte[]>> _primarystore = new List<Dictionary<string, byte[]>>();
-    #endregion
-
-    //#region Constructor
-
-    //internal ObjectStore()
-    //  : this(ObjectStoreKeyType.Integer)
-    //{ }
-
-    //internal ObjectStore(ObjectStoreKeyType keytype)
-    //{
-
-    //  KeyType = keytype;
-
-    //  switch (KeyType)
-    //  {
-    //    case ObjectStoreKeyType.Integer:
-    //      newIdFunction = () => ++_storeintuid;
-    //      currentIdFunction = () => _storeintuid;
-    //      break;
-    //    case ObjectStoreKeyType.LongInteger:
-    //      newIdFunction = () => ++_storelonguid;
-    //      currentIdFunction = () => _storelonguid;
-    //      break;
-    //    case ObjectStoreKeyType.GlobalUniqueIdentifier:
-    //      newIdFunction = () => { _storeGuid = Guid.NewGuid(); return _storeGuid; };
-    //      currentIdFunction = () => _storeGuid;
-    //      break;
-    //    default:
-    //      break;
-    //  }
-
-    //}
-    //#endregion
-
-    #region Public methods for storing objects
-
-    public void Set(BSonDoc entity)
+    public int Count()
     {
-      ChangesFromLastSave++;
-      //var lastid = currentIdFunction();
-      var uid = GetEntityUI(entity);
+      var result = 0;
+      foreach (var d in _primarystore)
+        lock (d)
+          result += d.Count;
 
-      if (dContains(uid))
-      {
-        dUpdate(uid, entity);
-        return;
-      }
-      dSet(uid, entity);
+      return result;
     }
 
-    public void Remove(BSonDoc entity)
+    public int Count(Func<JObject, bool> filter)
     {
-      //var lastid = currentIdFunction();
-      var uid = GetEntityUI(entity);
-      if (dContains(uid))
-        if (dRemove(uid))
-          ChangesFromLastSave++;
+      int count = 0;
+      if (filter != null)
+        foreach (var d in _primarystore)
+        {
+          lock (d)
+            foreach (var v in d.Values)
+            {
+              if (!string.IsNullOrEmpty(v) && filter(JObject.Parse(v)))
+                count++;
+            }
+        }
+
+      return count;
+    }
+
+    public IEnumerable<string> GetAll()
+    {
+      foreach (var d in _primarystore)
+      {
+        lock (d)
+          foreach (var v in d.Values)
+          {
+            if (!string.IsNullOrEmpty(v))
+              yield return v;
+          }
+      }
+
+      yield break;
+    }
+
+    public string GetById(string key)
+    {
+      return InternalDictionaryGet(key);
     }
 
     public void Flush()
     {
       foreach (var d in _primarystore)
       {
-        d.Clear();
-        //foreach (var k in d.Keys)
-        //{
-        //  d.Clear();
-        //}
+        lock (d)
+          d.Clear();
       }
     }
 
-    #endregion
-
-    #region private entities methods
-
-    private string GetEntityUI(BSonDoc entity)
+    public float IncoerenceIndexRatio()
     {
-      if (entity.HasProperty(DocumentMetadata.IdPropertyName) && entity[DocumentMetadata.IdPropertyName] != null)
-        return (string)entity[DocumentMetadata.IdPropertyName];
-
-      entity[DocumentMetadata.IdPropertyName] = newIdFunction();
-      return (string)entity[DocumentMetadata.IdPropertyName];
+      return (((float)Math.Max(this.Count() - _bloomfilter.Size, 0) + (float)_indexpossibleincoerences) / (float)this.Count()) * 100;
     }
 
-    #endregion
-
-    #region private DeNSo Dictionaries manipulations methods
-
-    private BSonDoc dGet(string key)
+    public void Remove(string key)
     {
-      foreach (var d in _primarystore)
+      if (InternalDictionaryContains(key))
+        if (InternalDictionaryRemove(key))
+          ChangesFromLastSave++;
+    }
+
+    public void Reindex()
+    {
+      lock (_bloomfilter)
       {
-        if (d.ContainsKey(key))
-          return d[key].Deserialize();
+        var newsize = this.Count() + Configuration.DictionarySplitSize * 2;
+        var newbloom = new BloomFilter<string>(newsize);
+        foreach (var d in _primarystore)
+          foreach (var k in d.Keys)
+            newbloom.Add(k);
+
+        _bloomfilter = newbloom;
+        _indexpossibleincoerences = 0;
       }
+    }
+
+    public void Set(string key, JObject document)
+    {
+      ChangesFromLastSave++;
+
+      if (string.IsNullOrEmpty(key))
+      {
+        key = GetEntityUI(document);
+      }
+
+      if (InternalDictionaryContains(key))
+      {
+        InternalDictionaryUpdate(key, document.ToString());
+        return;
+      }
+      InternalDictionarySet(key, document.ToString());
+    }
+
+    public IEnumerable<string> Where(Func<JObject, bool> filter)
+    {
+      if (filter != null)
+        foreach (var d in _primarystore)
+        {
+          lock (d)
+            foreach (var v in d.Values)
+            {
+              if (!string.IsNullOrEmpty(v) && filter(JObject.Parse(v)))
+                yield return v;
+            }
+        }
+
+      yield break;
+    }
+
+    private string GetEntityUI(JObject document)
+    {
+      var r = document.Property(DocumentMetadata.IdPropertyName);
+      var newkey = ((string)r ?? Guid.NewGuid().ToString());
+      document[DocumentMetadata.IdPropertyName] = newkey;
+      return newkey;
+    }
+
+    private string InternalDictionaryGet(string key)
+    {
+      if (BloomFilterCheck(key))
+        foreach (var d in _primarystore)
+        {
+          if (d.ContainsKey(key))
+            return d[key];
+        }
       return null;
     }
 
-    private void dSet(string key, BSonDoc doc)
+    internal void InternalDictionaryInsert(string key, string doc)
     {
-      lock (_primarystore)
-      {
-        if (!dUpdate(key, doc))
-          dInsert(key, doc);
-      }
-    }
-
-    private void dInsert(string key, BSonDoc doc)
-    {
-      //doc["@ts#"
-
-      Dictionary<string, byte[]> freedictionary = null;
+      Dictionary<string, string> freedictionary = null;
       foreach (var d in _primarystore)
-        if (d.Count < Configuration.DictionarySplitSize)
-        {
-          freedictionary = d; break;
-        }
+        lock (d)
+          if (d.Count < Configuration.DictionarySplitSize)
+          {
+            freedictionary = d; break;
+          }
 
       if (freedictionary == null)
       {
-        freedictionary = new Dictionary<string, byte[]>();
+        freedictionary = new Dictionary<string, string>();
         _primarystore.Add(freedictionary);
       }
 
-      if (!freedictionary.ContainsKey(key))
-        freedictionary.Add(key, doc.Serialize());
+      lock (freedictionary)
+        if (!freedictionary.ContainsKey(key))
+          freedictionary.Add(key, doc);
+
+      BloomFilterAdd(key);
     }
 
-    private bool dUpdate(string key, BSonDoc doc)
-    {
-      lock (_primarystore)
-        foreach (var d in _primarystore)
-          if (d.ContainsKey(key))
-          {
-            d[key] = doc.Serialize();
-            return true;
-          }
-      return false;
-    }
-
-    private bool dContains(string key)
-    {
-      foreach (var d in _primarystore)
-      {
-        if (d.ContainsKey(key))
-          return true;
-      }
-      return false;
-    }
-
-    private bool dRemove(string key)
+    private void InternalDictionarySet(string key, string doc)
     {
       lock (_primarystore)
       {
-        Dictionary<string, byte[]> realdictionary = null;
-        foreach (var d in _primarystore)
-          if (d.ContainsKey(key))
-          {
-            realdictionary = d; break;
-          }
-
-        if (realdictionary != null)
+        if (!InternalDictionaryUpdate(key, doc))
         {
-          realdictionary.Remove(key);
-          return true;
+          InternalDictionaryInsert(key, doc);
         }
       }
+    }
+
+    private bool InternalDictionaryUpdate(string key, string doc)
+    {
+      if (BloomFilterCheck(key))
+        lock (_primarystore)
+          foreach (var d in _primarystore)
+            lock (d)
+              if (d.ContainsKey(key))
+              {
+                d[key] = doc;
+                return true;
+              }
       return false;
     }
 
-    #endregion
-
-    internal void dInsert(string key, byte[] data)
+    private bool InternalDictionaryContains(string key)
     {
-      Dictionary<string, byte[]> freedictionary = null;
-      foreach (var d in _primarystore)
-        if (d.Count < Configuration.DictionarySplitSize)
-        {
-          freedictionary = d; break;
-        }
-
-      if (freedictionary == null)
-      {
-        freedictionary = new Dictionary<string, byte[]>();
-        _primarystore.Add(freedictionary);
-      }
-
-      if (!freedictionary.ContainsKey(key))
-        freedictionary.Add(key, data);
-    }
-
-    #region Public query methods
-
-    public IEnumerable<BSonDoc> Where(Func<BSonDoc, bool> filter)
-    {
-      if (filter != null)
-        foreach (var d in _primarystore)
-        {
-          foreach (var v in d.Values)
+      if (!string.IsNullOrEmpty(key))
+        if (BloomFilterCheck(key))
+          foreach (var d in _primarystore)
           {
-            var bdoc = v.Deserialize();
-            if (bdoc != null && filter(bdoc))
-              yield return bdoc;
+            lock (d)
+              if (d.ContainsKey(key))
+                return true;
           }
-        }
-
-      yield break;
+      return false;
     }
 
-    public IEnumerable<BSonDoc> GetAll()
+    private bool InternalDictionaryRemove(string key)
     {
-      foreach (var d in _primarystore)
-      {
-        foreach (var v in d.Values)
+      if (BloomFilterCheck(key))
+        lock (_primarystore)
         {
-          var bdoc = v.Deserialize();
-          if (bdoc != null)
-            yield return bdoc;
+          Dictionary<string, string> realdictionary = null;
+          foreach (var d in _primarystore)
+            lock (d)
+              if (d.ContainsKey(key))
+              {
+                realdictionary = d; break;
+              }
+
+          lock (realdictionary)
+            if (realdictionary != null)
+            {
+              realdictionary.Remove(key);
+              _indexpossibleincoerences++;
+              return true;
+            }
         }
-      }
-
-      yield break;
+      return false;
     }
 
-    public BSonDoc GetById(string key)
+    private bool BloomFilterCheck(string key)
     {
-      return dGet(key);
+      lock (_bloomfilter)
+        return _bloomfilter.Contains(key);
     }
 
-    public int Count()
+    private void BloomFilterAdd(string key)
     {
-      var result = 0;
-      foreach (var d in _primarystore)
-        result += d.Count();
-
-      return result;
+      lock (_bloomfilter)
+        _bloomfilter.Add(key);
     }
 
-    public int Count(Func<BSonDoc, bool> filter)
-    {
-      int count = 0;
-      if (filter != null)
-        foreach (var d in _primarystore)
-        {
-          foreach (var v in d.Values)
-          {
-            var bdoc = v.Deserialize();
-            if (bdoc != null && filter(bdoc))
-              count++;
-          }
-        }
-
-      return count;
-    }
-    #endregion
   }
 }

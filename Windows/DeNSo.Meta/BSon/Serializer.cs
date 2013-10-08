@@ -203,7 +203,8 @@ namespace DeNSo.BSon
 
     private static IEnumerable BSonToIEnumerable(this BSonDoc doc)
     {
-      ArrayList list = new ArrayList();
+#if WINDOWS_PHONE
+      List<object> list = new List<object>();
       foreach (var p in doc.Properties)
       {
         var val = doc[p];
@@ -213,6 +214,19 @@ namespace DeNSo.BSon
           list.Add(val);
       }
       return list;
+#else
+       ArrayList list = new ArrayList();
+      foreach (var p in doc.Properties)
+      {
+        var val = doc[p];
+        if (val is IBSonNode)
+          list.Add(((IBSonNode)val));
+        else
+          list.Add(val);
+      }
+      return list;
+#endif
+
     }
 
     private static IEnumerable<T> BSonToIEnumerableG<T>(this BSonDoc doc)

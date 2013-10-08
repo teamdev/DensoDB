@@ -4,7 +4,8 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using DeNSo;
-using DeNSo.BSon;
+
+using Newtonsoft.Json.Linq;
 
 namespace DeNSo.EventHandlers
 {
@@ -14,37 +15,36 @@ namespace DeNSo.EventHandlers
   {
     public override void OnHandle(IStore store,
                                   string collection,
-                                  BSonDoc command,
-                                  BSonDoc document)
+                                  JObject command,
+                                  JObject document)
     {
       if (document == null || string.IsNullOrEmpty(collection)) return;
       IObjectStore st = store.GetCollection(collection);
 
-      if (document.HasProperty(DocumentMetadata.IdPropertyName))
+      var r = document.Property(DocumentMetadata.IdPropertyName);
+      if (r != null)
       {
         UpdateSingleDocument(document, st); return;
       }
 
-      if (document.HasProperty(CommandKeyword.Filter))
+      var r2 = document.Property(CommandKeyword.Filter);
+      if (r2 != null)
       {
         UpdateCollection(document, st); return;
       }
-
-      st.Set(document);
     }
 
-    private static void UpdateSingleDocument(BSonDoc document, IObjectStore store)
+    private static void UpdateSingleDocument(JObject document, IObjectStore store)
     {
-      var obj = store.GetById((string)document[DocumentMetadata.IdPropertyName]);
-      BSonDoc val = GetValue(document);
-      foreach (var p in GetRealProperties(val)) // remove properties starting with  
-        if (document.HasProperty(p))
-          obj[p] = val[p];
+      var objid = (string)document[DocumentMetadata.IdPropertyName];
+      var obj = JObject.Parse(store.GetById(objid));
+      foreach (var p in GetRealProperties(document)) // remove properties starting with  
+        obj[p] = document[p];
 
-      store.Set(obj);
+      store.Set(objid, obj);
     }
 
-    private static void UpdateCollection(BSonDoc document, IObjectStore store)
+    private static void UpdateCollection(JObject document, IObjectStore store)
     {
       // TODO: completely to do. 
     }

@@ -41,6 +41,9 @@
     </StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -58,8 +61,13 @@
     <Content Include="pcm-house4.xyz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DeNSo.Client.InProcess\DeNSo.Client.InProcess.csproj">
+      <Project>{89bac01d-3187-40fa-9519-b35741523a60}</Project>
+      <Name>DeNSo.Client.InProcess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DeNSo.Core\DeNSo.Core.csproj">
       <Project>{60B0B52B-2846-41DF-931D-24032CF4E9E8}</Project>
       <Name>DeNSo.Core</Name>

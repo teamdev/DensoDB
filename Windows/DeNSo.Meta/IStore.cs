@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DeNSo.BSon;
+using Newtonsoft.Json.Linq;
 
 namespace DeNSo
 {
@@ -14,10 +14,13 @@ namespace DeNSo
 
   public interface IObjectStore
   {
-    IEnumerable<BSonDoc> Where(Func<BSonDoc, bool> filter);
-    void Set(BSonDoc entity);
-    void Remove(BSonDoc entity);
+    IEnumerable<string> Where(Func<JObject, bool> filter);
+    void Set(string key, JObject entity);
+    void Remove(string key);
     void Flush();
-    BSonDoc GetById(string key);
+    string GetById(string key);
+
+    float IncoerenceIndexRatio();
+    void Reindex();
   }
 }

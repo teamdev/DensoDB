@@ -4,19 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.Linq.Expressions;
-using DeNSo.BSon;
+
 using System.Diagnostics;
 using DeNSo;
 using DeNSo.DiskIO;
 using System.ComponentModel.Composition;
+using Newtonsoft.Json.Linq;
 
 namespace DeNSo
 {
   public static class EventHandlerManager
   {
-    //private static Dictionary<string, Dictionary<string, Action<ObjectStoreWrapper, BSonDoc>>> _methods =
-    //           new Dictionary<string, Dictionary<string, Action<ObjectStoreWrapper, BSonDoc>>>();
-
 
     private static Dictionary<string, List<ICommandHandler>> _commandHandlers = new Dictionary<string, List<ICommandHandler>>();
     private static List<Action<IStore, EventCommand>> _globaleventhandlers = new List<Action<IStore, EventCommand>>();
@@ -71,7 +69,7 @@ namespace DeNSo
       }
       #endregion
 
-      var command = waitingevent.Command.Deserialize();
+      var command = JObject.Parse(waitingevent.Command);
 
       var currenthandlers = ChechHandlers(command);
       if (currenthandlers != null)
@@ -88,11 +86,12 @@ namespace DeNSo
         }
     }
 
-    private static ICommandHandler[] ChechHandlers(BSonDoc command)
+    private static ICommandHandler[] ChechHandlers(JObject command)
     {
       string actionname = string.Empty;
-      if (command.HasProperty(CommandKeyword.Action))
-        actionname = (command[CommandKeyword.Action] ?? string.Empty).ToString();
+      var r = command.Property(CommandKeyword.Action);
+      if (r != null)
+        actionname = ((string)r ?? string.Empty).ToString();
 
       LogWriter.LogInformation(string.Format("Executing action {0}", string.Empty), LogEntryType.Information);
 

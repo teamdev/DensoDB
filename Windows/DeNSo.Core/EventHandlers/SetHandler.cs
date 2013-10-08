@@ -4,7 +4,8 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using DeNSo;
-using DeNSo.BSon;
+
+using Newtonsoft.Json.Linq;
 
 namespace DeNSo.EventHandlers
 {
@@ -14,11 +15,16 @@ namespace DeNSo.EventHandlers
   {
     public override void OnHandle(IStore store,
                                   string collection,
-                                  BSonDoc command,
-                                  BSonDoc document)
+                                  JObject command,
+                                  JObject document)
     {
       IObjectStore st = store.GetCollection(collection);
-      st.Set(document);
+      if (document != null)
+      {
+        JToken r = document.Property(CommandKeyword.Id);
+        st.Set((string)r, document);
+        return;
+      }
     }
   }
 }

@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using DeNSo;
+using Newtonsoft.Json.Linq;
 
 namespace DeNSo.EventHandlers
 {
@@ -11,11 +12,12 @@ namespace DeNSo.EventHandlers
   [Export(typeof(ICommandHandler))]
   public class CollectionFlushHandler : ICommandHandler
   {
-    public void HandleCommand(IStore store, BSon.BSonDoc command)
+    public void HandleCommand(IStore store, JObject command)
     {
-      if (command.HasProperty(CommandKeyword.Collection))
+      var r = command.Property(CommandKeyword.Collection);
+      if (r != null)
       {
-        var cc = store.GetCollection((command[CommandKeyword.Collection] ?? string.Empty).ToString());
+        var cc = store.GetCollection(((string)r ?? string.Empty).ToString());
         if (cc != null)
           cc.Flush();
       }

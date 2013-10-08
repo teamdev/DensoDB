@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DeNSo.BSon;
+
+using Newtonsoft.Json.Linq;
 
 namespace DeNSo
 {
   public interface ICommandHandler
   {
-    void HandleCommand(IStore store, BSonDoc command);
+    void HandleCommand(IStore store, JObject command);
   }
 }
